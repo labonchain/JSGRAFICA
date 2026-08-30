@@ -20,6 +20,13 @@ Todos estão em `assets/marca/`:
 
 Escolha a variação pelo fundo e pelo tamanho. Não redesenhe a marca, não deforme e não substitua por logo criada por IA.
 
+## Regra visual aprovada - prevalece sobre briefings anteriores
+
+- Base visual: Azul Sistema e Branco Base/Branco Gelo.
+- Não usar fundo preto como base principal sem aprovação específica.
+- Usar exclusivamente as fontes oficiais do manual.
+- Aplicar a logo oficial **uma única vez por arte**. Nunca repetir a logo em outro ponto da composição.
+
 ## Antes de começar, confirme
 
 - Qual é o ID da pauta.
@@ -27,6 +34,7 @@ Escolha a variação pelo fundo e pelo tamanho. Não redesenhe a marca, não def
 - Se preço, prazo, promoção, disponibilidade ou regra de órgão foram validados.
 - Se há foto real autorizada quando a pauta pede prova/portfólio.
 - Qual arquivo deverá ser salvo ao terminar sua etapa.
+- Para serviços digitais, se o serviço continua ativo no dia da produção.
 
 ## Onde salvar o resultado
 
