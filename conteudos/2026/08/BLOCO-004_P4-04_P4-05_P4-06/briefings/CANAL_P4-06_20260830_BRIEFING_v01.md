@@ -4,24 +4,28 @@
 **Pilar:** P4 - Personalizados e comunicação visual
 **Estado:** EM_BRIEFING
 **Formato:** Canal 1080 x 1080 px + variação para Status 1080 x 1920 px + copy separada
-**Objetivo único:** apresentar canecas, camisas, cerâmicas e almofadas personalizadas como opções de presente, sem simular produtos de clientes reais.
+**Objetivo único:** apresentar canecas, camisas, itens personalizados em cerâmica e almofadas como opções de presente, sem simular produtos de clientes reais.
+**Fonte de verdade:** Manual da Marca JS Gráfica; Base de Serviços Confirmados.
+**Data-alvo:** a definir pela coordenação.
+**Responsável pela próxima ação:** usuário/coordenação, para aprovar o briefing.
+**Última atualização:** 30/08/2026 - Direção de Arte e Conteúdo.
 
 ## Ficha técnica
 
-- **Dados confirmados:** canecas, camisas, cerâmicas e almofadas personalizadas são serviços ativos.
+- **Dados confirmados:** canecas, camisas, itens personalizados em cerâmica e almofadas são serviços ativos.
 - **Dados a confirmar:** preço, prazo, tamanho, material, técnica, quantidade, tema e disponibilidade.
 - **Riscos:** uso de foto, frase, personagem ou marca de terceiro sem autorização.
 - **Dependência para liberar a produção:** aprovação deste briefing. Usar objetos institucionais neutros, sem arte de cliente.
 
 ## Mensagem factual
 
-**Caneca, camisa, cerâmica e almofada para transformar uma lembrança em presente.**
+**Caneca, camisa, item em cerâmica e almofada para transformar uma lembrança em presente.**
 
 ## Direção visual
 
 - Fundo Branco Gelo com módulos Azul Sistema. Usar Laranja Pêssego Escuro apenas como detalhe de destaque.
 - Título em Space Grotesk 700: `PRESENTE BOM TEM HISTÓRIA.`
-- Visual: quatro objetos neutros e sem estampa reconhecível, organizados como uma coleção: caneca, camisa, cerâmica e almofada.
+- Visual: quatro objetos neutros e sem estampa reconhecível, organizados como uma coleção: caneca, camisa, item em cerâmica e almofada.
 - Linha de apoio em Inter: `Personalizados para presentear e guardar lembranças.`
 - CTA em IBM Plex Mono: `CONTE SUA IDEIA PARA A EQUIPE`.
 - Aplicar uma única logo oficial no rodapé.
@@ -53,5 +57,5 @@
 ## Copy sugerida - P4-06 v01
 
 - **Título/primeira linha:** Tem lembrança que merece virar presente.
-- **Legenda:** Caneca, camisa, cerâmica e almofada personalizada podem transformar uma ideia em algo para guardar. Fale com a equipe da JS Gráfica e conte o que você imagina.
+- **Legenda:** Caneca, camisa, item em cerâmica e almofada personalizada podem transformar uma ideia em algo para guardar. Fale com a equipe da JS Gráfica e conte o que você imagina.
 - **CTA:** Chame a equipe pelo WhatsApp ou venha ao balcão.
