@@ -1,0 +1,52 @@
+name: Fix P1-01 approved artwork
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-p1-01-approved.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-approved:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow
+      - name: Download exact approved artwork from Canva asset
+        env:
+          APPROVED_URL: "https://media.canva.com/v2/image-resize/format:JPG/height:1080/quality:100/uri:ifs%3A%2F%2FM%2Fce625621-9d54-4be6-8989-fbe1f887e881/watermark:F/width:1080?csig=AAAAAAAAAAAAAAAAAAAAAItEMj5qQP549rJVyrtXrhZDDYDIVxP4czpf4D3MWlq4&exp=1788117384&osig=AAAAAAAAAAAAAAAAAAAAAIcp7AOs_KRWxn0byy15xr-HINpo7Sj_8X2Q2TFOD1oU&signer=media-rpc&x-canva-quality=thumbnail"
+        run: |
+          curl -fL "$APPROVED_URL" -o /tmp/approved.jpg
+          python - <<'PY'
+          from PIL import Image
+          p='/tmp/approved.jpg'
+          im=Image.open(p)
+          print('downloaded', im.size, im.mode)
+          if im.size != (1080,1080):
+              raise SystemExit(f'Unexpected size: {im.size}')
+          out='conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes'
+          im.convert('RGB').save(f'{out}/CANAL_P1-01_20260830_ARTE_v01.jpg', quality=95, optimize=True)
+          im.convert('RGB').save(f'{out}/CANAL_P1-01_20260830_ARTE_v01.png', optimize=True)
+          PY
+      - name: Remove unapproved P1-01 status/render files
+        run: |
+          git rm -f --ignore-unmatch conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes/CANAL_P1-01_20260830_STATUS_v01.jpg
+          git rm -f --ignore-unmatch conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes/CANAL_P1-01_20260830_STATUS_v01.png
+          git rm -f --ignore-unmatch conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes/CANAL_P1-01_20260830_FONTE_v01.py
+          git rm -f --ignore-unmatch .github/workflows/render-p1-01.yml
+      - name: Commit approved artwork only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes/CANAL_P1-01_20260830_ARTE_v01.jpg
+          git add conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes/CANAL_P1-01_20260830_ARTE_v01.png
+          git add -u
+          git commit -m "fix(canal): substituir P1-01 pela arte aprovada e remover versões não aprovadas"
+          git push
