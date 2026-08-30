@@ -5,6 +5,10 @@
 **Estado:** EM_BRIEFING
 **Formato:** arte principal para Canal 1080 x 1080 px + variação para Status do WhatsApp 1080 x 1920 px + copy separada
 **Objetivo único:** apresentar panfletos como material de divulgação para negócios, eventos e avisos locais.
+**Fonte de verdade:** Manual da Marca JS Gráfica; Base de Serviços Confirmados.
+**Data-alvo:** a definir pela coordenação.
+**Responsável pela próxima ação:** usuário/coordenação, para aprovar o briefing.
+**Última atualização:** 30/08/2026 - Direção de Arte e Conteúdo.
 
 ## Ficha técnica
 
