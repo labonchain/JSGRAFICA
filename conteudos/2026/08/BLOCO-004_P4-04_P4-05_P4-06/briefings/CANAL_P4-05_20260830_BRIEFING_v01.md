@@ -5,6 +5,10 @@
 **Estado:** EM_BRIEFING
 **Formato:** Canal 1080 x 1080 px + variação para Status 1080 x 1920 px + copy separada
 **Objetivo único:** apresentar topo de bolo como personalizado para comemorações, sem mostrar rosto, nome ou tema de cliente.
+**Fonte de verdade:** Manual da Marca JS Gráfica; Base de Serviços Confirmados.
+**Data-alvo:** a definir pela coordenação.
+**Responsável pela próxima ação:** usuário/coordenação, para aprovar o briefing.
+**Última atualização:** 30/08/2026 - Direção de Arte e Conteúdo.
 
 ## Ficha técnica
 
