@@ -92,23 +92,37 @@ Este quadro deve ser atualizado a cada movimentação. Um chat que inicia uma et
 | ID | Pauta | Pilar | Estado | Dependência atual | Briefing | Copy | Peça | QA | Aprovação | Publicação | Observação curta |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | P1-01 | Abertura do Canal | P1 | APROVADO_PARA_PUBLICAR | Publicação manual, quando definida | v01 | v01 | v01 (Canal + Status) | v01 | Aprovada pelo usuário | - | Entregas completas; aprovação não equivale a publicação |
-| P1-02 | Como falar com a JS | P1 | EM_BRIEFING | Produção pelo chat de designer | v01 | v01 | - | - | - | - | Briefing e copy preservados; arte anterior removida |
-| P2-01 | Impressão e xerox | P2 | EM_BRIEFING | Produção pelo chat de designer | v01 | v01 | - | - | - | - | Briefing e copy preservados; arte anterior removida |
-| P2-02 | Foto 3x4 e revelação de fotos | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem foto de pessoa sem autorização |
-| P2-03 | Encadernação e plastificação | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem especificação comercial não confirmada |
-| P2-04 | Currículos | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Não prometer emprego ou vaga |
-| P3-01 | Segunda via de conta | P3 | EM_CHECAGEM | Confirmar serviço ativo no dia da produção | v01 | - | - | - | - | - | Não usar dados de conta |
-| P3-02 | Recarga de celular e VEM | P3 | EM_CHECAGEM | Confirmar serviço ativo no dia da produção | v01 | - | - | - | - | - | Sem valor, operadora ou saldo |
-| P3-03 | Agendamentos | P3 | EM_CHECAGEM | Confirmar serviço ativo no dia da produção | v01 | - | - | - | - | - | Sem órgão, vaga ou garantia |
-| P4-01 | Banner, lona e adesivo | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem medidas/preço ou marca de cliente |
-| P4-02 | Cartão de visita | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem dados reais de cliente |
-| P4-03 | Panfletos | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem oferta de cliente fictícia |
-| P4-04 | Convites | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem dados de evento real |
-| P4-05 | Topo de bolo | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem personagem ou tema de cliente |
-| P4-06 | Presentes personalizados | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Itens em cerâmica sem ampliar serviço |
+| P1-02 | Como falar com a JS | P1 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | v01 | - | - | Aprovado pelo usuário | - | Briefing e copy preservados; arte anterior removida |
+| P2-01 | Impressão e xerox | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | v01 | - | - | Aprovado pelo usuário | - | Briefing e copy preservados; arte anterior removida |
+| P2-02 | Foto 3x4 e revelação de fotos | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem foto de pessoa sem autorização |
+| P2-03 | Encadernação e plastificação | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem especificação comercial não confirmada |
+| P2-04 | Currículos | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Não prometer emprego ou vaga |
+| P3-01 | Segunda via de conta | P3 | BRIEFING_APROVADO | Confirmar serviço ativo no dia da produção | v01 | - | - | - | Aprovado pelo usuário | - | Não usar dados de conta |
+| P3-02 | Recarga de celular e VEM | P3 | BRIEFING_APROVADO | Confirmar serviço ativo no dia da produção | v01 | - | - | - | Aprovado pelo usuário | - | Sem valor, operadora ou saldo |
+| P3-03 | Agendamentos | P3 | BRIEFING_APROVADO | Confirmar serviço ativo no dia da produção | v01 | - | - | - | Aprovado pelo usuário | - | Sem órgão, vaga ou garantia |
+| P4-01 | Banner, lona e adesivo | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem medidas/preço ou marca de cliente |
+| P4-02 | Cartão de visita | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem dados reais de cliente |
+| P4-03 | Panfletos | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem oferta de cliente fictícia |
+| P4-04 | Convites | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem dados de evento real |
+| P4-05 | Topo de bolo | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem personagem ou tema de cliente |
+| P4-06 | Presentes personalizados | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Itens em cerâmica sem ampliar serviço |
 | P5-01 | Produção/entrega real | P5 | BLOQUEADO | Foto ou vídeo real aprovado | - | - | - | - | - | - | Não usar imagem genérica |
 | P5-02 | Trabalho real de impressão | P5 | BLOQUEADO | Foto/vídeo e autorização | - | - | - | - | - | - | Sem dados de cliente |
-| P6-01 | Como enviar arquivo para impressão | P6 | PLANEJADO | Validar formatos aceitos pela equipe | - | - | - | - | - | - | Conteúdo educativo |
+| P1-03 | O que a JS resolve no dia a dia | P1 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Papel e digital, sem prometer disponibilidade total |
+| P2-05 | Impressão A4 e A3 | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem preço, papel ou prazo |
+| P6-01 | Antes de enviar seu arquivo | P6 | EM_CHECAGEM | Confirmar formatos e regras de envio | v01 | - | - | - | - | - | Não citar formato sem validação |
+| P4-07 | Canecas personalizadas | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem marca ou foto de cliente |
+| P4-08 | Camisas personalizadas | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem tecido, tamanho ou técnica |
+| P4-09 | Almofadas personalizadas | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem foto familiar sem autorização |
+| P4-10 | Itens personalizados em cerâmica | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Confirmar item no atendimento |
+| P6-02 | Como pedir um personalizado | P6 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Orientação sem promessa de produção |
+| P6-03 | Como pedir material de divulgação | P6 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem medidas, preço ou arte fictícia |
+| P5-03 | Resultado real de impressão | P5 | BLOQUEADO | Foto real autorizada | v01 | - | - | - | - | - | Sem dados de cliente |
+| P5-04 | Resultado real de personalizado | P5 | BLOQUEADO | Foto real autorizada | v01 | - | - | - | - | - | Sem direito de imagem pendente |
+| P5-05 | Bastidor de produção autorizado | P5 | BLOQUEADO | Foto/vídeo e autorização | v01 | - | - | - | - | - | Sem tela, rosto ou pedido legível |
+| P1-04 | Atendimento próximo no Ibura | P1 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem endereço ou horário não confirmado |
+| P2-06 | Revelação de fotos | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem rosto não autorizado |
+| P4-11 | Presentes personalizados para celebrar | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem data, prazo ou personagem |
 
 **Regra de expansão:** antes de iniciar o dia 2, incluir no registro mestre as três pautas seguintes; antes de iniciar a semana 2, incluir todas as pautas da semana 2. Não criar dezenas de linhas vazias sem necessidade de produção.
 
