@@ -166,3 +166,10 @@ O Canal abre com três posts por dia. Cada dia deve combinar: uma peça de desco
 - `README.md` e `CLAUDE.md` do workspace.
 - Site institucional `index.html`.
 - Especificação Técnica de Operação - Canal WhatsApp | JS Gráfica, v1.0.
+
+## 12. Aprendizado de produção aprovado - P1-01
+
+- A direção mais adequada para a JS Gráfica é a base **azul e branca**, também presente no ambiente físico da loja.
+- Não usar fundo preto como base principal das peças institucionais, salvo se uma pauta futura justificar e receber aprovação específica.
+- Usar somente a logo oficial e as fontes definidas no manual.
+- Aplicar a logo **uma única vez por arte**, na posição prevista pela hierarquia. Repetição de logo não é permitida.
