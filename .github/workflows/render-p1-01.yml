@@ -1,0 +1,38 @@
+name: Render P1-01 final assets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes/CANAL_P1-01_20260830_FONTE_v01.py'
+      - '.github/workflows/render-p1-01.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow
+      - name: Render final PNG/JPG
+        run: python conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes/CANAL_P1-01_20260830_FONTE_v01.py
+      - name: Commit rendered assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes/CANAL_P1-01_20260830_ARTE_v01.png
+          git add conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes/CANAL_P1-01_20260830_ARTE_v01.jpg
+          git add conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes/CANAL_P1-01_20260830_STATUS_v01.png
+          git add conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes/CANAL_P1-01_20260830_STATUS_v01.jpg
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "chore(canal): renderizar assets finais P1-01 [skip ci]"
+            git push
+          fi
