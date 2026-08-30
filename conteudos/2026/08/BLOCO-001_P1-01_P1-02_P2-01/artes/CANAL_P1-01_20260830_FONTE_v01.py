@@ -3,7 +3,7 @@ from io import BytesIO
 import urllib.request
 from PIL import Image, ImageDraw, ImageFont
 
-ROOT = Path(__file__).resolve().parents[7]
+ROOT = Path(__file__).resolve().parents[5]
 BLOCK = ROOT / "conteudos/2026/08/BLOCO-001_P1-01_P1-02_P2-01/artes"
 ASSETS = ROOT / "assets/marca"
 BLOCK.mkdir(parents=True, exist_ok=True)
