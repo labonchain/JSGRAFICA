@@ -5,6 +5,10 @@
 **Estado:** EM_BRIEFING
 **Formato:** Canal 1080 x 1080 px + variação para Status 1080 x 1920 px + copy separada
 **Objetivo único:** informar que a JS Gráfica trabalha com segunda via de conta, sem citar empresa, prazo, cobrança ou resultado garantido.
+**Fonte de verdade:** Manual da Marca JS Gráfica; Base de Serviços Confirmados; confirmação atual da equipe.
+**Data-alvo:** a definir pela coordenação.
+**Responsável pela próxima ação:** equipe, para confirmar que o serviço está ativo antes da produção.
+**Última atualização:** 30/08/2026 - Direção de Arte e Conteúdo.
 
 ## Ficha técnica
 
@@ -12,6 +16,7 @@
 - **Dados a confirmar:** quais contas podem ser atendidas no momento, dados necessários, preço e prazo.
 - **Riscos:** expor dados de conta, senha, CPF, código de barras ou prometer emissão para qualquer empresa.
 - **Dependência para liberar a produção:** aprovação deste briefing. A peça é institucional; não usar conta, boleto, QR Code ou tela real.
+- **Gate antes da produção:** a equipe confirma que o serviço está ativo no dia da produção.
 
 ## Mensagem factual
 
