@@ -91,10 +91,22 @@ Este quadro deve ser atualizado a cada movimentação. Um chat que inicia uma et
 
 | ID | Pauta | Pilar | Estado | Dependência atual | Briefing | Copy | Peça | QA | Aprovação | Publicação | Observação curta |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| P1-01 | Abertura do Canal | P1 | PLANEJADO | Nenhuma | - | - | - | - | - | - | Primeiro post institucional |
+| P1-01 | Abertura do Canal | P1 | EM_QA | Registrar QA e versão final do Status | v01 | Pendente | Peça principal aprovada pelo usuário | Pendente | Aprovada pelo usuário | - | Não publicar sem QA e registro verificável |
+| P1-02 | Como acompanhar e falar com a JS | P1 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Informativo; CTA humano |
+| P2-01 | Impressão e xerox | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Serviço estável |
+| P2-02 | Foto 3x4 e revelação de fotos | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem foto de pessoa sem autorização |
+| P2-03 | Encadernação e plastificação | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem especificação comercial não confirmada |
+| P2-04 | Currículos | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Não prometer emprego ou vaga |
+| P3-01 | Segunda via de conta | P3 | EM_CHECAGEM | Confirmar serviço ativo no dia da produção | v01 | - | - | - | - | - | Não usar dados de conta |
+| P3-02 | Recarga de celular e VEM | P3 | EM_CHECAGEM | Confirmar serviço ativo no dia da produção | v01 | - | - | - | - | - | Sem valor, operadora ou saldo |
+| P3-03 | Agendamentos | P3 | EM_CHECAGEM | Confirmar serviço ativo no dia da produção | v01 | - | - | - | - | - | Sem órgão, vaga ou garantia |
+| P4-01 | Banner, lona e adesivo | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem medidas/preço ou marca de cliente |
+| P4-02 | Cartão de visita | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem dados reais de cliente |
+| P4-03 | Panfletos | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem oferta de cliente fictícia |
+| P4-04 | Convites | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem dados de evento real |
+| P4-05 | Topo de bolo | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem personagem ou tema de cliente |
+| P4-06 | Presentes personalizados | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Itens em cerâmica sem ampliar serviço |
 | P5-01 | Produção/entrega real | P5 | BLOQUEADO | Foto ou vídeo real aprovado | - | - | - | - | - | - | Não usar imagem genérica |
-| P1-02 | Como acompanhar e falar no WhatsApp | P1 | PLANEJADO | Confirmar CTA vigente | - | - | - | - | - | - | Informativo |
-| P2-01 | Impressão e xerox | P2 | PLANEJADO | Confirmar serviços ativos | - | - | - | - | - | - | Serviço estável |
 | P5-02 | Trabalho real de impressão | P5 | BLOQUEADO | Foto/vídeo e autorização | - | - | - | - | - | - | Sem dados de cliente |
 | P6-01 | Como enviar arquivo para impressão | P6 | PLANEJADO | Validar formatos aceitos pela equipe | - | - | - | - | - | - | Conteúdo educativo |
 
