@@ -91,9 +91,9 @@ Este quadro deve ser atualizado a cada movimentação. Um chat que inicia uma et
 
 | ID | Pauta | Pilar | Estado | Dependência atual | Briefing | Copy | Peça | QA | Aprovação | Publicação | Observação curta |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| P1-01 | Abertura do Canal | P1 | EM_QA | Registrar QA e versão final do Status | v01 | Pendente | Peça principal aprovada pelo usuário | Pendente | Aprovada pelo usuário | - | Não publicar sem QA e registro verificável |
-| P1-02 | Como acompanhar e falar com a JS | P1 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Informativo; CTA humano |
-| P2-01 | Impressão e xerox | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Serviço estável |
+| P1-01 | Abertura do Canal | P1 | APROVADO_PARA_PUBLICAR | Publicação manual, quando definida | v01 | v01 | v01 (Canal + Status) | v01 | Aprovada pelo usuário | - | Entregas completas; aprovação não equivale a publicação |
+| P1-02 | Como falar com a JS | P1 | AGUARDANDO_APROVACAO | Aprovação visual humana | v01 | v01 | v01 (Canal + Status) | v01 | - | - | Informativo; CTA humano |
+| P2-01 | Impressão e xerox | P2 | AGUARDANDO_APROVACAO | Aprovação visual humana | v01 | v01 | v01 (Canal + Status) | v01 | - | - | Serviço estável |
 | P2-02 | Foto 3x4 e revelação de fotos | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem foto de pessoa sem autorização |
 | P2-03 | Encadernação e plastificação | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem especificação comercial não confirmada |
 | P2-04 | Currículos | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Não prometer emprego ou vaga |
