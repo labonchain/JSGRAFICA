@@ -123,6 +123,15 @@ Este quadro deve ser atualizado a cada movimentação. Um chat que inicia uma et
 | P1-04 | Atendimento próximo no Ibura | P1 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem endereço ou horário não confirmado |
 | P2-06 | Revelação de fotos | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem rosto não autorizado |
 | P4-11 | Presentes personalizados para celebrar | P4 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem data, prazo ou personagem |
+| P2-07 | Cadernos, apostilas e materiais didáticos | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem conteúdo escolar legível |
+| P2-08 | Impressão em papel couchê | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem gramatura, preço ou prazo |
+| P2-09 | Impressão em papel cartão | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem gramatura, acabamento ou preço |
+| P2-10 | Impressão em papel adesivo | P2 | EM_BRIEFING | Aprovação do briefing | v01 | - | - | - | - | - | Sem medida, instalação ou marca de cliente |
+| P3-04 | Consulta e impressão de documentos | P3 | EM_BRIEFING | Aprovação do briefing + validar operação no dia | v01 | - | - | - | - | - | Sem dado sensível ou promessa de resultado |
+| P3-05 | Apoio de acesso ao Gov.br e serviços públicos online | P3 | EM_BRIEFING | Aprovação do briefing + validar operação no dia | v01 | - | - | - | - | - | Sem senha, resultado ou regra de órgão |
+| P3-06 | Declarações MEI e documentos empresariais | P3 | EM_BRIEFING | Aprovação do briefing + validar operação no dia | v01 | - | - | - | - | - | Sem obrigação, prazo ou resultado fiscal |
+| P3-07 | Licenciamento e renovações | P3 | EM_BRIEFING | Aprovação do briefing + validar operação no dia | v01 | - | - | - | - | - | Sem taxa, boleto, placa ou emissão garantida |
+| P3-08 | Consulta de situação do CadÚnico e benefícios sociais | P3 | EM_BRIEFING | Aprovação do briefing + validar operação no dia | v01 | - | - | - | - | - | Sem elegibilidade, benefício ou dado pessoal |
 
 **Regra de expansão:** antes de iniciar o dia 2, incluir no registro mestre as três pautas seguintes; antes de iniciar a semana 2, incluir todas as pautas da semana 2. Não criar dezenas de linhas vazias sem necessidade de produção.
 
