@@ -33,7 +33,7 @@ Pessoa que viu um post no Canal e ainda não sabe como transformar a necessidade
   1. `Conte o que precisa.`
   2. `Envie o arquivo ou uma foto, quando tiver.`
   3. `A equipe confirma o atendimento com você.`
-- Pictogramas monolineares próprios: conversa, documento e balcão/retirada. Uma cor por pictograma.
+- Pictogramas monolineares próprios: conversa, documento e atendimento no balcão. Uma cor por pictograma.
 - Título: `PRECISA RESOLVER ALGUMA COISA?`.
 - CTA no rodapé em IBM Plex Mono: `CHAME A JS GRÁFICA NO WHATSAPP`.
 - Logo de redução no canto inferior, respeitando clearspace.
