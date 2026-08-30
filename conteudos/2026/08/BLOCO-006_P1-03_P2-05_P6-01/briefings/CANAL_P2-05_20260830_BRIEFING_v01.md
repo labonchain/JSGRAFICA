@@ -18,6 +18,10 @@
 
 **Precisa imprimir em A4 ou A3? Fale com a equipe.**
 
+## Público e contexto
+
+Pessoa com atividade, documento ou material de divulgação que já sabe que precisa de impressão, mas precisa confirmar com a equipe os detalhes do pedido. A4 e A3 são os únicos formatos que esta pauta pode citar.
+
 ## Direção visual
 
 - Fundo Branco Gelo com dois planos de papel abstratos, identificados somente como `A4` e `A3`.
@@ -30,6 +34,20 @@
 
 Usar os dois formatos empilhados verticalmente; não apenas recortar a peça quadrada.
 
+## Hierarquia obrigatória
+
+1. Título “Impressão A4 e A3”.
+2. Dois planos abstratos identificados como A4 e A3.
+3. Orientação para enviar o arquivo ou explicar o pedido.
+4. CTA humano e uma única logo.
+
+## Entregáveis de design
+
+- Arquivo-fonte editável identificado com `P2-05`.
+- PNG e JPG do Canal em 1080 x 1080 px.
+- PNG e JPG do Status em 1080 x 1920 px, sem esticar a versão quadrada.
+- Copy em `copy/` e QA em `qa/`.
+
 ## Não incluir
 
 Tabela de preço, prazo, tipos de papel, cópias coloridas/preto e branco, “na hora” ou arquivos de clientes.
@@ -38,8 +56,13 @@ Tabela de preço, prazo, tipos de papel, cópias coloridas/preto e branco, “na
 
 A4 e A3 são legíveis em celular e a peça não promete especificação comercial não validada.
 
+## Gate de produção
+
+Pode seguir ao designer após `BRIEFING_APROVADO`. No QA, confirmar que não apareceu tipo de papel, cor, quantidade, preço, prazo ou imagem de documento legível.
+
 ## Copy sugerida
 
 - **Título:** Tem arquivo para imprimir em A4 ou A3?
 - **Legenda:** Envie seu arquivo ou fale com a equipe sobre o que você precisa. A JS Gráfica orienta o atendimento conforme o seu pedido.
 - **CTA:** Chame a equipe pelo WhatsApp.
+- **Dados validados em:** 30/08/2026 — Base de Serviços Confirmados da JS Gráfica.
