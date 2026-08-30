@@ -5,6 +5,10 @@
 **Estado:** EM_BRIEFING
 **Formato:** Canal 1080 x 1080 px + variação para Status 1080 x 1920 px + copy separada
 **Objetivo único:** informar que a JS Gráfica realiza agendamentos, sem citar órgãos ou prometer vaga, data ou confirmação.
+**Fonte de verdade:** Manual da Marca JS Gráfica; Base de Serviços Confirmados; confirmação atual da equipe.
+**Data-alvo:** a definir pela coordenação.
+**Responsável pela próxima ação:** equipe, para confirmar que o serviço está ativo antes da produção.
+**Última atualização:** 30/08/2026 - Direção de Arte e Conteúdo.
 
 ## Ficha técnica
 
@@ -12,6 +16,7 @@
 - **Dados a confirmar:** serviços/órgãos atendidos, disponibilidade de vagas, documentação, preço e prazo.
 - **Riscos:** promessa de vaga, confirmação, resultado de órgão ou uso de marca pública sem validação.
 - **Dependência para liberar a produção:** aprovação deste briefing. Não usar logos de órgãos, telas de sistema, dados pessoais ou calendário com datas reais.
+- **Gate antes da produção:** a equipe confirma que o serviço está ativo no dia da produção.
 
 ## Mensagem factual
 
