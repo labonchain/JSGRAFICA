@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JS Gráfica, Canal, P2-04, Currículos</title>
+<script src="./support.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --azul-sistema:#2C5F8A;
+    --azul-sistema-escuro:#1E4363;
+    --azul-sistema-claro:#DCE8F0;
+    --laranja-pessego:#E8935A;
+    --laranja-pessego-escuro:#C96E36;
+    --grafite-traco:#3A3A3A;
+    --grafite-nevoa:#6B6B6B;
+    --cinza-nevoa:#E4E4E4;
+    --branco-base:#FFFFFF;
+    --branco-gelo:#F7F7F5;
+    --amarelo-aviso:#F0B429;
+    --amarelo-aviso-escuro:#8A5A0A;
+    --font-display:'Space Grotesk','Segoe UI',Arial,sans-serif;
+    --font-corpo:'Inter','Segoe UI',Arial,sans-serif;
+    --font-dado:'IBM Plex Mono','Consolas',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#cccccc;}
+  x-dc{display:block;}
+  .canvas{
+    width:1080px;height:1080px;
+    background:var(--branco-gelo);
+    position:relative;
+    overflow:hidden;
+    font-family:var(--font-corpo);
+  }
+  .faixa-topo{
+    position:absolute;top:0;left:0;right:0;height:270px;
+    background:var(--azul-sistema);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .titulo{
+    text-align:center;
+    font-family:var(--font-display);font-weight:700;font-size:56px;line-height:1.2;
+    color:var(--branco-base);
+  }
+  .folha{
+    position:absolute;top:330px;left:310px;
+    width:460px;height:450px;
+    background:var(--branco-base);
+    border-radius:16px;
+    border:2px solid var(--cinza-nevoa);
+    box-shadow:0 20px 44px rgba(30,67,99,0.16);
+    padding:36px;
+  }
+  .barra-nome{width:60%;height:22px;border-radius:6px;background:var(--azul-sistema);}
+  .tags{display:flex;gap:12px;margin-top:16px;}
+  .tag{height:16px;width:80px;border-radius:100px;background:var(--amarelo-aviso-escuro);}
+  .secao-rotulo{width:34%;height:12px;border-radius:5px;background:var(--grafite-traco);margin-top:34px;}
+  .linha{height:9px;border-radius:5px;background:var(--cinza-nevoa);margin-top:16px;}
+  .linha.curta{width:55%;}
+  .linha.media{width:78%;}
+  .linha.longa{width:92%;}
+  .apoio{
+    position:absolute;top:900px;left:100px;right:100px;
+    text-align:center;
+    font-family:var(--font-corpo);font-weight:400;font-size:26px;line-height:1.4;
+    color:var(--grafite-traco);
+  }
+  .cta{
+    position:absolute;top:958px;left:100px;right:100px;
+    text-align:center;
+    font-family:var(--font-dado);font-weight:500;font-size:23px;letter-spacing:1.2px;
+    color:var(--azul-sistema-escuro);
+  }
+  .rodape-logo{
+    position:absolute;bottom:30px;left:0;right:0;
+    display:flex;justify-content:center;align-items:center;gap:14px;
+  }
+  .rodape-logo svg{width:44px;height:44px;}
+  .rodape-logo span{
+    font-family:var(--font-display);font-weight:700;font-size:26px;letter-spacing:0.5px;
+    color:var(--grafite-traco);
+  }
+</style>
+</head>
+<body>
+<x-dc>
+<div class="canvas">
+  <div class="faixa-topo">
+    <div class="titulo">SE APRESENTE<br>COM CLAREZA.</div>
+  </div>
+
+  <div class="folha">
+    <div class="barra-nome"></div>
+    <div class="tags">
+      <div class="tag"></div>
+      <div class="tag"></div>
+    </div>
+    <div class="secao-rotulo"></div>
+    <div class="linha media"></div>
+    <div class="linha longa"></div>
+    <div class="linha curta"></div>
+    <div class="secao-rotulo"></div>
+    <div class="linha media"></div>
+    <div class="linha longa"></div>
+    <div class="linha curta"></div>
+  </div>
+
+  <div class="apoio">Currículo para você levar sua apresentação mais organizada.</div>
+
+  <div class="cta">FALE COM A EQUIPE DA JS GRÁFICA</div>
+
+  <div class="rodape-logo">
+    <!-- logo-reducao.svg, aplicado literalmente, sem recolorir; unica aplicacao de marca da peca -->
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <path d="M12 6 C15 6 17.5 8.3 17.5 11.3 C17.5 13 16.6 14.1 15.6 15.3 C14.9 16.1 14.5 16.9 14.5 17.8 L13.9 17.8 L13.9 20.2 L10.1 20.2 L10.1 17.8 L9.5 17.8 C9.5 16.9 9.1 16.1 8.4 15.3 C7.4 14.1 6.5 13 6.5 11.3 C6.5 8.3 9 6 12 6 Z" fill="#2C5F8A"/>
+    </svg>
+    <span>JS GRÁFICA</span>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
