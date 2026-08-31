@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JS Gráfica, Canal, P3-02, Recarga de celular e VEM</title>
+<script src="./support.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --azul-sistema:#2C5F8A;
+    --azul-sistema-escuro:#1E4363;
+    --azul-sistema-claro:#DCE8F0;
+    --laranja-pessego:#E8935A;
+    --laranja-pessego-escuro:#C96E36;
+    --grafite-traco:#3A3A3A;
+    --grafite-nevoa:#6B6B6B;
+    --cinza-nevoa:#E4E4E4;
+    --branco-base:#FFFFFF;
+    --branco-gelo:#F7F7F5;
+    --amarelo-aviso:#F0B429;
+    --amarelo-aviso-escuro:#8A5A0A;
+    --font-display:'Space Grotesk','Segoe UI',Arial,sans-serif;
+    --font-corpo:'Inter','Segoe UI',Arial,sans-serif;
+    --font-dado:'IBM Plex Mono','Consolas',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#cccccc;}
+  x-dc{display:block;}
+  .canvas{
+    width:1080px;height:1080px;
+    background:var(--branco-gelo);
+    position:relative;
+    overflow:hidden;
+    font-family:var(--font-corpo);
+  }
+  .faixa-topo{
+    position:absolute;top:0;left:0;right:0;
+    height:290px;
+    background:var(--azul-sistema);
+  }
+  .titulo{
+    position:absolute;top:85px;left:80px;width:920px;
+    font-family:var(--font-display);font-weight:700;font-size:58px;line-height:1.16;
+    color:var(--branco-base);
+  }
+  .pictogramas{
+    position:absolute;top:330px;left:140px;width:800px;height:420px;
+    display:flex;gap:40px;
+  }
+  .card-pict{
+    width:380px;height:420px;
+    background:var(--branco-base);
+    border-radius:24px;
+    border:2px solid var(--cinza-nevoa);
+    box-shadow:0 16px 34px rgba(30,67,99,0.14);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  }
+  .icone-celular{
+    width:110px;height:196px;
+    border:3px solid var(--grafite-traco);
+    border-radius:20px;
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    padding:14px;
+  }
+  .icone-celular .tela{
+    width:100%;height:100%;
+    background:var(--azul-sistema-claro);
+    border-radius:8px;
+  }
+  .icone-celular .botao{
+    position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
+    width:14px;height:14px;border-radius:50%;
+    background:var(--grafite-traco);
+  }
+  .icone-cartao{
+    width:200px;height:130px;
+    background:var(--azul-sistema-claro);
+    border:3px solid var(--azul-sistema);
+    border-radius:16px;
+    position:relative;
+    overflow:hidden;
+  }
+  .icone-cartao .tarja{
+    position:absolute;top:0;left:0;right:0;height:26px;
+    background:var(--amarelo-aviso-escuro);
+  }
+  .icone-cartao .chip{
+    position:absolute;top:52px;left:20px;
+    width:28px;height:22px;border-radius:5px;
+    background:var(--azul-sistema-escuro);
+  }
+  .icone-cartao .linha1{
+    position:absolute;bottom:24px;right:20px;
+    width:60px;height:8px;border-radius:4px;
+    background:var(--grafite-nevoa);
+  }
+  .icone-cartao .linha2{
+    position:absolute;bottom:12px;right:20px;
+    width:40px;height:8px;border-radius:4px;
+    background:var(--grafite-nevoa);
+    opacity:0.55;
+  }
+  .label-pict{
+    font-family:var(--font-dado);font-weight:500;font-size:20px;letter-spacing:2px;
+    color:var(--grafite-traco);
+  }
+  .apoio{
+    position:absolute;top:800px;left:80px;width:920px;
+    text-align:center;
+    font-family:var(--font-corpo);font-weight:400;font-size:30px;line-height:1.5;
+    color:var(--grafite-traco);
+  }
+  .cta{
+    position:absolute;top:898px;left:80px;width:920px;
+    text-align:center;
+    font-family:var(--font-dado);font-weight:500;font-size:26px;letter-spacing:1.5px;
+    color:var(--amarelo-aviso-escuro);
+  }
+  .rodape-logo{
+    position:absolute;bottom:56px;left:0;right:0;
+    display:flex;justify-content:center;align-items:center;gap:14px;
+  }
+  .rodape-logo svg{width:52px;height:52px;}
+  .rodape-logo span{
+    font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing:0.5px;
+    color:var(--grafite-traco);
+  }
+</style>
+</head>
+<body>
+<x-dc>
+<div class="canvas">
+  <div class="faixa-topo"></div>
+  <div class="titulo">RECARGA PARA<br>SEGUIR O DIA.</div>
+
+  <div class="pictogramas">
+    <div class="card-pict">
+      <div class="icone-celular">
+        <div class="tela"></div>
+        <div class="botao"></div>
+      </div>
+      <div class="label-pict">CELULAR</div>
+    </div>
+    <div class="card-pict">
+      <div class="icone-cartao">
+        <div class="tarja"></div>
+        <div class="chip"></div>
+        <div class="linha1"></div>
+        <div class="linha2"></div>
+      </div>
+      <div class="label-pict">VEM</div>
+    </div>
+  </div>
+
+  <div class="apoio">Recarga de celular e VEM na JS Gráfica.</div>
+
+  <div class="cta">CONFIRME COM A EQUIPE PELO WHATSAPP</div>
+
+  <div class="rodape-logo">
+    <!-- logo-reducao.svg, aplicado literalmente (03-assets/logo/logo-reducao.svg), unica aplicacao de marca da peca -->
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <path d="M12 6 C15 6 17.5 8.3 17.5 11.3 C17.5 13 16.6 14.1 15.6 15.3 C14.9 16.1 14.5 16.9 14.5 17.8 L13.9 17.8 L13.9 20.2 L10.1 20.2 L10.1 17.8 L9.5 17.8 C9.5 16.9 9.1 16.1 8.4 15.3 C7.4 14.1 6.5 13 6.5 11.3 C6.5 8.3 9 6 12 6 Z" fill="#2C5F8A"/>
+    </svg>
+    <span>JS GRÁFICA</span>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
