@@ -92,8 +92,8 @@ Este quadro deve ser atualizado a cada movimentação. Um chat que inicia uma et
 | ID | Pauta | Pilar | Estado | Dependência atual | Briefing | Copy | Peça | QA | Aprovação | Publicação | Observação curta |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | P1-01 | Abertura do Canal | P1 | APROVADO_PARA_PUBLICAR | Publicação manual, quando definida | v01 | v01 | v01 (Canal + Status) | v01 | Aprovada pelo usuário | - | Entregas completas; aprovação não equivale a publicação |
-| P1-02 | Como falar com a JS | P1 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | v01 | - | - | Aprovado pelo usuário | - | Briefing e copy preservados; arte anterior removida |
-| P2-01 | Impressão e xerox | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | v01 | - | - | Aprovado pelo usuário | - | Briefing e copy preservados; arte anterior removida |
+| P1-02 | Como falar com a JS | P1 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado (squad js-grafica-canal-conteudo, 31/08); aguardando aprovação final |
+| P2-01 | Impressão e xerox | P2 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado (squad js-grafica-canal-conteudo, 31/08); aguardando aprovação final |
 | P2-02 | Foto 3x4 e revelação de fotos | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem foto de pessoa sem autorização |
 | P2-03 | Encadernação e plastificação | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem especificação comercial não confirmada |
 | P2-04 | Currículos | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Não prometer emprego ou vaga |
