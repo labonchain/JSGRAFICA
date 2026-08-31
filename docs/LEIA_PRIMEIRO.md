@@ -1,5 +1,22 @@
 # LEIA PRIMEIRO - obrigatório para qualquer chat
 
+## ⚠️ PRODUÇÃO DE ARTE PAUSADA (30/08/2026, demanda 361)
+
+O Edvam avaliou as 32 peças já produzidas e o feedback foi direto: visual genérico demais,
+parece template pronto (cards com círculo, blocos de cor lisos, ícone vetorial repetido), sem
+sofisticação. Não é sobre copy, é sobre composição e acabamento visual.
+
+**Não produzir arte nova (Canal ou Status) até esse aviso ser removido.** Copy/briefing podem
+seguir normalmente. Uma direção visual nova está em revisão em
+[`direcao/DIRECAO_ARTE_E_CONTEUDO_CANAL_JS_GRAFICA_v1.md`](direcao/DIRECAO_ARTE_E_CONTEUDO_CANAL_JS_GRAFICA_v1.md),
+com exemplo real sendo mostrado ao Edvam antes de qualquer peça nova ou reprodução em escala.
+
+Se esta é uma produção automática rodando fora do controle direto do time (pipeline próprio do
+Edvam), esta sinalização no repositório não substitui pausar o processo do lado de onde ele é
+operado.
+
+---
+
 Não comece nenhum trabalho antes de ler os arquivos abaixo, nesta ordem:
 
 1. [`marca/manual-de-marca-js-grafica.pdf`](marca/manual-de-marca-js-grafica.pdf)
