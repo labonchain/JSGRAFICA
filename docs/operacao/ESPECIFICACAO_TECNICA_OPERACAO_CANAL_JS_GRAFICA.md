@@ -94,13 +94,13 @@ Este quadro deve ser atualizado a cada movimentação. Um chat que inicia uma et
 | P1-01 | Abertura do Canal | P1 | APROVADO_PARA_PUBLICAR | Publicação manual, quando definida | v01 | v01 | v01 (Canal + Status) | v01 | Aprovada pelo usuário | - | Entregas completas; aprovação não equivale a publicação |
 | P1-02 | Como falar com a JS | P1 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado (squad js-grafica-canal-conteudo, 31/08); aguardando aprovação final |
 | P2-01 | Impressão e xerox | P2 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado (squad js-grafica-canal-conteudo, 31/08); aguardando aprovação final |
-| P2-02 | Foto 3x4 e revelação de fotos | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem foto de pessoa sem autorização |
-| P2-03 | Encadernação e plastificação | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem especificação comercial não confirmada |
+| P2-02 | Foto 3x4 e revelação de fotos | P2 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado (squad js-grafica-canal-conteudo, 31/08); aguardando aprovação final |
+| P2-03 | Encadernação e plastificação | P2 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado (squad js-grafica-canal-conteudo, 31/08); aguardando aprovação final |
 | P2-04 | Currículos | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Não prometer emprego ou vaga |
 | P3-01 | Segunda via de conta | P3 | BRIEFING_APROVADO | Confirmar serviço ativo no dia da produção | v01 | - | - | - | Aprovado pelo usuário | - | Não usar dados de conta |
 | P3-02 | Recarga de celular e VEM | P3 | BRIEFING_APROVADO | Confirmar serviço ativo no dia da produção | v01 | - | - | - | Aprovado pelo usuário | - | Sem valor, operadora ou saldo |
 | P3-03 | Agendamentos | P3 | BRIEFING_APROVADO | Confirmar serviço ativo no dia da produção | v01 | - | - | - | Aprovado pelo usuário | - | Sem órgão, vaga ou garantia |
-| P4-01 | Banner, lona e adesivo | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem medidas/preço ou marca de cliente |
+| P4-01 | Banner, lona e adesivo | P4 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado (squad js-grafica-canal-conteudo, 31/08); aguardando aprovação final |
 | P4-02 | Cartão de visita | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem dados reais de cliente |
 | P4-03 | Panfletos | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem oferta de cliente fictícia |
 | P4-04 | Convites | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem dados de evento real |
