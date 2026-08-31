@@ -1,0 +1,17 @@
+# Segredos e ambiente local (nunca commitar valor real)
+.env
+.env.local
+.env*.local
+!.env.local.example
+
+# dependências / build
+node_modules/
+.next/
+.vercel/
+*.tsbuildinfo
+
+# Backups de workflow n8n do sistema-caixa: contêm dado de execução real
+# (pinData) com token/instanceId Z-API reais e, em 2 arquivos, chave
+# service_role do Supabase compartilhado. Mantido só localmente, nunca
+# neste repositório público (decisão do Edvam, demanda 357).
+sistema-caixa/pm/backups/

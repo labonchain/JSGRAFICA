@@ -1,0 +1,80 @@
+"use client";
+
+// ── Demanda 193: padrão visual único do Financeiro ──────────────────────────
+// O levantamento da 186 achou 4 problemas transversais (T1-T4): cada tela
+// tinha seu próprio cabeçalho, seu próprio jeito de escolher período e datas
+// em formatos misturados. Estes componentes são A fonte do padrão — Entradas,
+// Saídas e Fechar Caixa usam os mesmos; as demais telas do Financeiro entram
+// nas próximas rodadas (194+).
+
+// T1 — cabeçalho padronizado: emoji + título + frase do que a tela é, e um
+// slot à direita (selo de status, botão de ação etc.).
+export function CabecalhoFinanceiro({ emoji, titulo, subtitulo, direita }: {
+  emoji: string;
+  titulo: string;
+  subtitulo: string;
+  direita?: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-start justify-between flex-wrap gap-2">
+      <div>
+        <h2 className="text-base font-bold text-gray-800">{emoji} {titulo}</h2>
+        <p className="text-sm text-gray-500 mt-0.5">{subtitulo}</p>
+      </div>
+      {direita}
+    </div>
+  );
+}
+
+// T3 — datas SEMPRE em DD/MM/AAAA nos textos. (O <input type="date"> nativo
+// segue o idioma do NAVEGADOR — em pt-BR ele já mostra dd/mm/aaaa; por isso o
+// rótulo do dia escolhido aparece por extenso ao lado, em BR, pra nunca
+// depender do input.)
+export function dataDiaParaBR(dataDia: string): string {
+  const [dd, mm, aa] = dataDia.split("-");
+  if (!dd || !mm || !aa) return dataDia;
+  return `${dd}/${mm}/20${aa}`;
+}
+
+export function dataDiaParaISO(dataDia: string): string {
+  const [dd, mm, aa] = dataDia.split("-");
+  if (!dd || !mm || !aa) return "";
+  return `20${aa}-${mm}-${dd}`;
+}
+
+export function isoParaDataDia(iso: string): string {
+  const [aaaa, mm, dd] = iso.split("-");
+  if (!dd || !mm || !aaaa) return "";
+  return `${dd}-${mm}-${aaaa.slice(-2)}`;
+}
+
+// T2 — o ÚNICO seletor de dia do Financeiro: botão "Hoje" + calendário, com
+// o dia escolhido escrito em DD/MM/AAAA. `hoje` vem de quem chama
+// (formatarDiaCaixa) pra manter a regra do dia-caixa num lugar só.
+export function SeletorDia({ dataDia, hoje, onMudar, maxHoje = true }: {
+  dataDia: string;              // DD-MM-AA (formato do caixa)
+  hoje: string;                 // DD-MM-AA
+  onMudar: (dataDia: string) => void;
+  maxHoje?: boolean;
+}) {
+  const ehHoje = dataDia === hoje;
+  return (
+    <div className="flex items-center gap-2 flex-wrap">
+      <button onClick={() => onMudar(hoje)}
+        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+          ehHoje ? "bg-blue-600 text-white" : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
+        }`}>
+        Hoje
+      </button>
+      <input type="date" value={dataDiaParaISO(dataDia)} lang="pt-BR"
+        max={maxHoje ? dataDiaParaISO(hoje) : undefined}
+        onChange={e => { const d = isoParaDataDia(e.target.value); if (d) onMudar(d); }}
+        className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-blue-400 bg-white" />
+      {!ehHoje && (
+        <span className="text-sm font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-1.5">
+          Vendo {dataDiaParaBR(dataDia)}
+        </span>
+      )}
+    </div>
+  );
+}

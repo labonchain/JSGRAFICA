@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Manual do Sistema — JS Gráfica</title>
+<style>
+  :root {
+    --azul:        #1d4ed8;
+    --azul-escuro: #1e3a8a;
+    --azul-claro:  #eaf0fe;
+    --tinta:       #1b2130;
+    --tinta-suave: #4b5468;
+    --papel:       #faf9f6;
+    --cartao:      #ffffff;
+    --linha:       #e4e1da;
+    --verde:       #15803d;
+    --verde-bg:    #eefbf1;
+    --ambar:       #b45309;
+    --ambar-bg:    #fff8ec;
+    --vermelho:    #b91c1c;
+    --vermelho-bg: #fdeeee;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: "Segoe UI", -apple-system, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.62;
+  }
+  h1, h2, h3, h4 { font-family: Cambria, Georgia, "Times New Roman", serif; color: var(--azul-escuro); }
+  p { margin: 10px 0; }
+
+  /* ---------- layout ---------- */
+  .shell { display: flex; max-width: 1280px; margin: 0 auto; }
+  nav.toc {
+    position: sticky; top: 0; align-self: flex-start;
+    width: 258px; flex: 0 0 258px;
+    height: 100vh; overflow-y: auto;
+    padding: 30px 18px 30px 26px;
+    border-right: 1px solid var(--linha);
+  }
+  nav.toc .marca { font-family: Cambria, Georgia, serif; font-weight: 700; font-size: 19px; color: var(--azul-escuro); margin-bottom: 2px; }
+  nav.toc .marca-sub { font-size: 12px; color: var(--tinta-suave); margin-bottom: 22px; }
+  nav.toc a {
+    display: flex; align-items: center; gap: 9px;
+    padding: 7px 10px; margin: 1px 0;
+    border-radius: 8px;
+    color: var(--tinta-suave);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 600;
+    transition: background .12s, color .12s;
+  }
+  nav.toc a .n { font-family: Cambria, Georgia, serif; font-weight: 700; color: #b7bdc9; font-size: 12.5px; width: 16px; }
+  nav.toc a:hover { background: var(--azul-claro); color: var(--azul-escuro); }
+  nav.toc a.ativo { background: var(--azul); color: #fff; }
+  nav.toc a.ativo .n { color: #cfe0ff; }
+  nav.toc .grupo-titulo {
+    font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+    color: #9aa1b1; margin: 20px 0 6px 10px;
+  }
+  main { flex: 1; min-width: 0; padding: 46px 56px 90px; }
+
+  /* ---------- capa ---------- */
+  .capa { margin-bottom: 10px; }
+  .capa .kicker {
+    display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--azul); background: var(--azul-claro);
+    padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
+  }
+  h1.titulo { font-size: 40px; line-height: 1.12; margin: 0 0 8px; letter-spacing: -.01em; }
+  .subtitulo { color: var(--tinta-suave); font-size: 16.5px; margin: 0 0 26px; }
+  .capa-linha {
+    display: flex; gap: 22px; flex-wrap: wrap;
+    border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha);
+    padding: 16px 0; margin-bottom: 44px; font-size: 13.5px; color: var(--tinta-suave);
+  }
+  .capa-linha b { color: var(--tinta); }
+
+  /* ---------- seções ---------- */
+  section { padding-top: 54px; margin-top: -54px; }
+  h2 {
+    font-size: 27px; margin: 0 0 6px;
+    padding-bottom: 14px; margin-bottom: 22px;
+    border-bottom: 3px solid var(--azul);
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  h2 .num { color: #c3ccdc; font-size: 18px; }
+  h3 { font-size: 19px; margin: 30px 0 10px; color: var(--tinta); }
+  h4 { font-size: 15.5px; margin: 18px 0 6px; color: var(--tinta); }
+  .lead { font-size: 16.5px; color: var(--tinta-suave); margin-bottom: 20px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 20px; vertical-align: middle; margin-left: 10px;
+  }
+  .badge-admin { background: #fdeee0; color: #9a4a12; }
+  .badge-todos { background: var(--azul-claro); color: var(--azul-escuro); }
+
+  .botao {
+    display: inline-block; font-weight: 700; font-size: 13.5px;
+    background: #eef1fb; color: #29399e; border: 1px solid #ced6f2;
+    border-radius: 7px; padding: 2px 10px;
+  }
+
+  /* ---------- passos ---------- */
+  .passos { counter-reset: passo; margin: 22px 0; }
+  .passo {
+    counter-increment: passo;
+    display: grid; grid-template-columns: 40px 1fr; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px dashed var(--linha);
+  }
+  .passo:last-child { border-bottom: none; }
+  .passo::before {
+    content: counter(passo);
+    font-family: Cambria, Georgia, serif; font-weight: 700; font-size: 16px;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--azul); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .passo p { margin: 3px 0; }
+
+  /* ---------- screenshots ---------- */
+  figure.tela {
+    margin: 18px 0 26px;
+    border: 1px solid var(--linha);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 26px -14px rgba(20,30,60,.28);
+    background: var(--cartao);
+  }
+  figure.tela img { display: block; width: 100%; height: auto; }
+  figure.tela figcaption {
+    font-size: 12.5px; color: var(--tinta-suave);
+    padding: 9px 16px; border-top: 1px solid var(--linha);
+    background: #fbfbfa;
+  }
+  .telas-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+
+  /* ---------- callouts ---------- */
+  .aviso, .nota, .destaque {
+    border-radius: 10px; padding: 14px 18px; margin: 16px 0; font-size: 14.5px;
+    border: 1px solid transparent;
+  }
+  .aviso     { background: var(--ambar-bg);    border-color: #f3d9ab; }
+  .nota      { background: var(--azul-claro);  border-color: #c7d6fb; }
+  .destaque  { background: var(--verde-bg);    border-color: #bfe6cb; }
+  .aviso .rotulo, .nota .rotulo, .destaque .rotulo {
+    display: block; font-weight: 700; font-size: 12px; letter-spacing: .04em; text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .aviso .rotulo { color: var(--ambar); }
+  .nota .rotulo { color: var(--azul-escuro); }
+  .destaque .rotulo { color: var(--verde); }
+
+  /* ---------- tabela esteira ---------- */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0 22px; font-size: 14.5px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--linha); }
+  th { background: #f2f1ec; font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--tinta-suave); font-weight: 700; }
+  tr:last-child td { border-bottom: none; }
+
+  .esteira { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 20px 0 26px; }
+  .esteira-item {
+    background: var(--cartao); border: 1.5px solid var(--linha); border-radius: 24px;
+    padding: 8px 16px; font-weight: 700; font-size: 13.5px; white-space: nowrap;
+  }
+  .esteira-item.op { border-color: #f3d9ab; background: var(--ambar-bg); color: var(--ambar); }
+  .esteira-seta { color: #c3ccdc; font-size: 18px; }
+
+  ul, ol { padding-left: 22px; }
+  li { margin: 5px 0; }
+
+  .rodape-manual {
+    margin-top: 70px; padding-top: 20px; border-top: 1px solid var(--linha);
+    font-size: 12.5px; color: #9aa1b1;
+  }
+
+  .print-btn {
+    position: fixed; top: 20px; right: 20px; z-index: 50;
+    background: var(--azul); color: #fff; border: none; border-radius: 8px;
+    padding: 11px 18px; font-weight: 700; font-size: 13.5px; cursor: pointer;
+    box-shadow: 0 8px 20px -8px rgba(29,78,216,.55);
+  }
+  .print-btn:hover { background: var(--azul-escuro); }
+
+  @media (max-width: 900px) {
+    nav.toc { display: none; }
+    main { padding: 30px 22px 70px; }
+  }
+
+  @page { size: A4; margin: 16mm 14mm; }
+  @media print {
+    .print-btn, nav.toc { display: none !important; }
+    .shell { display: block; max-width: none; }
+    main { padding: 0; }
+    body { font-size: 12.5px; background: #fff; }
+    h1.titulo { font-size: 30px; }
+    h2 { font-size: 19px; page-break-after: avoid; }
+    h3 { font-size: 15px; page-break-after: avoid; }
+    section { page-break-inside: avoid; padding-top: 0; margin-top: 0; }
+    figure.tela { box-shadow: none; page-break-inside: avoid; }
+    .passo { page-break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+
+<div class="shell">
+  <nav class="toc" id="toc">
+    <div class="marca">JS Gráfica</div>
+    <div class="marca-sub">Manual do sistema</div>
+
+    <div class="grupo-titulo">Para toda a equipe</div>
+    <a href="#entrar"><span class="n">01</span> Como entrar</a>
+    <a href="#vender"><span class="n">02</span> Vender no balcão</a>
+    <a href="#esteira"><span class="n">03</span> Acompanhar pedidos</a>
+    <a href="#fechar"><span class="n">04</span> Fechar caixa</a>
+
+    <div class="grupo-titulo">Só Admin (Edvam)</div>
+    <a href="#inbox"><span class="n">05</span> Inbox — WhatsApp</a>
+    <a href="#clientes"><span class="n">06</span> Clientes</a>
+    <a href="#financeiro"><span class="n">07</span> Financeiro</a>
+    <a href="#mp"><span class="n">08</span> Mercado Pago</a>
+    <a href="#produtos"><span class="n">09</span> Produtos</a>
+    <a href="#zapi"><span class="n">10</span> Conectar WhatsApp</a>
+
+    <div class="grupo-titulo">Consulta rápida</div>
+    <a href="#faq"><span class="n">11</span> Perguntas frequentes</a>
+  </nav>
+
+  <main>
+    <div class="capa">
+      <span class="kicker">Guia de uso</span>
+      <h1 class="titulo">Manual do Sistema<br>Caixa JS Gráfica</h1>
+      <p class="subtitulo">Passo a passo real do PDV e do Admin — com as telas do sistema em produção, do jeito que você vai ver na tela todo dia.</p>
+      <div class="capa-linha">
+        <span><b>pdv.jsgrafica.site</b> — Zu e Gabi</span>
+        <span><b>admin.jsgrafica.site</b> — Edvam</span>
+        <span>Atualizado em <b>10/07/2026</b></span>
+        <span>Seções 1–4 valem pra todo mundo · 5–10 são só do Admin</span>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <section id="entrar">
+      <h2><span class="num">01</span> Como entrar no sistema <span class="badge badge-todos">Todos</span></h2>
+
+      <h3>Zu e Gabi — PDV</h3>
+      <div class="passos">
+        <div class="passo"><div class="passo-corpo"><p>Abra <b>pdv.jsgrafica.site</b> e toque no seu nome. Não precisa de senha.</p></div></div>
+        <div class="passo"><div class="passo-corpo"><p><b>Abertura de caixa</b> — na primeira vez que você entra no dia, o sistema pede pra contar o dinheiro e as moedas físicas do seu caixa antes de liberar qualquer tela.</p>
+        <p>Preencha "Dinheiro R$" e "Moedas R$" e toque em <span class="botao">Registrar abertura e entrar</span>.</p></div></div>
+      </div>
+      <div class="nota"><span class="rotulo">Nota</span> Esse portão só aparece 1x por dia — depois de registrar, o sistema libera normalmente até o dia seguinte.</div>
+
+      <h3>Edvam — Admin</h3>
+      <figure class="tela">
+        <img src="imgs/login-admin.png" alt="Tela de login do Admin">
+        <figcaption>admin.jsgrafica.site — login com senha, sem portão de abertura de caixa.</figcaption>
+      </figure>
+
+      <h3>Navegação</h3>
+      <p>O menu tem 2 fileiras: primeiro o <b>grupo</b> (💬 Atendimento, 📋 Vendas, 💰 Financeiro, ⚙️ Configurações), depois a <b>aba</b> dentro dele. Zu e Gabi só veem os grupos/abas do dia a dia — as telas administrativas só aparecem pro Admin.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="vender">
+      <h2><span class="num">02</span> Vender no balcão <span class="badge badge-todos">Todos</span></h2>
+      <p class="lead">Aba <b>🧾 Pedidos Balcão</b>, dentro do grupo 📋 Vendas — a tela do dia a dia no caixa.</p>
+
+      <figure class="tela">
+        <img src="imgs/balcao-categorias.png" alt="Tela de categorias do balcão, carrinho vazio">
+        <figcaption>Categorias à esquerda, carrinho e atalhos de "Mais vendidos hoje" à direita.</figcaption>
+      </figure>
+
+      <div class="passos">
+        <div class="passo"><div class="passo-corpo"><p>Toque na <b>categoria</b> do produto (xerox, impressão, plastificação, recarga...). Os chips no topo trocam de categoria sem precisar voltar.</p></div></div>
+        <div class="passo"><div class="passo-corpo"><p>Toque no produto → escolha a quantidade → <span class="botao">Adicionar</span>. Serviço fora da tabela? Use <b>Entrada Avulsa</b>: descreva e informe o valor combinado.</p></div></div>
+        <div class="passo"><div class="passo-corpo"><p>Quer desconto num item? <span class="botao">🏷️ Aplicar desconto</span> na linha dele — R$ ou %, motivo opcional.</p></div></div>
+      </div>
+
+      <figure class="tela">
+        <img src="imgs/balcao-carrinho.png" alt="Carrinho com um item adicionado">
+        <figcaption>Item no carrinho — total atualiza na hora, botão "Confirmar Venda" libera.</figcaption>
+      </figure>
+
+      <div class="passos">
+        <div class="passo"><div class="passo-corpo"><p>Toque em <span class="botao">✓ Confirmar Venda</span>. Abre o modal <b>"Finalizar venda"</b>: escolha a <b>forma de pagamento</b> e se <b>já entregou agora</b>.</p></div></div>
+      </div>
+
+      <div class="telas-2col">
+        <figure class="tela">
+          <img src="imgs/balcao-modal-pagamento.png" alt="Modal Finalizar venda">
+          <figcaption>"Levou agora" — venda fecha na hora, sem mais nenhum passo.</figcaption>
+        </figure>
+        <figure class="tela">
+          <img src="imgs/balcao-modal-retira-depois.png" alt="Modal Finalizar venda com campo de retirada">
+          <figcaption>"Vai buscar depois" — nome de quem retira é obrigatório.</figcaption>
+        </figure>
+      </div>
+
+      <div class="destaque">
+        <span class="rotulo">Levou agora × Retira depois</span>
+        <b>Levou agora:</b> a venda já nasce <i>Entregue</i>, direto — não precisa fazer mais nada.<br>
+        <b>Retira depois:</b> desde 10/07/2026, o pedido entra na esteira de produção (seção 3) — precisa avançar manualmente na aba <b>Pedidos</b> até chegar em "Aguardando retirada" e depois "Entregue".
+      </div>
+
+      <p>Se a forma foi <b>Pix</b>, abre um popup com QR Code + código copia-e-cola — confirma sozinho quando cair (ou toque em <span class="botao">✓ Confirmar pagamento</span> se for Pix da RecargaPay, que não confirma sozinho). <span class="botao">Cancelar venda</span> no popup desfaz tudo se o cliente desistir.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="esteira">
+      <h2><span class="num">03</span> Acompanhar pedidos <span class="badge badge-todos">Todos</span></h2>
+      <p class="lead">Aba <b>🗂️ Pedidos</b> (grupo 📋 Vendas) — todo pedido aparece aqui, vindo do balcão ou do WhatsApp, com o mesmo fluxo de status.</p>
+
+      <div class="esteira">
+        <span class="esteira-item">Aguardando</span><span class="esteira-seta">→</span>
+        <span class="esteira-item">Confirmado</span><span class="esteira-seta">→</span>
+        <span class="esteira-item">Em produção</span><span class="esteira-seta">→</span>
+        <span class="esteira-item">Pronto</span><span class="esteira-seta">→</span>
+        <span class="esteira-item op">Aguardando retirada <i>(se aplicável)</i></span><span class="esteira-seta">→</span>
+        <span class="esteira-item">Entregue</span>
+      </div>
+
+      <figure class="tela">
+        <img src="imgs/pedidos-lista.png" alt="Lista de pedidos com filtros por status">
+        <figcaption>Lista completa, com contador por status e detalhe do pedido à direita.</figcaption>
+      </figure>
+
+      <h3>Como avançar um pedido</h3>
+      <table>
+        <tr><th>De</th><th>Botão</th><th>Vai para</th></tr>
+        <tr><td>Aguardando</td><td><span class="botao">Confirmar pedido</span></td><td>Confirmado</td></tr>
+        <tr><td>Confirmado</td><td><span class="botao">Iniciar produção</span></td><td>Em produção</td></tr>
+        <tr><td>Em produção</td><td><span class="botao">Marcar como pronto</span></td><td>Pronto</td></tr>
+        <tr><td>Pronto</td><td><span class="botao">✓ Entregue (levou agora)</span></td><td>Entregue</td></tr>
+        <tr><td>Pronto</td><td><span class="botao">📦 Aguardando retirada</span></td><td>Aguardando retirada</td></tr>
+        <tr><td>Aguardando retirada</td><td><span class="botao">Marcar entregue</span></td><td>Entregue</td></tr>
+      </table>
+
+      <figure class="tela">
+        <img src="imgs/fila-impressao.png" alt="Fila de impressão">
+        <figcaption>Sub-aba 🖨️ Fila de impressão — só o que está Confirmado ou Em produção, visão rápida "o que falta fazer agora".</figcaption>
+      </figure>
+
+      <div class="aviso">
+        <span class="rotulo">⚠️ Pagamento pendente — quando o sistema trava</span>
+        Tentou avançar pra <b>Em produção</b>, <b>Pronto</b> ou <b>Entregue</b> sem pagamento confirmado? Aparece o modal <b>"Pagamento pendente"</b> pedindo Dinheiro, Cartão ou Pix — ao confirmar, o pedido já avança. Vale pra qualquer forma, sem exceção. <b>"Aguardando retirada" NÃO trava</b> — é normal um pedido "paga na retirada" esperar o cliente vir buscar e pagar sem essa checagem.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="fechar">
+      <h2><span class="num">04</span> Fechar caixa <span class="badge badge-todos">Todos</span></h2>
+      <p class="lead">Aba <b>🔒 Fechar Caixa</b> (grupo 💰 Financeiro). Zu e Gabi fecham a própria gaveta; o Admin vê o fechamento geral com as 4 contas.</p>
+
+      <figure class="tela">
+        <img src="imgs/fechar-caixa.png" alt="Tela de Fechar Caixa">
+        <figcaption>Resumo por operador, entradas/saídas do dia e histórico dos últimos dias.</figcaption>
+      </figure>
+
+      <div class="passos">
+        <div class="passo"><div class="passo-corpo"><p>Conte o dinheiro em cédulas e as moedas do seu caixa físico e preencha nos campos.</p></div></div>
+        <div class="passo"><div class="passo-corpo"><p>Compare com o <b>Total esperado</b> calculado pelo sistema — bateu, fica verde; se não, mostra a diferença.</p></div></div>
+        <div class="passo"><div class="passo-corpo"><p>Toque em <span class="botao">🔒 Fechar Caixa</span>. Depois de fechado não dá pra editar — algo errado, avise o Edvam.</p></div></div>
+      </div>
+
+      <h3>Fechamento geral <span class="badge badge-admin">Admin</span></h3>
+      <p>Além da contagem física, o Admin confere as 4 contas: <b>💳 Mercado Pago</b> (automática), <b>🏦 Caixa Econômica</b>, <b>💳 Stone</b> e <b>📱 RecargaPay</b> (manuais). O sistema já pré-preenche o dinheiro/moedas que Zu e Gabi fecharam nas próprias gavetas.</p>
+
+      <h3>🔍 Diagnóstico do fechamento <span class="badge badge-admin">Admin</span></h3>
+      <figure class="tela">
+        <img src="imgs/fechar-caixa-diagnostico.png" alt="Histórico de fechamentos com divergência">
+        <figcaption>Histórico dos últimos dias — divergência em destaque quando existe.</figcaption>
+      </figure>
+      <ul>
+        <li>Escolha o dia e toque em <span class="botao">✨ Gerar resumo do dia</span> — texto em português explica o que bateu e o que não bateu, sem inventar causa quando os dados não sustentam.</li>
+        <li>Abaixo, lista de <b>sinais</b> automáticos (🔴 crítico, 🟡 atenção, ℹ️ info) apontando o pedido/saída exato envolvido.</li>
+        <li><span class="botao">✎ Editar</span> ajusta o texto manualmente; <span class="botao">↻ Gerar de novo</span> gera outro sem perder a edição.</li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="inbox">
+      <h2><span class="num">05</span> Inbox — WhatsApp <span class="badge badge-admin">Admin</span></h2>
+      <p class="lead">Central de conversas do WhatsApp — 3 colunas: lista de conversas, a conversa aberta, e o painel do contato/pedido.</p>
+
+      <figure class="tela">
+        <img src="imgs/inbox.png" alt="Lista de conversas do Inbox">
+        <figcaption>Filtros por status e busca por nome/telefone.</figcaption>
+      </figure>
+
+      <h3>Conversas</h3>
+      <ul>
+        <li>Filtrar por <span class="botao">Todos</span> / <span class="botao">Aberto</span> / <span class="botao">Em atend.</span> / <span class="botao">Resolvido</span>.</li>
+        <li>Abrir uma conversa "Aberta" já assume ela automaticamente pro seu nome.</li>
+        <li><span class="botao">Resolver ✓</span> ao terminar, <span class="botao">Reabrir</span> se precisar voltar, <span class="botao">🗄 Arquivar</span> pra tirar da lista.</li>
+      </ul>
+
+      <h3>Responder</h3>
+      <p>Digite e toque em <span class="botao">➤</span> pra enviar. <span class="botao">✨ IA</span> sugere uma resposta — <b>nunca envia sozinho</b>, sempre revise antes.</p>
+
+      <h3>Criar pedido pela conversa</h3>
+      <div class="passos">
+        <div class="passo"><div class="passo-corpo"><p>No painel direito, <span class="botao">📦 Criar pedido</span>.</p></div></div>
+        <div class="passo"><div class="passo-corpo"><p>Categoria → produto → quantidade (ou valor combinado, se sob consulta) → <span class="botao">+ Adicionar ao pedido</span>. Repita pra mais itens.</p></div></div>
+        <div class="passo"><div class="passo-corpo"><p><span class="botao">Confirmar pedido (N itens)</span> — modal com <b>Tipo de entrega</b> e <b>Forma de pagamento</b>, ambos opcionais.</p></div></div>
+        <div class="passo"><div class="passo-corpo"><p><span class="botao">✓ Confirmar</span>. O pedido entra na esteira (seção 3). Pix real? O mesmo popup de QR do balcão abre na hora.</p></div></div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="clientes">
+      <h2><span class="num">06</span> Clientes <span class="badge badge-admin">Admin</span></h2>
+      <p class="lead">Cadastro e histórico de todo contato que já falou com a gráfica pelo WhatsApp.</p>
+      <ul>
+        <li>Busca por nome ou telefone; ordena por Último contato ou A-Z; alterna lista/grade.</li>
+        <li>No detalhe: editar nome, aniversário e endereço.</li>
+        <li>Histórico completo de pedidos e status de atendimento.</li>
+        <li><span class="botao">💬 Abrir conversa no Inbox</span> leva direto pra conversa dele.</li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="financeiro">
+      <h2><span class="num">07</span> Financeiro <span class="badge badge-admin">Admin</span></h2>
+
+      <h3>📥 Entradas</h3>
+      <p>Ledger só-leitura de tudo que entrou no caixa no dia — venda balcão, pedido pago, abertura e fechamento de caixa. Filtra por data, operador e tipo; não lança nada.</p>
+
+      <h3>💸 Saídas</h3>
+      <figure class="tela">
+        <img src="imgs/saidas.png" alt="Tela de Saídas com lançamentos e saídas previstas">
+        <figcaption>Lançamentos do dia + "Saídas previstas" (contas a pagar pendentes).</figcaption>
+      </figure>
+      <div class="passos">
+        <div class="passo"><div class="passo-corpo"><p><span class="botao">+ Adicionar saída</span> → escolha a categoria → preencha → <span class="botao">Lançar</span>.</p></div></div>
+        <div class="passo"><div class="passo-corpo"><p><b>Recarga VEM</b> tem cálculo automático: informe quantidade e valor da carga, o sistema já desconta a taxa fixa.</p></div></div>
+      </div>
+
+      <h3>📋 Contas a Pagar/Receber</h3>
+      <figure class="tela">
+        <img src="imgs/contas-pagar-receber.png" alt="Tela de Contas a Pagar e Receber">
+        <figcaption>Cadastro de obrigações futuras — baixa gera automaticamente o lançamento real.</figcaption>
+      </figure>
+      <p>Cadastre nome, valor, categoria, tipo, vencimento e recorrência. Na hora de pagar, <span class="botao">Marcar pago</span> já lança em Saídas/Entradas sozinho.</p>
+
+      <h3>📊 Movimento</h3>
+      <figure class="tela">
+        <img src="imgs/movimento.png" alt="Relatórios de Movimento">
+        <figcaption>3 relatórios com filtro de período e operador.</figcaption>
+      </figure>
+      <ul>
+        <li><b>📈 Fluxo de Caixa</b> — entradas x saídas, produtos mais vendidos, melhores dias.</li>
+        <li><b>🔒 Controle de Caixa</b> — histórico de fechamentos por operador e período.</li>
+        <li><b>💸 Relatório de Saídas</b> — saídas por categoria.</li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="mp">
+      <h2><span class="num">08</span> Mercado Pago <span class="badge badge-admin">Admin</span></h2>
+      <p class="lead">Consulta (só leitura) do saldo real da conta Mercado Pago — bruto, líquido após taxas, e movimentações do período.</p>
+      <div class="aviso">
+        <span class="rotulo">⏳ Fique de olho no aviso de expiração do token</span>
+        O Access Token do Mercado Pago expira periodicamente — quando faltar pouco tempo, aparece um aviso no topo dessa tela apontando pra renovar no painel do desenvolvedor. Se passar da validade, a integração para até renovar.
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="produtos">
+      <h2><span class="num">09</span> Produtos <span class="badge badge-admin">Admin</span></h2>
+      <p class="lead">Cadastro de tudo que é vendido — nome, preço, categoria, descrição e, se quiser, controle de estoque.</p>
+      <figure class="tela">
+        <img src="imgs/produtos.png" alt="Lista de produtos cadastrados">
+        <figcaption>100 produtos cadastrados — toggle liga/desliga controla se aparece no PDV.</figcaption>
+      </figure>
+      <p><span class="botao">+ Novo produto</span> pra cadastrar, <span class="botao">Editar</span> em cada linha pra ajustar. Desativar não apaga — só some da tela de venda.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="zapi">
+      <h2><span class="num">10</span> Conectar WhatsApp <span class="badge badge-admin">Admin</span></h2>
+      <p class="lead">Gerencia a conexão do número da gráfica com o Inbox.</p>
+      <p>Indicador verde "Conectado" / vermelho "Desconectado" no topo. Desconectou? <span class="botao">Gerar QR Code</span> e escaneie: WhatsApp → Dispositivos conectados → Conectar dispositivo.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="faq">
+      <h2><span class="num">11</span> Perguntas frequentes</h2>
+
+      <h4>Vendi errado, e agora?</h4>
+      <p>Cancele na aba Pedidos: abra o item e toque em <span class="botao">Cancelar</span> (ou <span class="botao">Cancelar venda</span> se ainda estiver no popup de Pix). Desfaz qualquer saída automática vinculada — não mexa em Saídas na mão.</p>
+
+      <h4>O cliente disse que já pagou o Pix, mas o sistema não confirmou.</h4>
+      <p>Confira se caiu de verdade na conta antes de forçar. Se caiu e não confirmou sozinho, avance manualmente — abre "Pagamento pendente", escolha Pix e confirme.</p>
+
+      <h4>Marquei "retira depois" e o pedido não aparece pronto pra buscar.</h4>
+      <p>É esperado — desde 10/07/2026 "retira depois" passa pela esteira (seção 3). Avance manualmente na aba Pedidos até "Aguardando retirada".</p>
+
+      <h4>O caixa não bateu no fechamento.</h4>
+      <p>Não trave nisso — feche mesmo com a diferença, o sistema registra a divergência. O Admin investiga depois pelo "🔍 Diagnóstico do fechamento".</p>
+
+      <h4>O QR Code do Pix não abre / trava.</h4>
+      <p>Cheque a conexão. Persistindo, use "Paga na retirada" ou confirme manualmente Dinheiro/Cartão pra não travar o cliente — ajuste depois com o Admin.</p>
+
+      <h4>Esqueci de fazer a abertura de caixa hoje.</h4>
+      <p>O sistema não deixa passar — é sempre a primeira tela do dia. Conte o caixa físico e registre, mesmo que já tenha vendido algo antes de perceber (avise o Admin).</p>
+    </section>
+
+    <div class="rodape-manual">Manual gerado a partir do sistema real em produção (10/07/2026) — qualquer tela nova ou mudança de fluxo deve atualizar este documento.</div>
+  </main>
+</div>
+
+<script>
+  const links = Array.from(document.querySelectorAll('nav.toc a'));
+  const sections = links.map(a => document.querySelector(a.getAttribute('href')));
+  function marcarAtivo() {
+    let atual = sections[0];
+    for (const s of sections) { if (s && s.getBoundingClientRect().top - 90 <= 0) atual = s; }
+    links.forEach(a => a.classList.toggle('ativo', atual && a.getAttribute('href') === '#' + atual.id));
+  }
+  document.addEventListener('scroll', marcarAtivo, { passive: true });
+  marcarAtivo();
+</script>
+
+</body>
+</html>

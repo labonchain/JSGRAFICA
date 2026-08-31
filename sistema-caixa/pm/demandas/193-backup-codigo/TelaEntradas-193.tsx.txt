@@ -1,0 +1,305 @@
+"use client";
+
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useRecarregarAoReativar } from "@/components/AbaKeepAlive";
+import { formatarDiaCaixa } from "@/lib/supabase";
+import { USUARIOS } from "@/lib/usuarios";
+import { CabecalhoFinanceiro, SeletorDia, dataDiaParaBR } from "@/components/FinanceiroUI";
+
+// ── Entradas (demanda 098) — ledger cronológico do dia, equivalente ao
+// painel "Lançamentos de hoje" de Lançar Saídas (demanda 091), mas do lado
+// das entradas. Só leitura — nenhum lançamento é feito aqui.
+// Demanda 193 (redesenho, do levantamento da 186): cabeçalho/seletor no
+// padrão único do Financeiro (FinanceiroUI), total com rótulo do que inclui
+// + quebra por forma de pagamento, itens do mesmo carrinho agrupados por
+// venda, e abertura/fechamento (EVENTOS, não dinheiro) separados da lista.
+interface Lancamento {
+  id: string;
+  tipo: "venda_balcao" | "pedido_pago" | "abertura" | "fechamento";
+  horario: string;
+  operador: string | null;
+  valor: number;
+  descricao: string;
+  forma?: string | null;
+  vendaId?: string | null;
+}
+
+function moeda(v: number | null | undefined) {
+  return (v ?? 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function hora(iso: string) {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "—";
+  return d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+}
+
+const CFG_TIPO: Record<Lancamento["tipo"], { label: string; emoji: string; bg: string; texto: string }> = {
+  venda_balcao: { label: "Venda balcão", emoji: "🧾", bg: "bg-green-50", texto: "text-green-700" },
+  pedido_pago:  { label: "Pedido pago",  emoji: "💬", bg: "bg-green-50", texto: "text-green-700" },
+  abertura:     { label: "Abertura de caixa", emoji: "🔓", bg: "bg-blue-50", texto: "text-blue-700" },
+  fechamento:   { label: "Fechamento",   emoji: "🔒", bg: "bg-gray-100", texto: "text-gray-600" },
+};
+
+const EH_DINHEIRO = (t: Lancamento["tipo"]) => t === "venda_balcao" || t === "pedido_pago";
+
+// Demanda 193: linha exibida — 1 lançamento solto OU 1 venda com 2+ itens
+// (mesmo venda_id) agregada, com os itens listados dentro do card.
+type LinhaLista =
+  | { tipo: "unico"; lancamento: Lancamento }
+  | { tipo: "venda"; vendaId: string; itens: Lancamento[] };
+
+function agruparPorVenda(lancamentos: Lancamento[]): LinhaLista[] {
+  const vistos = new Set<string>();
+  const linhas: LinhaLista[] = [];
+  for (const l of lancamentos) {
+    if (l.vendaId && EH_DINHEIRO(l.tipo)) {
+      if (vistos.has(l.vendaId)) continue;
+      const doGrupo = lancamentos.filter(x => x.vendaId === l.vendaId && EH_DINHEIRO(x.tipo));
+      if (doGrupo.length > 1) {
+        vistos.add(l.vendaId);
+        linhas.push({ tipo: "venda", vendaId: l.vendaId, itens: doGrupo });
+        continue;
+      }
+    }
+    linhas.push({ tipo: "unico", lancamento: l });
+  }
+  return linhas;
+}
+
+// Demanda 106: `operadorFixo` trava o filtro pro PDV (Zu/Gabi só veem o
+// próprio movimento) — Admin continua com o seletor livre.
+export function TelaEntradas({ operadorFixo }: { operadorFixo?: string } = {}) {
+  const [dataDia, setDataDia]       = useState(() => formatarDiaCaixa());
+  const [operador, setOperador]     = useState(operadorFixo ?? "");
+  const [lancamentos, setLancamentos] = useState<Lancamento[]>([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro]             = useState<string | null>(null);
+  // Demanda 122: busca por texto + filtro por tipo, client-side.
+  const [busca, setBusca]           = useState("");
+  const [tipoFiltro, setTipoFiltro] = useState<Lancamento["tipo"] | "todos">("todos");
+
+  const carregar = useCallback(async (dia: string, op: string) => {
+    setCarregando(true);
+    setErro(null);
+    try {
+      const params = new URLSearchParams({ dia });
+      if (op) params.set("operador", op);
+      const res = await fetch(`/api/entradas?${params}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Erro ao carregar entradas");
+      setLancamentos(data.lancamentos ?? []);
+    } catch (e) {
+      setErro(e instanceof Error ? e.message : "Erro ao carregar entradas");
+      setLancamentos([]);
+    } finally {
+      setCarregando(false);
+    }
+  }, []);
+
+  useEffect(() => { carregar(dataDia, operador); }, [dataDia, operador, carregar]);
+  // Demanda 136: a aba não desmonta mais ao trocar — recarrega ao reativar.
+  useRecarregarAoReativar(() => carregar(dataDia, operador));
+
+  const dinheiroDoDia = lancamentos.filter(l => EH_DINHEIRO(l.tipo));
+  const eventosDoDia  = lancamentos.filter(l => !EH_DINHEIRO(l.tipo));
+  const totalDia = dinheiroDoDia.reduce((acc, l) => acc + l.valor, 0);
+
+  // Demanda 193: quebra por forma de pagamento — só das entradas de dinheiro.
+  // Vendas legadas (antes da 054) não têm forma registrada → "sem forma".
+  const porForma = useMemo(() => {
+    const mapa = new Map<string, number>();
+    for (const l of dinheiroDoDia) {
+      const chave = l.forma || "Sem forma registrada";
+      mapa.set(chave, (mapa.get(chave) ?? 0) + l.valor);
+    }
+    return Array.from(mapa.entries()).sort((a, b) => b[1] - a[1]);
+  }, [dinheiroDoDia]);
+
+  // Demanda 122: filtros aplicados só na lista — o resumo do dia continua do
+  // dia inteiro, pra não parecer que o caixa mudou por causa do filtro.
+  const buscaNormalizada = busca.trim().toLowerCase();
+  const filtroAtivo = tipoFiltro !== "todos" || buscaNormalizada.length > 0;
+  const passaFiltro = (l: Lancamento) => {
+    if (tipoFiltro !== "todos" && l.tipo !== tipoFiltro) return false;
+    if (buscaNormalizada) {
+      const alvo = `${l.descricao} ${l.operador ?? ""} ${l.forma ?? ""}`.toLowerCase();
+      if (!alvo.includes(buscaNormalizada)) return false;
+    }
+    return true;
+  };
+  const dinheiroFiltrado = dinheiroDoDia.filter(passaFiltro);
+  const eventosFiltrados = eventosDoDia.filter(passaFiltro);
+  const linhas = useMemo(() => agruparPorVenda(dinheiroFiltrado), [dinheiroFiltrado]);
+
+  const FORMA_EMOJI: Record<string, string> = { "Dinheiro": "💵", "Pix": "🔷", "Cartão": "💳" };
+
+  return (
+    <div className="overflow-y-auto h-full bg-gray-50">
+      <div className="p-5 space-y-4 max-w-5xl">
+
+        {/* T1 — cabeçalho padrão do Financeiro (193) */}
+        <CabecalhoFinanceiro
+          emoji="📥" titulo="Entradas"
+          subtitulo="Tudo que ENTROU no caixa no dia, lançamento a lançamento — só leitura; vendas são feitas no balcão/Atendimento."
+          direita={operadorFixo ? (
+            <span className="border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs bg-white text-gray-600 self-center">
+              Seu movimento: <strong>{operadorFixo}</strong>
+            </span>
+          ) : (
+            <select value={operador} onChange={e => setOperador(e.target.value)}
+              className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-blue-400 bg-white self-center">
+              <option value="">Todos os operadores</option>
+              {USUARIOS.map(u => <option key={u.id} value={u.nome}>{u.nome}</option>)}
+            </select>
+          )}
+        />
+
+        {/* T2 — seletor de dia padrão (193) */}
+        <SeletorDia dataDia={dataDia} hoje={formatarDiaCaixa()} onMudar={setDataDia} />
+
+        {/* Resumo do dia — T4: o número diz o que inclui; quebra por forma. */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-700">Entrou em {dataDiaParaBR(dataDia)}</h3>
+              <p className="text-xs text-gray-400 mt-0.5">
+                {dinheiroDoDia.length} lançamento{dinheiroDoDia.length !== 1 ? "s" : ""} de dinheiro
+                (vendas de balcão + pedidos pagos) — abertura/fechamento de caixa são eventos e não somam.
+              </p>
+            </div>
+            <span className="text-2xl font-bold text-green-700">{moeda(totalDia)}</span>
+          </div>
+          {porForma.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100">
+              {porForma.map(([forma, valor]) => (
+                <span key={forma} className="text-xs font-medium bg-gray-50 border border-gray-200 rounded-full px-2.5 py-1 text-gray-700">
+                  {FORMA_EMOJI[forma] ?? "•"} {forma}: <strong>{moeda(valor)}</strong>
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Busca + filtro por tipo (demanda 122) */}
+        <div className="flex flex-wrap items-center gap-2">
+          <input type="text" value={busca} onChange={e => setBusca(e.target.value)}
+            placeholder="Buscar por cliente, produto/serviço ou operador..."
+            className="flex-1 min-w-[200px] border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-blue-400 bg-white" />
+          <div className="flex flex-wrap gap-2">
+            <button onClick={() => setTipoFiltro("todos")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                tipoFiltro === "todos" ? "bg-blue-600 text-white" : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
+              }`}>Todos os tipos</button>
+            {(Object.keys(CFG_TIPO) as Lancamento["tipo"][]).map(tipo => (
+              <button key={tipo} onClick={() => setTipoFiltro(tipo)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  tipoFiltro === tipo ? "bg-blue-600 text-white" : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
+                }`}>{CFG_TIPO[tipo].emoji} {CFG_TIPO[tipo].label}</button>
+            ))}
+          </div>
+        </div>
+
+        {erro && <p className="text-xs text-red-500">{erro}</p>}
+
+        {/* Lista de DINHEIRO — itens do mesmo carrinho agrupados (193). */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
+            Lançamentos {filtroAtivo && `(${dinheiroFiltrado.length} de ${dinheiroDoDia.length})`}
+          </h3>
+          {carregando ? (
+            <p className="text-xs text-gray-300 text-center py-6">Carregando...</p>
+          ) : dinheiroDoDia.length === 0 ? (
+            <p className="text-xs text-gray-300 text-center py-6">Nenhuma entrada de dinheiro nesse dia</p>
+          ) : dinheiroFiltrado.length === 0 ? (
+            <p className="text-xs text-gray-300 text-center py-6">Nenhum lançamento encontrado com esse filtro</p>
+          ) : (
+            <div className="space-y-2">
+              {linhas.map(linha => {
+                if (linha.tipo === "unico") {
+                  const l = linha.lancamento;
+                  const cfg = CFG_TIPO[l.tipo];
+                  return (
+                    <div key={l.id} className={`${cfg.bg} rounded-lg p-3`}>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium text-gray-700">{cfg.emoji} {l.descricao}</span>
+                        <span className={`text-sm font-bold ${cfg.texto}`}>{moeda(l.valor)}</span>
+                      </div>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-xs text-gray-400">
+                          {cfg.label}{l.forma ? ` · ${l.forma}` : ""}{l.operador ? ` · ${l.operador}` : ""}
+                        </span>
+                        <span className="text-xs text-gray-400">{hora(l.horario)}</span>
+                      </div>
+                    </div>
+                  );
+                }
+                const primeiro = linha.itens[0];
+                const cfg = CFG_TIPO[primeiro.tipo];
+                const totalVenda = linha.itens.reduce((a, i) => a + i.valor, 0);
+                return (
+                  <div key={linha.vendaId} className={`${cfg.bg} rounded-lg p-3`}>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-gray-700">
+                        🧾 Venda com {linha.itens.length} itens
+                      </span>
+                      <span className={`text-sm font-bold ${cfg.texto}`}>{moeda(totalVenda)}</span>
+                    </div>
+                    <div className="mt-1.5 space-y-0.5 border-l-2 border-green-200 pl-2">
+                      {linha.itens.map(i => (
+                        <div key={i.id} className="flex items-center justify-between text-xs text-gray-500">
+                          <span>{i.descricao}</span>
+                          <span>{moeda(i.valor)}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="text-xs text-gray-400">
+                        {cfg.label}{primeiro.forma ? ` · ${primeiro.forma}` : ""}{primeiro.operador ? ` · ${primeiro.operador}` : ""}
+                      </span>
+                      <span className="text-xs text-gray-400">{hora(primeiro.horario)}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Eventos do caixa — separados do dinheiro (193): abrir/fechar caixa
+            é marco do dia, não entrada. */}
+        {(eventosFiltrados.length > 0 || (!carregando && eventosDoDia.length > 0 && !filtroAtivo)) && (
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
+              Eventos do caixa
+            </h3>
+            <p className="text-xs text-gray-400 mb-3">
+              Abertura e fechamento — registram o valor contado no momento, não somam nas entradas.
+            </p>
+            <div className="space-y-2">
+              {eventosFiltrados.map(l => {
+                const cfg = CFG_TIPO[l.tipo];
+                return (
+                  <div key={l.id} className={`${cfg.bg} rounded-lg p-3`}>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-medium text-gray-700">{cfg.emoji} {l.descricao}</span>
+                      <span className={`text-sm font-bold ${cfg.texto}`}>{moeda(l.valor)}</span>
+                    </div>
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="text-xs text-gray-400">{cfg.label}{l.operador ? ` · ${l.operador}` : ""}</span>
+                      <span className="text-xs text-gray-400">{hora(l.horario)}</span>
+                    </div>
+                  </div>
+                );
+              })}
+              {eventosFiltrados.length === 0 && (
+                <p className="text-xs text-gray-300 text-center py-2">Nenhum evento com esse filtro</p>
+              )}
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}
