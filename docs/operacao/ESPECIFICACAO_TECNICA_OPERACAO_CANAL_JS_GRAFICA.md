@@ -111,9 +111,9 @@ Este quadro deve ser atualizado a cada movimentação. Um chat que inicia uma et
 | P1-03 | O que a JS resolve no dia a dia | P1 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Papel e digital, sem prometer disponibilidade total |
 | P2-05 | Impressão A4 e A3 | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem preço, papel ou prazo |
 | P6-01 | Antes de enviar seu arquivo | P6 | EM_CHECAGEM | Confirmar formatos e regras de envio | v01 | - | - | - | - | - | Não citar formato sem validação |
-| P4-07 | Canecas personalizadas | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem marca ou foto de cliente |
-| P4-08 | Camisas personalizadas | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem tecido, tamanho ou técnica |
-| P4-09 | Almofadas personalizadas | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem foto familiar sem autorização |
+| P4-07 | Canecas personalizadas | P4 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado (squad js-grafica-canal-conteudo, 30/08); aguardando aprovação final |
+| P4-08 | Camisas personalizadas | P4 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado com correção de legibilidade no título (squad js-grafica-canal-conteudo, 30/08); aguardando aprovação final |
+| P4-09 | Almofadas personalizadas | P4 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado (squad js-grafica-canal-conteudo, 30/08); aguardando aprovação final |
 | P4-10 | Itens personalizados em cerâmica | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Confirmar item no atendimento |
 | P6-02 | Como pedir um personalizado | P6 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Orientação sem promessa de produção |
 | P6-03 | Como pedir material de divulgação | P6 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem medidas, preço ou arte fictícia |
