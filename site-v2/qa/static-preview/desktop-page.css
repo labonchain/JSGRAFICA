@@ -1,0 +1,4 @@
+@page { size: 1440px 1100px; margin: 0; }
+html, body { width: 1440px; min-height: 1100px; }
+h1 { font-size: 58px !important; }
+h2 { font-size: 34px !important; }

@@ -1,0 +1,945 @@
+[
+  {
+    "code": "prod-009",
+    "slug": null,
+    "name": "Impressão P&B A4",
+    "price": 1.2,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Documentos / Xerox",
+    "meta": "A4 · preto e branco",
+    "attributes": {
+      "format": "A4"
+    }
+  },
+  {
+    "code": "prod-110",
+    "slug": null,
+    "name": "Impressão preto e branco frente e verso",
+    "price": 2.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Documentos / Xerox",
+    "meta": "A4 · frente e verso",
+    "attributes": {
+      "format": "A4",
+      "sides": "frente e verso"
+    }
+  },
+  {
+    "code": "prod-034",
+    "slug": null,
+    "name": "Xerox A3",
+    "price": 2.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Documentos / Xerox",
+    "meta": "A3",
+    "attributes": {
+      "format": "A3"
+    }
+  },
+  {
+    "code": "prod-036",
+    "slug": null,
+    "name": "Xerox preto e branco A4",
+    "price": 0.45,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Documentos / Xerox",
+    "meta": "A4",
+    "attributes": {
+      "format": "A4"
+    }
+  },
+  {
+    "code": "prod-035",
+    "slug": null,
+    "name": "Xerox colorida A4",
+    "price": 1.2,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Coloridas",
+    "meta": "A4",
+    "attributes": {
+      "format": "A4"
+    }
+  },
+  {
+    "code": "prod-007",
+    "slug": null,
+    "name": "Impressão colorida ofício A4 (jato tinta)",
+    "price": 2.2,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Coloridas",
+    "meta": "A4 · jato de tinta",
+    "attributes": {
+      "format": "A4"
+    }
+  },
+  {
+    "code": "prod-008",
+    "slug": null,
+    "name": "Impressão colorida ofício A4 (laser)",
+    "price": 3.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Coloridas",
+    "meta": "A4 · laser",
+    "attributes": {
+      "format": "A4"
+    }
+  },
+  {
+    "code": "prod-006",
+    "slug": null,
+    "name": "Impressão colorida ofício A3",
+    "price": 3.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Coloridas",
+    "meta": "A3",
+    "attributes": {
+      "format": "A3"
+    }
+  },
+  {
+    "code": "prod-111",
+    "slug": null,
+    "name": "Impressão colorida frente e verso",
+    "price": 3.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Coloridas",
+    "meta": "Frente e verso"
+  },
+  {
+    "code": "prod-011",
+    "slug": null,
+    "name": "Impressão Papel Adesivo A4 192g (sem recorte)",
+    "price": 6.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Adesivo",
+    "href": "/produtos-servicos/produto/impressao-papel-adesivo-a4-192g",
+    "meta": "A4 · 192g · sem recorte",
+    "attributes": {
+      "format": "A4",
+      "weight": "192g",
+      "cut": "sem recorte"
+    }
+  },
+  {
+    "code": "prod-056",
+    "slug": null,
+    "name": "Impressão Papel Adesivo A4 192g (com recorte)",
+    "price": 9.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Adesivo",
+    "href": "/produtos-servicos/produto/impressao-papel-adesivo-a4-192g",
+    "meta": "A4 · 192g · com recorte",
+    "attributes": {
+      "format": "A4",
+      "weight": "192g",
+      "cut": "com recorte"
+    }
+  },
+  {
+    "code": "prod-010",
+    "slug": null,
+    "name": "Impressão Papel Adesivo A3 192g (sem recorte)",
+    "price": 9.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Adesivo",
+    "meta": "A3 · 192g · sem recorte",
+    "attributes": {
+      "format": "A3",
+      "weight": "192g",
+      "cut": "sem recorte"
+    }
+  },
+  {
+    "code": "prod-057",
+    "slug": null,
+    "name": "Impressão Papel Adesivo A3 192g (com recorte)",
+    "price": 11.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Adesivo",
+    "meta": "A3 · 192g · com recorte",
+    "attributes": {
+      "format": "A3",
+      "weight": "192g",
+      "cut": "com recorte"
+    }
+  },
+  {
+    "code": "prod-013",
+    "slug": null,
+    "name": "Impressão Papel Cartão A4 180g (só frente)",
+    "price": 5.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Cartão",
+    "meta": "A4 · 180g · só frente",
+    "attributes": {
+      "format": "A4",
+      "weight": "180g",
+      "sides": "só frente"
+    }
+  },
+  {
+    "code": "prod-055",
+    "slug": null,
+    "name": "Impressão Papel Cartão A4 180g (frente e verso)",
+    "price": 6.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Cartão",
+    "meta": "A4 · 180g · frente e verso",
+    "attributes": {
+      "format": "A4",
+      "weight": "180g",
+      "sides": "frente e verso"
+    }
+  },
+  {
+    "code": "prod-012",
+    "slug": null,
+    "name": "Impressão Papel Cartão A3 180g (só frente)",
+    "price": 7.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Cartão",
+    "meta": "A3 · 180g · só frente",
+    "attributes": {
+      "format": "A3",
+      "weight": "180g",
+      "sides": "só frente"
+    }
+  },
+  {
+    "code": "prod-053",
+    "slug": null,
+    "name": "Impressão Papel Cartão A3 180g (frente e verso)",
+    "price": 8.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Cartão",
+    "meta": "A3 · 180g · frente e verso",
+    "attributes": {
+      "format": "A3",
+      "weight": "180g",
+      "sides": "frente e verso"
+    }
+  },
+  {
+    "code": "prod-019",
+    "slug": null,
+    "name": "Impressão Papel Couchê A4 90g (só frente)",
+    "price": 3.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A4 · 90g · só frente",
+    "attributes": {
+      "format": "A4",
+      "weight": "90g",
+      "sides": "só frente"
+    }
+  },
+  {
+    "code": "prod-058",
+    "slug": null,
+    "name": "Impressão Papel Couchê A4 90g (frente e verso)",
+    "price": 5.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A4 · 90g · frente e verso",
+    "attributes": {
+      "format": "A4",
+      "weight": "90g",
+      "sides": "frente e verso"
+    }
+  },
+  {
+    "code": "prod-017",
+    "slug": null,
+    "name": "Impressão Papel Couchê A4 250g (só frente)",
+    "price": 7.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A4 · 250g · só frente",
+    "attributes": {
+      "format": "A4",
+      "weight": "250g",
+      "sides": "só frente"
+    }
+  },
+  {
+    "code": "prod-061",
+    "slug": null,
+    "name": "Impressão Papel Couchê A4 250g (frente e verso)",
+    "price": 8.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A4 · 250g · frente e verso",
+    "attributes": {
+      "format": "A4",
+      "weight": "250g",
+      "sides": "frente e verso"
+    }
+  },
+  {
+    "code": "prod-018",
+    "slug": null,
+    "name": "Impressão Papel Couchê A4 300g (só frente)",
+    "price": 7.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A4 · 300g · só frente",
+    "attributes": {
+      "format": "A4",
+      "weight": "300g",
+      "sides": "só frente"
+    }
+  },
+  {
+    "code": "prod-015",
+    "slug": null,
+    "name": "Impressão Papel Couchê A4 300g (frente e verso)",
+    "price": 9.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A4 · 300g · frente e verso",
+    "attributes": {
+      "format": "A4",
+      "weight": "300g",
+      "sides": "frente e verso"
+    }
+  },
+  {
+    "code": "prod-016",
+    "slug": null,
+    "name": "Impressão Papel Couchê A3 90g (só frente)",
+    "price": 5.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A3 · 90g · só frente",
+    "attributes": {
+      "format": "A3",
+      "weight": "90g",
+      "sides": "só frente"
+    }
+  },
+  {
+    "code": "prod-014",
+    "slug": null,
+    "name": "Impressão Papel Couchê A3 90g (frente e verso)",
+    "price": 6.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A3 · 90g · frente e verso",
+    "attributes": {
+      "format": "A3",
+      "weight": "90g",
+      "sides": "frente e verso"
+    }
+  },
+  {
+    "code": "prod-062",
+    "slug": null,
+    "name": "Impressão Papel Couchê A3 250g (só frente)",
+    "price": 9.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A3 · 250g · só frente",
+    "attributes": {
+      "format": "A3",
+      "weight": "250g",
+      "sides": "só frente"
+    }
+  },
+  {
+    "code": "prod-063",
+    "slug": null,
+    "name": "Impressão Papel Couchê A3 250g (frente e verso)",
+    "price": 11.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A3 · 250g · frente e verso",
+    "attributes": {
+      "format": "A3",
+      "weight": "250g",
+      "sides": "frente e verso"
+    }
+  },
+  {
+    "code": "prod-059",
+    "slug": null,
+    "name": "Impressão Papel Couchê A3 300g (só frente)",
+    "price": 10.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A3 · 300g · só frente",
+    "attributes": {
+      "format": "A3",
+      "weight": "300g",
+      "sides": "só frente"
+    }
+  },
+  {
+    "code": "prod-060",
+    "slug": null,
+    "name": "Impressão Papel Couchê A3 300g (frente e verso)",
+    "price": 11.5,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Papel Couchê",
+    "href": "/produtos-servicos/impressoes/papel-couche",
+    "meta": "A3 · 300g · frente e verso",
+    "attributes": {
+      "format": "A3",
+      "weight": "300g",
+      "sides": "frente e verso"
+    }
+  },
+  {
+    "code": "prod-102",
+    "slug": null,
+    "name": "Cartão de visita 100 un (só frente)",
+    "price": 45.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Panfletos e Cartões",
+    "meta": "100 unidades · só frente",
+    "attributes": {
+      "sides": "só frente"
+    }
+  },
+  {
+    "code": "prod-103",
+    "slug": null,
+    "name": "Cartão de visita 100 un (frente e verso)",
+    "price": 55.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Panfletos e Cartões",
+    "meta": "100 unidades · frente e verso",
+    "attributes": {
+      "sides": "frente e verso"
+    }
+  },
+  {
+    "code": "prod-101",
+    "slug": null,
+    "name": "Panfleto 10×14 100 un (só frente)",
+    "price": 50.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Panfletos e Cartões",
+    "meta": "10×14 · 100 unidades · só frente",
+    "attributes": {
+      "sides": "só frente"
+    }
+  },
+  {
+    "code": "prod-104",
+    "slug": null,
+    "name": "Panfleto 10×14 100 un (frente e verso)",
+    "price": 60.0,
+    "priceMode": "FIXO",
+    "area": "impressoes",
+    "group": "Panfletos e Cartões",
+    "meta": "10×14 · 100 unidades · frente e verso",
+    "attributes": {
+      "sides": "frente e verso"
+    }
+  },
+  {
+    "code": "prod-025",
+    "slug": null,
+    "name": "Foto 3×4 (6 fotos)",
+    "price": 7.0,
+    "priceMode": "FIXO",
+    "area": "fotos",
+    "group": "Fotos",
+    "meta": "6 fotos"
+  },
+  {
+    "code": "prod-021",
+    "slug": null,
+    "name": "Foto 10×15",
+    "price": 2.5,
+    "priceMode": "FIXO",
+    "area": "fotos",
+    "group": "Fotos",
+    "meta": "10×15 cm"
+  },
+  {
+    "code": "prod-023",
+    "slug": null,
+    "name": "Foto 15×20",
+    "price": 4.5,
+    "priceMode": "FIXO",
+    "area": "fotos",
+    "group": "Fotos",
+    "meta": "15×20 cm"
+  },
+  {
+    "code": "prod-024",
+    "slug": null,
+    "name": "Foto 20×29",
+    "price": 9.0,
+    "priceMode": "FIXO",
+    "area": "fotos",
+    "group": "Fotos",
+    "meta": "20×29 cm"
+  },
+  {
+    "code": "prod-022",
+    "slug": null,
+    "name": "Foto Polaroid 7×10",
+    "price": 2.0,
+    "priceMode": "FIXO",
+    "area": "fotos",
+    "group": "Fotos",
+    "meta": "7×10 cm"
+  },
+  {
+    "code": "prod-020",
+    "slug": null,
+    "name": "Impressão Papel Foto A4 230g",
+    "price": 6.5,
+    "priceMode": "FIXO",
+    "area": "fotos",
+    "group": "Papel Fotográfico",
+    "meta": "A4 · 230g",
+    "attributes": {
+      "format": "A4",
+      "weight": "230g"
+    }
+  },
+  {
+    "code": "prod-064",
+    "slug": null,
+    "name": "Impressão Papel Foto A3 230g",
+    "price": 9.0,
+    "priceMode": "FIXO",
+    "area": "fotos",
+    "group": "Papel Fotográfico",
+    "meta": "A3 · 230g",
+    "attributes": {
+      "format": "A3",
+      "weight": "230g"
+    }
+  },
+  {
+    "code": "prod-037",
+    "slug": null,
+    "name": "Encadernação até 30 folhas",
+    "price": 4.5,
+    "priceMode": "FIXO",
+    "area": "acabamentos",
+    "group": "Encadernação",
+    "href": "/produtos-servicos/acabamentos/encadernacao",
+    "meta": "Até 30 folhas"
+  },
+  {
+    "code": "prod-040",
+    "slug": null,
+    "name": "Encadernação de 31 a 50 folhas",
+    "price": 5.5,
+    "priceMode": "FIXO",
+    "area": "acabamentos",
+    "group": "Encadernação",
+    "href": "/produtos-servicos/acabamentos/encadernacao",
+    "meta": "31 a 50 folhas"
+  },
+  {
+    "code": "prod-041",
+    "slug": null,
+    "name": "Encadernação de 51 a 100 folhas",
+    "price": 6.5,
+    "priceMode": "FIXO",
+    "area": "acabamentos",
+    "group": "Encadernação",
+    "href": "/produtos-servicos/acabamentos/encadernacao",
+    "meta": "51 a 100 folhas"
+  },
+  {
+    "code": "prod-038",
+    "slug": null,
+    "name": "Encadernação de 101 a 200 folhas",
+    "price": 7.5,
+    "priceMode": "FIXO",
+    "area": "acabamentos",
+    "group": "Encadernação",
+    "href": "/produtos-servicos/acabamentos/encadernacao",
+    "meta": "101 a 200 folhas"
+  },
+  {
+    "code": "prod-039",
+    "slug": null,
+    "name": "Encadernação de 201 a 300 folhas",
+    "price": 8.5,
+    "priceMode": "FIXO",
+    "area": "acabamentos",
+    "group": "Encadernação",
+    "href": "/produtos-servicos/acabamentos/encadernacao",
+    "meta": "201 a 300 folhas"
+  },
+  {
+    "code": "prod-033",
+    "slug": null,
+    "name": "Plastificação pequena",
+    "price": 4.0,
+    "priceMode": "FIXO",
+    "area": "acabamentos",
+    "group": "Plastificação",
+    "meta": "Pequena"
+  },
+  {
+    "code": "prod-032",
+    "slug": null,
+    "name": "Plastificação média",
+    "price": 5.0,
+    "priceMode": "FIXO",
+    "area": "acabamentos",
+    "group": "Plastificação",
+    "meta": "Média"
+  },
+  {
+    "code": "prod-031",
+    "slug": null,
+    "name": "Plastificação A4",
+    "price": 7.0,
+    "priceMode": "FIXO",
+    "area": "acabamentos",
+    "group": "Plastificação",
+    "meta": "A4",
+    "attributes": {
+      "format": "A4"
+    }
+  },
+  {
+    "code": "prod-030",
+    "slug": null,
+    "name": "Plastificação A3",
+    "price": 11.0,
+    "priceMode": "FIXO",
+    "area": "acabamentos",
+    "group": "Plastificação",
+    "meta": "A3",
+    "attributes": {
+      "format": "A3"
+    }
+  },
+  {
+    "code": "prod-112",
+    "slug": null,
+    "name": "Criar arte",
+    "price": 15.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Criação",
+    "meta": "Criação de arte"
+  },
+  {
+    "code": "prod-047",
+    "slug": null,
+    "name": "Ímã com calendário",
+    "price": 1.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Personalizados",
+    "meta": "Ímã"
+  },
+  {
+    "code": "prod-045",
+    "slug": null,
+    "name": "Rifa",
+    "price": 1.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Personalizados",
+    "meta": "Rifa"
+  },
+  {
+    "code": "prod-046",
+    "slug": null,
+    "name": "Topo de bolo (sem recorte)",
+    "price": 10.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Topo de bolo",
+    "meta": "Sem recorte"
+  },
+  {
+    "code": "prod-054",
+    "slug": null,
+    "name": "Topo de bolo (com recorte)",
+    "price": 12.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Topo de bolo",
+    "meta": "Com recorte"
+  },
+  {
+    "code": "prod-048",
+    "slug": null,
+    "name": "Caneca / Camisa",
+    "price": 40.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Personalizados",
+    "meta": "Serviço terceirizado"
+  },
+  {
+    "code": "prod-026",
+    "slug": null,
+    "name": "Banner ou lona até 50×1,00",
+    "price": 35.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Comunicação Visual",
+    "meta": "Até 50×1,00"
+  },
+  {
+    "code": "prod-068",
+    "slug": null,
+    "name": "Banner ou lona acima de 50×1,00",
+    "price": 65.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Comunicação Visual",
+    "meta": "Acima de 50×1,00"
+  },
+  {
+    "code": "prod-029",
+    "slug": null,
+    "name": "Adesivo leitoso/transparente sem recorte até 50×1,0m²",
+    "price": 40.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Adesivos",
+    "meta": "Sem recorte · até 50×1,0m²"
+  },
+  {
+    "code": "prod-027",
+    "slug": null,
+    "name": "Adesivo leitoso/transparente com recorte até 50×1,0m²",
+    "price": 45.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Adesivos",
+    "meta": "Com recorte · até 50×1,0m²"
+  },
+  {
+    "code": "prod-066",
+    "slug": null,
+    "name": "Adesivo leitoso/transparente sem recorte acima 50×1,0m²",
+    "price": 70.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Adesivos",
+    "meta": "Sem recorte · acima 50×1,0m²"
+  },
+  {
+    "code": "prod-067",
+    "slug": null,
+    "name": "Adesivo leitoso/transparente com recorte acima 50×1,0m²",
+    "price": 85.0,
+    "priceMode": "FIXO",
+    "area": "personalizados",
+    "group": "Adesivos",
+    "meta": "Com recorte · acima 50×1,0m²"
+  },
+  {
+    "code": "prod-052",
+    "slug": null,
+    "name": "Acesso / Envio de documentos",
+    "price": 1.2,
+    "priceMode": "FIXO",
+    "area": "digitais",
+    "group": "Documentos",
+    "meta": "Acesso ou envio"
+  },
+  {
+    "code": "prod-043",
+    "slug": null,
+    "name": "Scanner",
+    "price": 0.7,
+    "priceMode": "FIXO",
+    "area": "digitais",
+    "group": "Documentos",
+    "meta": "Digitalização"
+  },
+  {
+    "code": "prod-042",
+    "slug": null,
+    "name": "Agendamento / Currículo / Antecedentes / Digitação",
+    "price": 5.0,
+    "priceMode": "FIXO",
+    "area": "digitais",
+    "group": "Atendimento Digital",
+    "meta": "Atendimento digital"
+  },
+  {
+    "code": "prod-050",
+    "slug": null,
+    "name": "Cadastro / Matrícula escolar",
+    "price": 10.0,
+    "priceMode": "FIXO",
+    "area": "digitais",
+    "group": "Cadastros",
+    "meta": "Cadastro e matrícula"
+  },
+  {
+    "code": "prod-049",
+    "slug": null,
+    "name": "Cadastro e B.O.",
+    "price": 7.0,
+    "priceMode": "FIXO",
+    "area": "digitais",
+    "group": "Cadastros",
+    "meta": "Cadastro e boletim de ocorrência"
+  },
+  {
+    "code": "prod-002",
+    "slug": null,
+    "name": "Consulta CPF (SCPC, Serasa, cartórios, cheques)",
+    "price": 25.0,
+    "priceMode": "FIXO",
+    "area": "digitais",
+    "group": "Consultas",
+    "meta": "Consulta CPF"
+  },
+  {
+    "code": "prod-108",
+    "slug": null,
+    "name": "Consulta SCPC",
+    "price": 10.0,
+    "priceMode": "FIXO",
+    "area": "digitais",
+    "group": "Consultas",
+    "meta": "SCPC"
+  },
+  {
+    "code": "prod-003",
+    "slug": null,
+    "name": "Consulta Serasa",
+    "price": 18.0,
+    "priceMode": "FIXO",
+    "area": "digitais",
+    "group": "Consultas",
+    "meta": "Serasa"
+  },
+  {
+    "code": "prod-107",
+    "slug": null,
+    "name": "Conta GOV",
+    "price": 15.0,
+    "priceMode": "FIXO",
+    "area": "digitais",
+    "group": "GOV e 2ª via",
+    "meta": "Conta GOV"
+  },
+  {
+    "code": "prod-001",
+    "slug": null,
+    "name": "Impressão 2ª via de conta",
+    "price": 2.2,
+    "priceMode": "FIXO",
+    "area": "digitais",
+    "group": "GOV e 2ª via",
+    "meta": "2ª via"
+  },
+  {
+    "code": "prod-044",
+    "slug": null,
+    "name": "Envelope A4",
+    "price": 1.0,
+    "priceMode": "FIXO",
+    "area": "papelaria",
+    "group": "Papelaria / Conveniência"
+  },
+  {
+    "code": "prod-065",
+    "slug": null,
+    "name": "Caneta comum",
+    "price": 2.0,
+    "priceMode": "FIXO",
+    "area": "papelaria",
+    "group": "Papelaria / Conveniência"
+  },
+  {
+    "code": "prod-069",
+    "slug": null,
+    "name": "Caneta CIS 0,7mm",
+    "price": 5.0,
+    "priceMode": "FIXO",
+    "area": "papelaria",
+    "group": "Papelaria / Conveniência"
+  },
+  {
+    "code": "prod-070",
+    "slug": null,
+    "name": "Carteira para RG",
+    "price": 2.0,
+    "priceMode": "FIXO",
+    "area": "papelaria",
+    "group": "Papelaria / Conveniência"
+  },
+  {
+    "code": "prod-028",
+    "slug": null,
+    "name": "Lápis com borracha",
+    "price": 1.0,
+    "priceMode": "FIXO",
+    "area": "papelaria",
+    "group": "Papelaria / Conveniência"
+  },
+  {
+    "code": "prod-004",
+    "slug": null,
+    "name": "Recarga celular 20,00",
+    "price": 20.0,
+    "priceMode": "FIXO",
+    "area": "recargas",
+    "group": "Recargas"
+  },
+  {
+    "code": "prod-005",
+    "slug": null,
+    "name": "Recarga VEM 10,00",
+    "price": 10.0,
+    "priceMode": "FIXO",
+    "area": "recargas",
+    "group": "Recargas"
+  }
+]

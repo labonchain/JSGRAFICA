@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JS Gráfica Rápida – Ibura, Recife</title>
+  <meta name="description" content="Gráfica rápida no Ibura, Recife. Impressão, xerox, fotos 3x4, plastificação, encadernação, banners e serviços digitais. Peça pelo WhatsApp!" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --azul:        #1A5F8A;
+      --azul-medio:  #1C6EA4;
+      --azul-claro:  #2580C3;
+      --azul-ice:    #E8F4FC;
+      --laranja:     #FF6B00;
+      --branco:      #FFFFFF;
+      --cinza-bg:    #F5F7FA;
+      --cinza-borda: #E2E8F0;
+      --cinza-texto: #4A5568;
+      --verde-zap:   #25D366;
+      --verde-zap-dk:#1DA851;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--branco);
+      color: #1A202C;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ══ NAV ══ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      background: var(--azul);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.12);
+    }
+
+    .nav-logo {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 18px;
+      color: var(--branco);
+      letter-spacing: 0.5px;
+      text-decoration: none;
+    }
+
+    .nav-logo em {
+      font-style: normal;
+      color: var(--laranja);
+    }
+
+    .nav-zap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--verde-zap);
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .nav-zap:hover {
+      background: var(--verde-zap-dk);
+      transform: translateY(-1px);
+    }
+
+    /* ══ HERO ══ */
+    .hero {
+      min-height: 100svh;
+      background: var(--azul);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 6% 70px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-bg-circle.c1 {
+      width: 500px; height: 500px;
+      background: rgba(255,255,255,0.035);
+      top: -120px; right: -120px;
+    }
+    .hero-bg-circle.c2 {
+      width: 300px; height: 300px;
+      background: rgba(255,107,0,0.07);
+      bottom: -80px; left: -60px;
+    }
+    .hero-bg-circle.c3 {
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.04);
+      bottom: 120px; right: 10%;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.9);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.4rem, 7.5vw, 5rem);
+      color: var(--branco);
+      line-height: 1.05;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--laranja);
+    }
+
+    .hero-sub {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 40px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 60px;
+    }
+
+    .btn-zap-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--verde-zap);
+      color: white;
+      text-decoration: none;
+      padding: 16px 34px;
+      border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.35);
+    }
+
+    .btn-zap-hero:hover {
+      background: var(--verde-zap-dk);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(37,211,102,0.5);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      color: white;
+      text-decoration: none;
+      padding: 15px 28px;
+      border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: white;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2rem;
+      color: white;
+      line-height: 1;
+    }
+
+    .hero-stat span {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* ══ SECTION HEADER ══ */
+    .sec-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .sec-label {
+      display: inline-block;
+      background: var(--azul-ice);
+      color: var(--azul-claro);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 50px;
+      margin-bottom: 12px;
+    }
+
+    .sec-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      color: var(--azul);
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .sec-title em {
+      font-style: normal;
+      color: var(--laranja);
+    }
+
+    .sec-desc {
+      font-size: 1rem;
+      color: var(--cinza-texto);
+      max-width: 540px;
+      line-height: 1.75;
+    }
+
+    /* ══ SERVIÇOS GRÁFICOS ══ */
+    .grafica-section {
+      padding: 88px 6%;
+      background: var(--cinza-bg);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--cinza-borda);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      cursor: pointer;
+    }
+
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(26,95,138,0.14);
+      border-color: var(--azul-claro);
+    }
+
+    .service-card .card-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+
+    .service-card .card-img .emoji-icon {
+      font-size: 3.5rem;
+      line-height: 1;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+    }
+
+    .service-card:hover .card-img .emoji-icon {
+      transform: scale(1.15);
+    }
+
+    .service-card .card-body {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--azul);
+      margin-bottom: 4px;
+    }
+
+    .service-card p {
+      font-size: 0.82rem;
+      color: var(--cinza-texto);
+      flex: 1;
+    }
+
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--verde-zap);
+      margin-top: 12px;
+    }
+
+    /* ══ SERVIÇOS DIGITAIS ══ */
+    .digital-section {
+      background: var(--azul);
+      padding: 88px 6%;
+    }
+
+    .digital-section .sec-label {
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.85);
+    }
+
+    .digital-section .sec-title { color: white; }
+    .digital-section .sec-desc { color: rgba(255,255,255,0.65); }
+
+    .digital-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 40px;
+    }
+
+    .digital-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.25s, transform 0.25s;
+    }
+
+    .digital-card:hover {
+      background: rgba(255,255,255,0.11);
+      transform: translateY(-4px);
+    }
+
+    .digital-card .dc-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      background: rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .digital-card .dc-img .emoji-icon {
+      font-size: 3rem;
+      line-height: 1;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+    }
+
+    .digital-card:hover .dc-img .emoji-icon {
+      transform: scale(1.15);
+    }
+
+    .digital-card .dc-body {
+      padding: 18px;
+    }
+
+    .digital-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .digital-card p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+    }
+
+    .digital-cta-wrap {
+      margin-top: 44px;
+      text-align: center;
+    }
+
+    .btn-zap-solid {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--verde-zap);
+      color: white;
+      text-decoration: none;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+    }
+
+    .btn-zap-solid:hover {
+      background: var(--verde-zap-dk);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(37,211,102,0.5);
+    }
+
+    /* ══ COMO FUNCIONA ══ */
+    .how-section {
+      padding: 88px 6%;
+      background: var(--branco);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin-top: 48px;
+      position: relative;
+    }
+
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 26px;
+      left: calc(100% / 6);
+      right: calc(100% / 6);
+      height: 1px;
+      background: var(--cinza-borda);
+      z-index: 0;
+    }
+
+    .step {
+      text-align: center;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-num {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--azul);
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--azul);
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 0.87rem;
+      color: var(--cinza-texto);
+      line-height: 1.65;
+    }
+
+    .how-cta {
+      text-align: center;
+      margin-top: 52px;
+    }
+
+    /* ══ CONTATO ══ */
+    .contact-section {
+      padding: 88px 6%;
+      background: var(--cinza-bg);
+    }
+
+    .contact-card {
+      background: var(--azul);
+      border-radius: 20px;
+      padding: 48px;
+      margin-top: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .contact-info h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.93rem;
+      line-height: 1.5;
+    }
+
+    .contact-detail .ico {
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 220px;
+    }
+
+    .btn-insta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      color: white;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.93rem;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-insta:hover {
+      background: rgba(255,255,255,0.18);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    /* ══ CTA FINAL ══ */
+    .final-section {
+      background: linear-gradient(135deg, var(--azul) 0%, var(--azul-medio) 100%);
+      text-align: center;
+      padding: 96px 6%;
+    }
+
+    .final-section h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      color: white;
+      margin-bottom: 14px;
+    }
+
+    .final-section h2 em {
+      font-style: normal;
+      color: var(--laranja);
+    }
+
+    .final-section p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 40px;
+      max-width: 460px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+
+    .btn-zap-final {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--verde-zap);
+      color: white;
+      text-decoration: none;
+      padding: 18px 48px;
+      border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.1rem;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 28px rgba(37,211,102,0.4);
+    }
+
+    .btn-zap-final:hover {
+      background: var(--verde-zap-dk);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 36px rgba(37,211,102,0.55);
+    }
+
+    /* ══ FOOTER ══ */
+    footer {
+      background: #060F22;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      padding: 28px 6%;
+      font-size: 0.82rem;
+      line-height: 1.8;
+    }
+
+    footer strong { color: rgba(255,255,255,0.8); }
+    footer a { color: var(--verde-zap); text-decoration: none; }
+
+    /* ══ ZAP FLOAT ══ */
+    .zap-float {
+      position: fixed;
+      bottom: 24px;
+      right: 22px;
+      width: 56px;
+      height: 56px;
+      background: var(--verde-zap);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.5rem;
+      z-index: 200;
+      box-shadow: 0 4px 16px rgba(37,211,102,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: pulse-float 3s ease-in-out infinite;
+    }
+
+    .zap-float:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 24px rgba(37,211,102,0.7);
+      animation: none;
+    }
+
+    @keyframes pulse-float {
+      0%, 100% { box-shadow: 0 4px 16px rgba(37,211,102,0.5); }
+      50% { box-shadow: 0 4px 24px rgba(37,211,102,0.8), 0 0 0 8px rgba(37,211,102,0.1); }
+    }
+
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 700px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .steps-grid::before { display: none; }
+      .contact-card { padding: 28px 22px; }
+      .contact-actions { min-width: 100%; }
+      .hero-stats { gap: 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .digital-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">JS <em>GRÁFICA</em></a>
+    <a href="https://wa.me/5581986108547?text=Olá!%20Vim%20pelo%20site%20e%20preciso%20de%20um%20orçamento." class="nav-zap" target="_blank" rel="noopener">
+      💬 Falar pelo WhatsApp
+    </a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-circle c1"></div>
+    <div class="hero-bg-circle c2"></div>
+    <div class="hero-bg-circle c3"></div>
+    <div class="hero-tag">📍 Ibura, Recife — PE</div>
+    <h1>GRÁFICA <em>RÁPIDA</em><br>&amp; SERVIÇOS<br>DIGITAIS</h1>
+    <p class="hero-sub">Impressão profissional e suporte digital para você e seu negócio</p>
+    <div class="hero-ctas">
+      <a href="https://wa.me/5581986108547?text=Olá!%20Vim%20pelo%20site%20e%20preciso%20de%20um%20orçamento." class="btn-zap-hero" target="_blank" rel="noopener">
+        💬 Fazer Pedido Agora
+      </a>
+      <a href="#servicos" class="btn-ghost">
+        Ver nossos serviços
+      </a>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS GRÁFICOS -->
+  <section class="grafica-section" id="servicos">
+    <div class="sec-wrap">
+      <div class="sec-label">Gráfica Rápida</div>
+      <h2 class="sec-title">Impressão <em>Profissional</em><br>Entregue na Hora</h2>
+      <p class="sec-desc">Xerox, fotos, encadernação, plastificação e muito mais. Manda o arquivo pelo WhatsApp e retira presencialmente.</p>
+
+      <div class="cards-grid">
+        <a href="https://wa.me/5581986108547?text=Olá!%20Preciso%20de%20xerox." class="service-card" target="_blank" rel="noopener">
+          <div class="card-img">
+            <span class="emoji-icon">🖨️</span>
+          </div>
+          <div class="card-body">
+            <h3>Xerox</h3>
+            <p>Preto e branco ou colorida, A4 e A3. Rápido e com qualidade.</p>
+            <span class="card-cta">Pedir agora →</span>
+          </div>
+        </a>
+
+        <a href="https://wa.me/5581986108547?text=Olá!%20Preciso%20de%20impressão." class="service-card" target="_blank" rel="noopener">
+          <div class="card-img">
+            <span class="emoji-icon">📄</span>
+          </div>
+          <div class="card-body">
+            <h3>Impressão</h3>
+            <p>P&B e colorida em A4, A3, papel couchê, cartão, adesivo e foto.</p>
+            <span class="card-cta">Pedir agora →</span>
+          </div>
+        </a>
+
+        <a href="https://wa.me/5581986108547?text=Olá!%20Preciso%20de%20fotos." class="service-card" target="_blank" rel="noopener">
+          <div class="card-img">
+            <span class="emoji-icon">🖼️</span>
+          </div>
+          <div class="card-body">
+            <h3>Fotos</h3>
+            <p>Revelação de fotos em vários formatos: 10x15, 15x20, 20x29 e mais.</p>
+            <span class="card-cta">Pedir agora →</span>
+          </div>
+        </a>
+
+        <a href="https://wa.me/5581986108547?text=Olá!%20Preciso%20de%20foto%203x4." class="service-card" target="_blank" rel="noopener">
+          <div class="card-img">
+            <span class="emoji-icon">📸</span>
+          </div>
+          <div class="card-body">
+            <h3>Foto 3x4</h3>
+            <p>Para documentos, CNH, passaporte e carteira de trabalho. 8 unidades.</p>
+            <span class="card-cta">Pedir agora →</span>
+          </div>
+        </a>
+
+        <a href="https://wa.me/5581986108547?text=Olá!%20Preciso%20de%20plastificação." class="service-card" target="_blank" rel="noopener">
+          <div class="card-img">
+            <span class="emoji-icon">🛡️</span>
+          </div>
+          <div class="card-body">
+            <h3>Plastificação</h3>
+            <p>Proteção durável para documentos, cartões, cardápios e crachás.</p>
+            <span class="card-cta">Pedir agora →</span>
+          </div>
+        </a>
+
+        <a href="https://wa.me/5581986108547?text=Olá!%20Preciso%20de%20encadernação." class="service-card" target="_blank" rel="noopener">
+          <div class="card-img">
+            <span class="emoji-icon">📚</span>
+          </div>
+          <div class="card-body">
+            <h3>Encadernação</h3>
+            <p>TCC, apostilas, relatórios e manuais. Espiral, capa dura e mais.</p>
+            <span class="card-cta">Pedir agora →</span>
+          </div>
+        </a>
+
+        <a href="https://wa.me/5581986108547?text=Olá!%20Preciso%20de%20cadernos." class="service-card" target="_blank" rel="noopener">
+          <div class="card-img">
+            <span class="emoji-icon">📓</span>
+          </div>
+          <div class="card-body">
+            <h3>Cadernos e Apostilas</h3>
+            <p>Impressão e montagem de apostilas, cadernos e materiais didáticos.</p>
+            <span class="card-cta">Pedir agora →</span>
+          </div>
+        </a>
+
+        <a href="https://wa.me/5581986108547?text=Olá!%20Preciso%20de%20banner%20ou%20adesivo." class="service-card" target="_blank" rel="noopener">
+          <div class="card-img">
+            <span class="emoji-icon">🎯</span>
+          </div>
+          <div class="card-body">
+            <h3>Banners e Adesivos</h3>
+            <p>Material de divulgação para lojas, eventos e fachadas. Orçamento sob consulta.</p>
+            <span class="card-cta">Solicitar orçamento →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS DIGITAIS -->
+  <section class="digital-section" id="digital">
+    <div class="sec-wrap">
+      <div class="sec-label">Serviços Digitais</div>
+      <h2 class="sec-title">Serviços <em>Digitais</em></h2>
+
+      <div class="digital-grid">
+        <div class="digital-card">
+          <div class="dc-img"><span class="emoji-icon">📋</span></div>
+          <div class="dc-body">
+            <h3>2ª Via de Contas</h3>
+            <p>Água, luz, gás, internet. Emitimos a segunda via e entregamos impressa na hora.</p>
+          </div>
+        </div>
+
+        <div class="digital-card">
+          <div class="dc-img"><span class="emoji-icon">🔍</span></div>
+          <div class="dc-body">
+            <h3>Consulta e Impressão de Documentos</h3>
+            <p>CPF, Serasa, comprovantes, boletos e documentos do governo. Consultamos e imprimimos para você.</p>
+          </div>
+        </div>
+
+        <div class="digital-card">
+          <div class="dc-img"><span class="emoji-icon">🏛️</span></div>
+          <div class="dc-body">
+            <h3>Acesso Gov.br e Serviços Públicos</h3>
+            <p>Ajudamos a criar ou recuperar o acesso ao Gov.br e a acessar serviços públicos online.</p>
+          </div>
+        </div>
+
+        <div class="digital-card">
+          <div class="dc-img"><span class="emoji-icon">📊</span></div>
+          <div class="dc-body">
+            <h3>Declaração MEI e Documentos Empresariais</h3>
+            <p>Emissão de declarações, certidões e documentos para MEI e pequenos negócios.</p>
+          </div>
+        </div>
+
+        <div class="digital-card">
+          <div class="dc-img"><span class="emoji-icon">🚗</span></div>
+          <div class="dc-body">
+            <h3>Licenciamento e Renovações</h3>
+            <p>Acesso e emissão de boletos de licenciamento de veículos e renovações em geral.</p>
+          </div>
+        </div>
+
+        <div class="digital-card">
+          <div class="dc-img"><span class="emoji-icon">🤝</span></div>
+          <div class="dc-body">
+            <h3>Cadastro Único e Benefícios Sociais</h3>
+            <p>Consulta de situação do CadÚnico, Bolsa Família e outros benefícios sociais. Imprimimos o comprovante.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="digital-cta-wrap">
+        <a href="https://wa.me/5581986108547?text=Olá!%20Preciso%20de%20ajuda%20com%20um%20serviço%20digital." class="btn-zap-solid" target="_blank" rel="noopener">
+          💬 Preciso de Ajuda Digital
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section class="how-section" id="como-funciona">
+    <div class="sec-wrap" style="text-align:center;">
+      <div class="sec-label">Como funciona</div>
+      <h2 class="sec-title">Simples, <em>Rápido</em> e sem Complicação</h2>
+      <p class="sec-desc" style="margin: 0 auto;">Atendimento pelo WhatsApp ou presencialmente no Ibura.</p>
+
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Manda no WhatsApp</h3>
+          <p>Envie o arquivo, a foto do documento ou descreva o que precisa. Nossa equipe responde rapidamente.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Confirma o pedido</h3>
+          <p>Você recebe o orçamento e confirma. Sem surpresas, sem taxas escondidas.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Retira na gráfica</h3>
+          <p>Passe na gráfica no Ibura e pegue seu pedido pronto. Rápido e sem espera.</p>
+        </div>
+      </div>
+
+      <div class="how-cta">
+        <a href="https://wa.me/5581986108547?text=Olá!%20Quero%20fazer%20um%20pedido." class="btn-zap-solid" target="_blank" rel="noopener">
+          💬 Começar meu pedido
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO E LOCALIZAÇÃO -->
+  <section class="contact-section" id="contato">
+    <div class="sec-wrap">
+      <div class="sec-label">Localização</div>
+      <h2 class="sec-title">Estamos no <em>Ibura</em>,<br>Recife</h2>
+      <div class="contact-card">
+        <div class="contact-info">
+          <h3>JS Gráfica Rápida</h3>
+          <div class="contact-detail">
+            <span class="ico">📍</span>
+            <span>Bairro do Ibura, Recife — PE<br>Próximo à feira do Ibura</span>
+          </div>
+          <div class="contact-detail">
+            <span class="ico">📱</span>
+            <span>(81) 98610-8547 — WhatsApp</span>
+          </div>
+          <div class="contact-detail">
+            <span class="ico">🕐</span>
+            <span>Segunda a sábado<br>Consulte horários pelo WhatsApp</span>
+          </div>
+          <div class="contact-detail">
+            <span class="ico">📷</span>
+            <span>@js.grafica no Instagram</span>
+          </div>
+        </div>
+        <div class="contact-actions">
+          <a href="https://wa.me/5581986108547?text=Olá!%20Vim%20pelo%20site%20e%20preciso%20de%20ajuda." class="btn-zap-solid" style="justify-content:center;" target="_blank" rel="noopener">
+            💬 Falar pelo WhatsApp
+          </a>
+          <a href="https://www.instagram.com/js.grafica/" class="btn-insta" target="_blank" rel="noopener">
+            📷 @js.grafica
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="final-section">
+    <h2>Pronto para <em>começar</em>?</h2>
+    <p>Manda a mensagem agora. Nossa equipe atende pelo WhatsApp e te ajuda com tudo que precisar.</p>
+    <a href="https://wa.me/5581986108547?text=Olá!%20Vim%20pelo%20site%20da%20JS%20Gráfica%20e%20quero%20fazer%20um%20pedido." class="btn-zap-final" target="_blank" rel="noopener">
+      💬 Chamar no WhatsApp
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      <strong>JS Gráfica Rápida</strong> — Ibura, Recife – PE &nbsp;·&nbsp;
+      <a href="https://wa.me/5581986108547" target="_blank" rel="noopener">(81) 98610-8547</a> &nbsp;·&nbsp;
+      <a href="https://www.instagram.com/js.grafica/" target="_blank" rel="noopener">@js.grafica</a>
+    </p>
+    <p style="margin-top:6px;">© 2026 JS Gráfica Rápida. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- ZAP FLUTUANTE -->
+  <a href="https://wa.me/5581986108547?text=Olá!%20Vim%20pelo%20site%20da%20JS%20Gráfica." class="zap-float" target="_blank" rel="noopener" title="Falar no WhatsApp">
+    💬
+  </a>
+
+</body>
+</html>

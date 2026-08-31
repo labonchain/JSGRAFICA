@@ -1,0 +1,18 @@
+@page { size: 390px 844px; margin: 0; }
+html, body { width: 390px; min-height: 844px; }
+.container { width: 368px !important; margin-left: 11px !important; margin-right: 11px !important; }
+.desktop-nav { display: none !important; }
+.header-inner { gap: 8px !important; min-height: 62px !important; }
+.brand { font-size: 15px !important; }
+.header-cta { margin-left: auto !important; min-height: 38px !important; padding: 0 12px !important; font-size: 12px !important; }
+.hero { padding: 48px 0 40px !important; }
+.hero-grid, .grid.two, .grid.three, .product-grid, .proof-grid, .footer-grid { display: block !important; }
+.hero-grid > *, .grid.two > *, .grid.three > *, .proof-grid > * { margin-bottom: 14px !important; }
+h1 { font-size: 34px !important; line-height: 1.05 !important; }
+h2 { font-size: 26px !important; }
+.hero p { font-size: 16px !important; }
+.hero-panel { margin-top: 18px !important; }
+.hero-actions .button { width: 100% !important; margin-bottom: 8px !important; }
+.section { padding: 42px 0 !important; }
+.intent-card { margin-bottom: 14px !important; }
+.site-footer { padding: 24px 0 !important; }

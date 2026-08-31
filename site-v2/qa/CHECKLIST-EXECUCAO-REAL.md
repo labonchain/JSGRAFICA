@@ -1,0 +1,28 @@
+# Checklist obrigatório após aplicação pelo Claude PM
+
+- [ ] conta Supabase correta confirmada
+- [ ] conta/projeto Vercel corretos confirmados
+- [ ] backup/snapshot realizado
+- [ ] migration 001 aplicada
+- [ ] `app.settings.supabase_url` configurado com a URL correta
+- [ ] migration 002 aplicada
+- [ ] QA SQL 003 passou
+- [ ] RLS ativo nas três tabelas novas
+- [ ] zero grants diretos de tabela para anon/authenticated
+- [ ] RPCs executáveis apenas conforme previsto
+- [ ] bucket só contém derivados web aprovados
+- [ ] build passou
+- [ ] preview isolado publicado
+- [ ] `robots.txt` bloqueia indexação no preview
+- [ ] Home desktop/mobile validada
+- [ ] Serviços validado
+- [ ] Produtos em estado vazio validado quando aplicável
+- [ ] nenhum SKU SELECIONADO aparece vendável
+- [ ] 404 validado
+- [ ] teclado/foco/contraste básico validados
+- [ ] WhatsApp contextual validado
+- [ ] SEO/canonical/sitemap validados
+- [ ] rollback de preview possível
+- [ ] rollback SQL revisado/testável
+- [ ] produção atual não alterada
+- [ ] evidências/URLs registradas no Google Drive
