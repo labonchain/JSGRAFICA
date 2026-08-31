@@ -120,9 +120,9 @@ Este quadro deve ser atualizado a cada movimentação. Um chat que inicia uma et
 | P5-03 | Resultado real de impressão | P5 | BLOQUEADO | Foto real autorizada | v01 | - | - | - | - | - | Sem dados de cliente |
 | P5-04 | Resultado real de personalizado | P5 | BLOQUEADO | Foto real autorizada | v01 | - | - | - | - | - | Sem direito de imagem pendente |
 | P5-05 | Bastidor de produção autorizado | P5 | BLOQUEADO | Foto/vídeo e autorização | v01 | - | - | - | - | - | Sem tela, rosto ou pedido legível |
-| P1-04 | Atendimento próximo no Ibura | P1 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem endereço ou horário não confirmado |
-| P2-06 | Revelação de fotos | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem rosto não autorizado |
-| P4-11 | Presentes personalizados para celebrar | P4 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem data, prazo ou personagem |
+| P1-04 | Atendimento próximo no Ibura | P1 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado com correção de área segura do Status (squad js-grafica-canal-conteudo, 30/08); aguardando aprovação final |
+| P2-06 | Revelação de fotos | P2 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado com correção de sobreposição e contraste (squad js-grafica-canal-conteudo, 30/08); aguardando aprovação final |
+| P4-11 | Presentes personalizados para celebrar | P4 | AGUARDANDO_APROVACAO | Aprovação final do Edvam pra publicar | v01 | v01 | v01 (Canal + Status) | v01 | Aprovado pelo usuário (briefing) | - | QA aprovado com correção no ícone de almofada (squad js-grafica-canal-conteudo, 30/08); aguardando aprovação final |
 | P2-07 | Cadernos, apostilas e materiais didáticos | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem conteúdo escolar legível |
 | P2-08 | Impressão em papel couchê | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem gramatura, preço ou prazo |
 | P2-09 | Impressão em papel cartão | P2 | BRIEFING_APROVADO | Produção pelo chat de designer | v01 | - | - | - | Aprovado pelo usuário | - | Sem gramatura, acabamento ou preço |
