@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JS Gráfica, Status, P3-01, Segunda via de conta</title>
+<script src="./support.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --azul-sistema:#2C5F8A;
+    --azul-sistema-escuro:#1E4363;
+    --azul-sistema-claro:#DCE8F0;
+    --laranja-pessego:#E8935A;
+    --laranja-pessego-escuro:#C96E36;
+    --grafite-traco:#3A3A3A;
+    --grafite-nevoa:#6B6B6B;
+    --cinza-nevoa:#E4E4E4;
+    --branco-base:#FFFFFF;
+    --branco-gelo:#F7F7F5;
+    --amarelo-aviso:#F0B429;
+    --amarelo-aviso-escuro:#8A5A0A;
+    --font-display:'Space Grotesk','Segoe UI',Arial,sans-serif;
+    --font-corpo:'Inter','Segoe UI',Arial,sans-serif;
+    --font-dado:'IBM Plex Mono','Consolas',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#cccccc;}
+  x-dc{display:block;}
+  .canvas{
+    width:1080px;height:1920px;
+    background:var(--azul-sistema-escuro);
+    position:relative;
+    overflow:hidden;
+    font-family:var(--font-corpo);
+  }
+  .titulo{
+    position:absolute;top:190px;left:0;right:0;
+    text-align:center;
+    font-family:var(--font-display);font-weight:700;font-size:72px;line-height:1.18;
+    color:var(--branco-base);
+  }
+  .documento{
+    position:absolute;top:440px;left:290px;
+    width:500px;height:600px;
+    background:var(--branco-base);
+    border-radius:26px;
+    box-shadow:0 30px 64px rgba(0,0,0,0.3);
+    padding:56px;
+  }
+  .linha-doc{
+    background:var(--cinza-nevoa);
+    border-radius:8px;
+    height:18px;
+  }
+  .linha-doc.titulo-doc{width:60%;height:26px;background:var(--azul-sistema);margin-bottom:36px;}
+  .linha-doc.m{width:88%;margin-top:22px;}
+  .linha-doc.s{width:55%;margin-top:22px;}
+  .linha-doc.rodape-doc{width:40%;margin-top:56px;background:var(--laranja-pessego-escuro);}
+  .selo-confirmacao{
+    position:absolute;top:-44px;right:-44px;
+    width:136px;height:136px;border-radius:50%;
+    background:var(--amarelo-aviso-escuro);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 14px 30px rgba(138,90,10,0.4);
+  }
+  .selo-confirmacao svg{width:64px;height:64px;}
+  .apoio{
+    position:absolute;top:1470px;left:120px;right:120px;
+    text-align:center;
+    font-family:var(--font-corpo);font-weight:400;font-size:36px;line-height:1.5;
+    color:var(--branco-gelo);
+  }
+  .cta{
+    position:absolute;top:1590px;left:90px;right:90px;
+    text-align:center;
+    font-family:var(--font-dado);font-weight:500;font-size:30px;letter-spacing:1.5px;
+    color:var(--amarelo-aviso);
+  }
+  .rodape-logo{
+    position:absolute;bottom:150px;left:0;right:0;
+    display:flex;justify-content:center;
+  }
+  .rodape-logo-placa{
+    display:flex;align-items:center;gap:16px;
+    background:var(--branco-base);
+    border-radius:100px;
+    padding:16px 32px;
+  }
+  .rodape-logo svg{width:56px;height:56px;}
+  .rodape-logo span{
+    font-family:var(--font-display);font-weight:700;font-size:32px;letter-spacing:0.5px;
+    color:var(--grafite-traco);
+  }
+</style>
+</head>
+<body>
+<x-dc>
+<div class="canvas">
+  <div class="titulo">PRECISA DA<br>SEGUNDA VIA?</div>
+
+  <div class="documento">
+    <div class="linha-doc titulo-doc"></div>
+    <div class="linha-doc m"></div>
+    <div class="linha-doc m"></div>
+    <div class="linha-doc s"></div>
+    <div class="linha-doc rodape-doc"></div>
+    <div class="selo-confirmacao">
+      <!-- selo de confirmacao generico, sem codigo de barras, valor ou logo de empresa -->
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 12.5L10 17.5L19 7" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="apoio">A equipe orienta o atendimento com você.</div>
+
+  <div class="cta">CHAME A JS GRÁFICA NO WHATSAPP</div>
+
+  <div class="rodape-logo">
+    <div class="rodape-logo-placa">
+      <!-- logo-reducao.svg, aplicado literalmente (03-assets/logo/logo-reducao.svg), sem recolorir, sobre placa branca pra manter a cor oficial Azul Sistema legivel no fundo escuro; unica aplicacao de marca da peca -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path d="M12 6 C15 6 17.5 8.3 17.5 11.3 C17.5 13 16.6 14.1 15.6 15.3 C14.9 16.1 14.5 16.9 14.5 17.8 L13.9 17.8 L13.9 20.2 L10.1 20.2 L10.1 17.8 L9.5 17.8 C9.5 16.9 9.1 16.1 8.4 15.3 C7.4 14.1 6.5 13 6.5 11.3 C6.5 8.3 9 6 12 6 Z" fill="#2C5F8A"/>
+      </svg>
+      <span>JS GRÁFICA</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
