@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JS Gráfica, Canal, P4-11, Presentes personalizados para celebrar</title>
+<script src="./support.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --azul-sistema:#2C5F8A;
+    --azul-sistema-escuro:#1E4363;
+    --azul-sistema-claro:#DCE8F0;
+    --laranja-pessego:#E8935A;
+    --laranja-pessego-escuro:#C96E36;
+    --grafite-traco:#3A3A3A;
+    --grafite-nevoa:#6B6B6B;
+    --cinza-nevoa:#E4E4E4;
+    --branco-base:#FFFFFF;
+    --branco-gelo:#F7F7F5;
+    --amarelo-aviso:#F0B429;
+    --amarelo-aviso-escuro:#8A5A0A;
+    --font-display:'Space Grotesk','Segoe UI',Arial,sans-serif;
+    --font-corpo:'Inter','Segoe UI',Arial,sans-serif;
+    --font-dado:'IBM Plex Mono','Consolas',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#cccccc;}
+  x-dc{display:block;}
+  .canvas{
+    width:1080px;height:1080px;
+    background:var(--branco-gelo);
+    position:relative;
+    overflow:hidden;
+    font-family:var(--font-corpo);
+    display:flex;flex-direction:column;
+    padding:76px 90px 56px;
+  }
+  .cabecalho{
+    flex:none;
+    display:flex;flex-direction:column;align-items:center;gap:24px;
+    text-align:center;
+  }
+  .titulo{
+    font-family:var(--font-display);font-weight:700;font-size:50px;line-height:1.22;
+    color:var(--grafite-traco);
+    max-width:860px;
+  }
+  .apoio{
+    font-family:var(--font-corpo);font-weight:400;font-size:28px;line-height:1.4;
+    color:var(--grafite-nevoa);
+    max-width:700px;
+  }
+  .categorias{
+    flex:1;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+  }
+  .categoria{
+    flex:1;
+    display:flex;flex-direction:column;align-items:center;gap:28px;
+  }
+  .categoria-icone{
+    flex:none;width:190px;height:190px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .categoria-icone svg{width:100px;height:100px;}
+  .categoria-label{
+    font-family:var(--font-display);font-weight:500;font-size:30px;letter-spacing:0.5px;
+    color:var(--grafite-traco);
+    text-transform:uppercase;
+    text-align:center;
+  }
+  .rodape{
+    flex:none;
+    display:flex;flex-direction:column;align-items:center;gap:32px;
+  }
+  .cta{
+    text-align:center;
+    font-family:var(--font-dado);font-weight:500;font-size:30px;letter-spacing:1.5px;
+    color:var(--azul-sistema-escuro);
+  }
+  .rodape-logo{
+    display:flex;justify-content:center;align-items:center;gap:14px;
+  }
+  .rodape-logo svg{width:48px;height:48px;}
+  .rodape-logo span{
+    font-family:var(--font-display);font-weight:700;font-size:28px;letter-spacing:0.5px;
+    color:var(--grafite-traco);
+  }
+</style>
+</head>
+<body>
+<x-dc>
+<div class="canvas">
+
+  <div class="cabecalho">
+    <div class="titulo">QUAL IDEIA VOCÊ QUER PRESENTEAR?</div>
+    <div class="apoio">Escolha uma categoria e converse com a equipe.</div>
+  </div>
+
+  <div class="categorias">
+    <div class="categoria">
+      <div class="categoria-icone" style="background:var(--azul-sistema-claro);">
+        <!-- silhueta propria de caneca, tracado 2px, sem marca de terceiro -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--azul-sistema)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 7h11v8a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V7Z"/>
+          <path d="M16 9h1.5a2.5 2.5 0 0 1 0 5H16"/>
+        </svg>
+      </div>
+      <span class="categoria-label">Caneca</span>
+    </div>
+
+    <div class="categoria">
+      <div class="categoria-icone" style="background:var(--azul-sistema-claro);">
+        <!-- silhueta propria de camiseta, tracado 2px, sem estampa/tema reconhecivel -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--grafite-traco)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 4 4 7 7 10.5 8 9.8 8 20 16 20 16 9.8 17 10.5 20 7 15 4 Q12 6.5 9 4 Z"/>
+        </svg>
+      </div>
+      <span class="categoria-label">Camiseta</span>
+    </div>
+
+    <div class="categoria">
+      <div class="categoria-icone" style="background:var(--azul-sistema-claro);">
+        <!-- silhueta propria de almofada (cantos chanfrados de estofado + costura central pontilhada), tracado 2px, sem cruzamento diagonal (evita leitura de "imagem quebrada") -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--azul-sistema-escuro)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7.5 5h9l3 3v8l-3 3h-9l-3-3V8Z"/>
+          <path d="M8 12h8" stroke-dasharray="1.6 2"/>
+        </svg>
+      </div>
+      <span class="categoria-label">Almofada</span>
+    </div>
+  </div>
+
+  <div class="rodape">
+    <div class="cta">FALE COM A JS GRÁFICA</div>
+    <div class="rodape-logo">
+      <!-- logo-reducao.svg, aplicado literalmente (03-assets/logo/logo-reducao.svg), unica aplicacao de marca da peca -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path d="M12 6 C15 6 17.5 8.3 17.5 11.3 C17.5 13 16.6 14.1 15.6 15.3 C14.9 16.1 14.5 16.9 14.5 17.8 L13.9 17.8 L13.9 20.2 L10.1 20.2 L10.1 17.8 L9.5 17.8 C9.5 16.9 9.1 16.1 8.4 15.3 C7.4 14.1 6.5 13 6.5 11.3 C6.5 8.3 9 6 12 6 Z" fill="#2C5F8A"/>
+      </svg>
+      <span>JS GRÁFICA</span>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>
