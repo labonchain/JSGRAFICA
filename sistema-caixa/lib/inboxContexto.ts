@@ -15,6 +15,35 @@ interface MensagemLog {
   data_timestamp: number;
 }
 
+// Demanda 368: a Sugestão de IA (048) nunca recebia o catálogo real de
+// serviços, só o histórico da conversa — o Gemini respondia "não fazemos X"
+// baseado em suposição genérica de "gráfica rápida", não no que a JS Gráfica
+// presta de verdade (achado real: negou "agendamento de RG", que existe como
+// produto ativo, `prod-042`). Busca só produtos `ativo=true` (o que a gráfica
+// realmente presta hoje, independente de aparecer no menu do cliente) e
+// agrupa por categoria pra caber num bloco compacto no prompt.
+export async function buscarCatalogoServicos(): Promise<string> {
+  const { data: produtos } = await supabaseAdmin
+    .from('jsgrafica_produtos')
+    .select('nome, categoria')
+    .eq('ativo', true)
+    .order('categoria')
+    .order('nome');
+
+  if (!produtos || produtos.length === 0) return '';
+
+  const porCategoria = new Map<string, string[]>();
+  for (const p of produtos) {
+    const categoria = p.categoria || 'Outros';
+    if (!porCategoria.has(categoria)) porCategoria.set(categoria, []);
+    porCategoria.get(categoria)!.push(p.nome);
+  }
+
+  return Array.from(porCategoria.entries())
+    .map(([categoria, nomes]) => `${categoria}: ${nomes.join(', ')}`)
+    .join('\n');
+}
+
 export async function buscarContextoConversa(phone: string) {
   const { data: mensagens } = await supabaseAdmin
     .from('jsgrafica_log_msgs_privadas')

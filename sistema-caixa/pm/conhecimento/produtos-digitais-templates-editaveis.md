@@ -6,8 +6,11 @@ o histórico de ideias testadas, descartadas e validadas. Serve de contexto pra 
 divulgação e formalizar os produtos quando chegar a hora de propor a demanda de verdade pro
 03-APP (catálogo) e pro 07-MARKETING (divulgação).
 
-Status: em andamento, nenhuma demanda formal aberta ainda. Aguardando decisão do Edvam sobre qual
-modelo lançar primeiro.
+Status: em andamento. As demandas formais que saíram deste backlog (346, 347) foram **canceladas
+em 2026-08-29** (decisão do Edvam: não seguir no formato que estava, quer produtos digitais
+refeitos do zero). Demanda **360** (aprovada 31/08) pede retomar a pesquisa do zero, usando este
+documento e o NEG-KIT-001 só como referência de aprendizado, não como base a continuar. Ver seção
+"Demanda 360" no fim deste arquivo pro estado real do levantamento em andamento.
 
 ## Origem e objetivo real (não é pedido de cliente)
 

@@ -6,11 +6,67 @@
 
 Documento vivo. O PM atualiza isso conforme os chats do time reportam resultado de tarefas,
 não é histórico (isso é `HISTORICO.md`), é uma foto do que o sistema faz e em que estado está
-agora. **Última atualização: 2026-08-30** (as seções abaixo do "Estado atual (2026-08-30)" são o
+agora. **Última atualização: 2026-08-31** (as seções abaixo do "Estado atual (2026-08-31)" são o
 registro histórico das sessões anteriores, mantidas porque continuam factualmente corretas no
 momento em que foram escritas, só não são mais "o estado atual").
 
-## Estado atual (2026-08-30)
+## Estado atual (2026-08-31)
+
+Sessão longa e densa, ver `pm/demandas/STATUS.md` (topo) pro detalhe demanda a demanda. Resumo
+por tema:
+
+**Infraestrutura, GitHub (357-358, concluídas)**: todo o código da JS Gráfica está versionado em
+`labonchain/JSGRAFICA` (repositório público compartilhado, criado pelo Edvam, também usado pelo
+pipeline de conteúdo via GPT). `sistema-caixa/` (caixa-js-grafica completo, `pm/` incluso exceto
+`pm/backups/`), `site-institucional/` (site da raiz), `site-v2/` (site novo). Decisão consciente
+do Edvam: `pm/` fica público de propósito, pra o GPT do pipeline ler histórico/continuidade.
+
+**Achado de segurança, resolvido**: auditoria pré-push achou chave `service_role` real do
+Supabase compartilhado + 27 tokens Z-API reais em `pm/backups/*.json` (histórico antigo). Decisão
+do Edvam: apagar os 29 arquivos do disco local (feito, confirmado), sem rotacionar a chave por
+ora (decisão consciente).
+
+**Canal do WhatsApp, completo e em produção (352-356, 362)**: canal real "JS Gráfica" criado,
+testado (texto/imagem/vídeo/áudio funcionam, documento não), integrado em Marketing → Conteúdo
+como 3º destino (post real, agendamento real distinto de "aprovar e publicar agora", tela de
+Configurações). Robô de disparo agendado (355) rodando a cada 30min.
+
+**🎨 Qualidade visual das peças, teste concluído, padrão aguardando aprovação (361, 364, 366)**: a
+produção original (32 peças, HTML/CSS/SVG puro) foi considerada fraca pelo Edvam ("visual
+genérico, parece Canva"). Causa raiz: técnica de código não simula foto/textura real. Solução:
+workflow (364) gera imagem realista via **Gemini gratuito**, testado em 3 variações de fundo no
+mesmo produto (366): produto isolado, painel de cor complementar dentro da própria foto
+(recomendado pelo 07-Marketing, mockup real com título/CTA direto sobre o painel, foto e
+tipografia como peça só) e cena lifestyle ambientada (opção pontual). **Aguardando aprovação do
+Edvam** da variação recomendada antes de virar padrão de produção e escalar pras 32 peças antigas.
+
+**✅ Contador de visualizações de Status, causa raiz corrigida (363 parte 2, 367, 2026-08-31)**:
+o painel mostrava 8x a 20x mais "visualizações" do que o número real do WhatsApp nativo. Causa:
+a função `jsgrafica_contar_visualizacoes_status` somava eventos `RECEIVED` (entrega automática,
+82,5% da base) junto com `READ` (visualização real, 18,9%). Corrigido com filtro `status='READ'`,
+testado contra 5 posts reais, painel já mostra o número certo. No caminho, 3 hipóteses causais
+diferentes foram propostas e derrubadas por dado real antes de achar a causa verdadeira (registro
+completo em `pm/demandas/363-*.md`, inclusive autocrítica do executor sobre apresentar hipótese
+como conclusão fechada sem validar primeiro).
+
+**🔴 Alcance de Status via API, ainda sem causa raiz confirmada (363 parte 1)**: Status postado
+via automação (API) não alcança todos os clientes reais (achado real: Zuzeide, 72 interações,
+nunca vê Status via API, só o manual). A hipótese original ("1.717 contatos sincronizados pelo
+dispositivo vinculado da Z-API") foi derrubada, o Edvam confirmou que não existe conceito de
+sincronização de contato na Z-API. Segunda hipótese (contato salvo/não salvo na agenda do
+telefone) também derrubada, Zuzeide está salva na agenda e mesmo assim não aparece em `/contacts`.
+Causa real ainda não identificada. Edvam segue direto com o 01-N8N e com o suporte da Z-API.
+
+**Bug real corrigido no Inbox (demanda 368, 2026-08-31)**: o botão "Sugestão da IA" negava
+serviços reais da gráfica (ex. "agendamento de RG") porque a rota de sugestão nunca consultava o
+catálogo (`jsgrafica_produtos`), só o histórico de conversa. Corrigido injetando a lista real de
+serviços ativos no prompt, testado com caso real e com regressão (serviço que a gráfica realmente
+não presta continuou sendo negado corretamente).
+
+**08-Produtos**: sem demanda ativa, aguardando o Edvam detalhar o que não convenceu no Kit
+Delivery Brasil antes de fechar a proposta de retomada de pesquisa (demanda 360).
+
+## Estado atual (2026-08-30), histórico
 
 **Episódio de coordenação (28/08 à noite)**: o Edvam abriu várias janelas de PM por engano
 tentando limpar a sessão, gerando confusão real de múltiplos "00 - PM" coexistindo e dando

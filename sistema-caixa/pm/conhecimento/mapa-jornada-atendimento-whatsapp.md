@@ -64,7 +64,7 @@ não pegou, e 1 mensagem de teste interno explícita. Não há um padrão sistem
   confiável pra reconhecer automaticamente não é uma palavra isolada, é a combinação
   prato+acompanhamento+preço fixo de marmita.
 - **São sempre os mesmos números ou gente nova?** Mistura dos dois: os 3 números mais recorrentes
-  (`558184836197`, `558187981175`, `558188057984`) mandam pedido de almoço quase todo dia — parecem
+  (`CLIENTE-101`, `CLIENTE-102`, `CLIENTE-103`) mandam pedido de almoço quase todo dia — parecem
   clientes fiéis da Dizu que erram o número recorrentemente. Mas o total de 28 contatos distintos
   em 30 dias (vs. só 3 recorrentes) mostra que também há gente nova cometendo o mesmo engano.
 - **Esses contatos também mandam mensagem de gráfica?** Não. Confirmado por SQL: **zero** dos 28
@@ -182,10 +182,10 @@ match por nome.
     cruzada de canal, é conversão de Inbox só que demorada.
   - **4 (2,6% do total de 152) não têm mensagem nova perto do pedido** → sinal mais forte de
     conversão cruzada real Inbox→presencial. Confirmei o conteúdo da conversa original desses 4:
-    ex. **Wilson Reis** (04/07, 12h46): manda a mídia, escreve *"Imprimir a 2,3 e4 folha ok"*,
+    ex. **CLIENTE-104** (04/07, 12h46): manda a mídia, escreve *"Imprimir a 2,3 e4 folha ok"*,
     *"Tô indo buscar"*, depois *"Tá funcionando hoje não é"* / *"??"* (sem confirmação clara na
     conversa) — o pedido só é lançado no sistema **2 dias depois** (06/07, por Gabi). Padrão
-    parecido em **Luciano Araújo** (mídia sem texto, pedido só 2 dias depois) e **Beronice Maria**
+    parecido em **CLIENTE-105** (mídia sem texto, pedido só 2 dias depois) e **CLIENTE-106**
     (mídia sem texto, pedido 3 dias depois). Bate com a hipótese do Edvam: cliente fala no Inbox,
     não fecha ali, aparece fisicamente depois e o pedido é lançado nesse momento.
 - **Leitura**: a conversão cruzada Inbox→balcão existe e é real (confirmada com casos concretos),
@@ -258,31 +258,31 @@ total). **158 (56%) nunca geram nenhum pedido vinculado** — consistente com a 
 44-49% já medida na 159. Amostrei 15 casos concretos e o padrão qualitativo é bem mais variado do
 que uma categoria genérica de "abandonou":
 
-- **Mídia/documento enviado, sem resposta humana registrada em até 6h** (ex.: Etiene Oliveira
-  manda boleto e diz "Só o boleto"/"Ok", zero resposta; Cláudia Maria manda 4 documentos + "Meu
-  esposo vai buscar", zero resposta; Danilo manda vários documentos perguntando a ordem de
+- **Mídia/documento enviado, sem resposta humana registrada em até 6h** (ex.: CLIENTE-107
+  manda boleto e diz "Só o boleto"/"Ok", zero resposta; CLIENTE-108 manda 4 documentos + "Meu
+  esposo vai buscar", zero resposta; CLIENTE-109 manda vários documentos perguntando a ordem de
   impressão, zero resposta). No total da amostra de 158, **54 (34%) não têm nenhuma resposta
   humana em 6h** — mas esse número mistura casos que realmente precisavam de resposta e não
   tiveram (ponto de atrito real) com casos que a equipe corretamente ignorou (Dizu, spam — ver
   abaixo), não dá pra separar os dois só com esse agregado.
 - **Negociação completa no chat que mesmo assim nunca vira pedido registrado no sistema**: caso
-  mais importante da amostra — **Ana Paula** pergunta o preço de 50 cópias com corte, confirma
+  mais importante da amostra — **CLIENTE-110** pergunta o preço de 50 cópias com corte, confirma
   ("Tá certo"), diz que a mãe vai pagar em dinheiro e pede recibo em nome de terceiro — conversa
   com **acordo claro fechado no chat**, mas **nunca aparece um `jsgrafica_pedido` vinculado a esse
   telefone**. Isso sugere que a "taxa de conversão" da 159 (medida só por vínculo em
   `jsgrafica_pedidos`) pode estar **subestimando vendas reais** que acontecem e são combinadas
   via WhatsApp mas não chegam a ser lançadas no sistema — um gap de processo (venda sem registro),
   não de atendimento.
-- **Confusão com a Dizu Refeições continua aparecendo em quem "não converte"** (Larissa Barbosa faz
-  pedido de comida estruturado; Mateus Grupo Prima Almoço avisa "hoje não vou pedir"; Elders De
-  Ibura 2 pede comida e depois pergunta "já está pronto?" pro número errado) — reforça o achado da
+- **Confusão com a Dizu Refeições continua aparecendo em quem "não converte"** (CLIENTE-111 faz
+  pedido de comida estruturado; CLIENTE-112 avisa "hoje não vou pedir"; CLIENTE-113
+  pede comida e depois pergunta "já está pronto?" pro número errado) — reforça o achado da
   159/160, e mostra que o confundido às vezes chega a perguntar status pro número errado.
 - **Contato é outro WhatsApp Business com resposta automática própria, não é atendimento real**:
   achado novo — "Farmácia do Trabalhador Pernambuco" respondeu com uma mensagem de boas-vindas
   automatizada própria ("Olá, seja bem-vindo! Já estamos com entrega em domicílio...") quando a
   JS Gráfica entrou em contato com eles — é ruído de infraestrutura (bot de outro negócio), não
   uma dúvida de cliente real.
-- **Dúvida sobre serviço fora do padrão**: Maria Tainara pergunta se fazem "marca texto em bíblia"
+- **Dúvida sobre serviço fora do padrão**: CLIENTE-114 pergunta se fazem "marca texto em bíblia"
   — não converte, possivelmente por não ser um serviço que a gráfica ofereça claramente.
 
 ### 8.4 O que as pessoas pedem, de fato
@@ -347,54 +347,54 @@ Base: 301 sessões que começam com mídia sem texto de um contato real (mesmo c
   sendo digitado em partes) se conclui em até 2 minutos. Existe uma cauda longa (~10% dos gaps
   >15min) que corresponde a retomadas dentro da mesma janela de 4h, não ao mesmo "pensamento".
 
-**12 exemplos reais de rajada** (texto exato, hora local Recife; nenhum repete Wilson Reis, Ana
-Paula [confirmado: a sessão de `558195287007` — "50 cópias", corte, mãe paga em dinheiro, recibo
-pro Conjunto Musical Melodia Divina — é o MESMO caso da 161, excluída daqui], Luciano Araújo ou
-Beronice Maria):
+**12 exemplos reais de rajada** (texto exato, hora local Recife; nenhum repete CLIENTE-104,
+CLIENTE-110 [confirmado: a sessão de `CLIENTE-110` — "50 cópias", corte, mãe paga em dinheiro, recibo
+pro Conjunto Musical Melodia Divina — é o MESMO caso da 161, excluída daqui], CLIENTE-105 ou
+CLIENTE-106):
 
-1. **Willianne Barbosa** (`558198332888`, 03/07 09:23-09:25): 6 imagens em ~2s, depois 141s
+1. **CLIENTE-115** (03/07 09:23-09:25): 6 imagens em ~2s, depois 141s
    depois: *"Bom dia!!!\nPor favor, imprimir em colorido , recortar, e plastificar essa
    carteiras.\n\nObs: a frente é essa verde e atrás é essa branca.\nNo tamanho legível ,pode se
    basear na carteira de identidade"* — legenda completa chega só depois da rajada de imagem.
-2. **Gedalva** (`558181304322`, 06/07 13:42): imagem, +17s *"Boa tarde olha essa foto aqui para
+2. **CLIENTE-007** (06/07 13:42): imagem, +17s *"Boa tarde olha essa foto aqui para
    mim pegar ela de 3 horas tá certo por favor é o tamanho dela de uma foto normal pequena normal
    obrigada"*, +7s *"Manda o preço"*, +6s *"Vai ser no Pix"` — 3 mensagens em 30s completando o
    mesmo pedido.
-3. **Iran** (`558186853543`, 06/07 13:05-13:08): 8 imagens em <2s, +68s *"Boa tarde copie mais 5
+3. **CLIENTE-116** (06/07 13:05-13:08): 8 imagens em <2s, +68s *"Boa tarde copie mais 5
    folhas mande o valor vou passar o pix"*, +109s *"Essas 8 desculpe não são 5"*, +36s *"Mande o
    total com as 3 primeiras"* — cliente se autocorrige dentro da própria rajada, antes mesmo da
    equipe responder.
-4. **Nadja Tavares** (`558198372267`, 10/07 08:29-08:31): imagem, +25s *"Bom dia"*, +71s *"Nadja
-   Tavares de Almeida \nNasc. 06/09/1963\nnadjatavares620@gmail.com"*, +15s *"Essa fatura é para
+4. **CLIENTE-117** (10/07 08:29-08:31): imagem, +25s *"Bom dia"*, +71s *"CLIENTE-117
+   \nNasc. [data de nascimento removida]\n[e-mail removido]"*, +15s *"Essa fatura é para
    imprimir"* — dados pessoais e instrução chegam em mensagens separadas.
-5. **Sônia Pedroza** (`558188775469`, 06/07 10:04-12:36): 2 documentos duplicados 3 vezes ao longo
+5. **CLIENTE-055** (06/07 10:04-12:36): 2 documentos duplicados 3 vezes ao longo
    de ~2,5h (reenvio, não rajada única), *"Bom dia"*, *"Chego já"*, *"Senha do hiper 192814"` —
    mostra que "rajada" às vezes é o cliente reenviando o mesmo arquivo por insegurança, não só
    fragmentando texto novo.
-6. **Cleonice** (`558181109498`, 07/07 11:40-11:58): 2 imagens, +10s *"Bom dia é para quanto para
+6. **CLIENTE-118** (07/07 11:40-11:58): 2 imagens, +10s *"Bom dia é para quanto para
    puxar esses dois exames"*, +71s *"Eu queria para hoje esse exame é dois exames que eu queria
    que imprimir"*, +16s *"Pra hoje!"*, +309s *"É para quanto fica para quanto os dois exames"*,
    sticker, +620s *"Boa tarde mande o valor desses dois exames e se tem alguma coisa que tem que
    abrir mais esse papel"* — a mesma pergunta (preço) repetida 3x em formas diferentes dentro da
    mesma rajada, por ansiedade/falta de resposta.
-7. **Roberta Severina** (`558194597618`, 03/07 09:31): 5 imagens em 14s, +8s *"Bom dia"*, +39s *"É
+7. **CLIENTE-119** (03/07 09:31): 5 imagens em 14s, +8s *"Bom dia"*, +39s *"É
    para revelar essas fotos tamanho normal"*, +73s *"Ok"* — sem resposta da equipe registrada na
    sessão.
-8. **Silvia Souza - Divina Moda Evangélica** (`558183351810`, 03/07 11:39-11:42): 3 documentos em
+8. **CLIENTE-120** (03/07 11:39-11:42): 3 documentos em
    1s, +5s *"Boa tarde"*, +25s *"Gostaria de imprimir essas 3 páginas. Pode ser preto e branco
    mesmo."*, +10s *"Daqui a pouco vou buscar"*, +98s *"Ok"*, +8s *"Manda o pix"* — sem resposta da
    equipe registrada na sessão.
-9. **Kaylon Luiz** (`558185861379`, 06/07 20:11-20:13): documento, +12s *"Em ofício"*, 3 imagens em
+9. **CLIENTE-121** (06/07 20:11-20:13): documento, +12s *"Em ofício"*, 3 imagens em
    <1s, +7s *"E essas 3 em polaroid"* — combina documento e fotos com instrução de formato
    fragmentada entre os dois.
-10. **Cícera J Meireles** (`558188019667`, 06/07 10:02-12:08): 2 documentos, +43s *"Um dia
+10. **CLIENTE-122** (06/07 10:02-12:08): 2 documentos, +43s *"Um dia
     abençoado."*, +57s *"Por favor imprimir Pag. 1e 2"*, mais 1 documento, +7000s *"Faltou a foto
     Hiper"* — equipe responde 425s depois: *"mil desculpa , mas pode vim buscar"*.
-11. **Roseane Carvalho** (`558184216944`, 06/07 09:00-09:55): rajada longa e complexa (documento,
+11. **CLIENTE-123** (06/07 09:00-09:55): rajada longa e complexa (documento,
     senha numérica solta, "à de pagar e a detalhada", mais documentos, mais senhas) — equipe só
     responde 3.096s (51,6min) depois: *"teve duas que nao conseguir"*, mostra que rajadas
     complexas/confusas correlacionam com silêncio maior antes da resposta.
-12. **Paulo Henrique** (`558186113061`, 10/07 10:18-10:54): 2 documentos, +7s *"Bom dia!"*, +51s
+12. **CLIENTE-124** (10/07 10:18-10:54): 2 documentos, +7s *"Bom dia!"*, +51s
     *"O extrato da Tim só a folha q tem o endereço ok?"*, +38s *"Quanto custa as impressões?"*,
     dados pessoais, 👍 — equipe só responde 4.289s (71,5min) depois com *"Obrigado"*, **sem
     responder a pergunta de preço feita na rajada** — evidência de que nem toda resposta da
@@ -427,11 +427,11 @@ Beronice Maria):
   dessas 15**, quase todas não são "interrupção de um pensamento inacabado" — são (a) o cliente
   só confirmando/agradecendo (*"Joia"*, *"ok"*, *"Tou indo agora buscar"*), ou (b) a primeira
   resposta da equipe foi só uma saudação genérica (*"Boa tarde"*, *"boa tarde"*) e o cliente
-  emenda a explicação de verdade na sequência (ex. **Lindauria Maria**, `558185556203`, 06/07
+  emenda a explicação de verdade na sequência (ex. **CLIENTE-136**, 06/07
   12:42:29 equipe *"Boa tarde"* → 11s depois cliente detalha pedido de 6 cadernos de louvor com
   lista de músicas — a saudação não foi uma tentativa de resolver, só um "oi, já vi"). **Só 1 caso
-  na amostra é evidência real de a equipe ter agido cedo demais**: **Ricardo do Dutra**
-  (`558188852989`, 09/07 08:03-08:11) manda 3 documentos + "Bom dia irmão", a equipe já cria o
+  na amostra é evidência real de a equipe ter agido cedo demais**: **CLIENTE-135**
+  (`CLIENTE-135`, 09/07 08:03-08:11) manda 3 documentos + "Bom dia irmão", a equipe já cria o
   pedido (template automático "Pedido confirmado! IMPRESSÃO P&B A4 Qtd: 4") no mesmo segundo, e o
   cliente precisa corrigir na sequência: *"Pode imprimir estes três arquivos q mandei"* — indício
   de que o pedido foi criado com uma leitura incompleta dos 3 arquivos antes do cliente confirmar
@@ -439,8 +439,8 @@ Beronice Maria):
 - **Conclusão do item**: não há evidência de que a equipe interrompa rajadas no meio (não
   acontece por construção); a equipe tende a **esperar mais tempo que o padrão geral** antes de
   responder quando a sessão começa por mídia sem legenda (mediana ~3,8min vs 42s geral), e quase
-  não há sinal de resposta prematura seguida de correção — a única exceção clara (Ricardo do
-  Dutra) envolve o fluxo automático de "criar pedido", não uma resposta manual de texto.
+  não há sinal de resposta prematura seguida de correção — a única exceção clara (CLIENTE-135)
+  envolve o fluxo automático de "criar pedido", não uma resposta manual de texto.
 
 ### 9.3 Frases reais da equipe pra confirmar mídia recebida e perguntar o que o cliente quer
 
@@ -452,23 +452,21 @@ agradecimento isolado ("obg"/"Obrigado", nada mais), 3 (2%) são só uma confirm
 confirmação com contexto). Frases reais desse último grupo que confirmam recebimento e/ou
 perguntam o que o cliente quer (texto exato, não parafraseado):
 
-- *"Bom dia, seu arquivo tem 3 folhas, é para imprimir as 3 ou só boleto?"* (`558186490837`,
-  Janaina Rosa)
-- *"que tipo de papel"* (`558196158618`, Helen Silva)
-- *"Boa tarde, a impressão colorida ou preto e branco?"* (`558193278417`, João Gomes)
-- *"Bom dia, Joselma! impressão de foto no tamanho 10x15 2,50 - 15x20 4,50 - polaroid 2,00 qual
-  vai querer? 😉"* (`558183559074`, Joselma Mariano)
+- *"Bom dia, seu arquivo tem 3 folhas, é para imprimir as 3 ou só boleto?"* (`CLIENTE-125`)
+- *"que tipo de papel"* (`CLIENTE-126`)
+- *"Boa tarde, a impressão colorida ou preto e branco?"* (`CLIENTE-127`)
+- *"Bom dia, CLIENTE-128! impressão de foto no tamanho 10x15 2,50 - 15x20 4,50 - polaroid 2,00 qual
+  vai querer? 😉"* (`CLIENTE-128`)
 - *"Bom dia! Pra te passar o valor certinho, preciso dar uma olhada no arquivo.  Assim já confirmo
-  e te falo o total."* (`558198008702`, Danielle)
-- *"boa tarde ira imprimir novamente?"* (`558196186444`, Maria Claudia)
-- *"Oi, Brayan! Recebemos seu arquivo aqui, valor da impressão 1,20 😉"* (`558184246675`, Brayan
-  Santos)
-- *"Bom dia, Rosilandia! Recebemos o documento. Vamos verificar sua solicitação. 😉"*
-  (`5516993985673`, Rosilandia da Silva)
-- *"Opa, Romildo! Recebi todos os arquivos aqui. A impressão P&B A4, 3 unidades, fica R$ 3,60.
-  Confirma pra gente?"* (`559281195991`, Romildo Epifanio)
-- *"Oi, Cleonice! Boa tarde!\n\nVamos verificar e informaremos os valores"* (`558181109498`,
-  Cleonice)
+  e te falo o total."* (`CLIENTE-088`)
+- *"boa tarde ira imprimir novamente?"* (`CLIENTE-129`)
+- *"Oi, CLIENTE-130! Recebemos seu arquivo aqui, valor da impressão 1,20 😉"* (`CLIENTE-130`)
+- *"Bom dia, CLIENTE-002! Recebemos o documento. Vamos verificar sua solicitação. 😉"*
+  (`CLIENTE-002`)
+- *"Opa, CLIENTE-131! Recebi todos os arquivos aqui. A impressão P&B A4, 3 unidades, fica R$ 3,60.
+  Confirma pra gente?"* (`CLIENTE-131`)
+- *"Oi, CLIENTE-118! Boa tarde!\n\nVamos verificar e informaremos os valores"* (`CLIENTE-118`,
+  CLIENTE-118)
 
 **Padrão de tom**: quase sempre nome próprio + saudação + confirmação objetiva ("recebemos
 [o quê]" / "seu arquivo tem [n] folhas") antes da pergunta ou do valor — vocabulário simples,
@@ -486,22 +484,22 @@ nenhuma pista textual):
   **21/33 (63,6%) vieram de rajadas 100% mídia, sem nenhum texto do cliente** — ou seja, na
   maioria desses casos a equipe (usando o fluxo "Criar pedido" do Inbox) olhou o arquivo, decidiu
   produto+quantidade+preço, e já registrou o pedido **sem perguntar nada no chat**. Exemplos
-  reais: `558188646488` (Roberto José, 4 imagens → Pedido confirmado, IMPRESSÃO P&B A4, Qtd 4,
-  R$4,80), `558197485707` (Luciana Santos Itaparica, 1 imagem → Pedido confirmado, ENCADERNAÇÃO
-  ATÉ 30 FOLHAS, R$4,50), `558197103012` (Mario Antunes, 3 documentos → Pedido confirmado,
+  reais: `CLIENTE-132` (4 imagens → Pedido confirmado, IMPRESSÃO P&B A4, Qtd 4,
+  R$4,80), `CLIENTE-085` (1 imagem → Pedido confirmado, ENCADERNAÇÃO
+  ATÉ 30 FOLHAS, R$4,50), `CLIENTE-133` (3 documentos → Pedido confirmado,
   IMPRESSÃO COLORIDA OFÍCIO A4, Qtd 2).
 - **Resposta manual em texto livre**, olhando só as 11 sessões onde a rajada inicial também era
   100% mídia sem texto e a resposta foi texto digitado (não o template): **5/11 (45,5%) já
-  direcionam sem perguntar** — ex. *"Opa, Leone! Recebemos os arquivos. Sua impressão P&B A4, 1
-  unidade, no valor de R$ 1,20, já está impressa."* (`558186401292`, nem pergunta, já entregou
-  pronto); *"Oi, Brayan! Recebemos seu arquivo aqui, valor da impressão 1,20 😉"* (`558184246675`);
-  *"Opa, Romildo! Recebi todos os arquivos aqui. A impressão P&B A4, 3 unidades, fica R$ 3,60.
-  Confirma pra gente?"* (`559281195991` — direciona mas fecha com confirmação objetiva sim/não, não
+  direcionam sem perguntar** — ex. *"Opa, CLIENTE-031! Recebemos os arquivos. Sua impressão P&B A4, 1
+  unidade, no valor de R$ 1,20, já está impressa."* (`CLIENTE-031`, nem pergunta, já entregou
+  pronto); *"Oi, CLIENTE-130! Recebemos seu arquivo aqui, valor da impressão 1,20 😉"* (`CLIENTE-130`);
+  *"Opa, CLIENTE-131! Recebi todos os arquivos aqui. A impressão P&B A4, 3 unidades, fica R$ 3,60.
+  Confirma pra gente?"* (`CLIENTE-131` — direciona mas fecha com confirmação objetiva sim/não, não
   pergunta aberta); *"Opa, bom dia! Confirmado o recebimento dos 50% , a caneca está em produção.
-  Avisaremos assim que chegar. 😉"* (`558185971071` — aqui a equipe claramente usa contexto de uma
+  Avisaremos assim que chegar. 😉"* (`CLIENTE-134` — aqui a equipe claramente usa contexto de uma
   conversa anterior fora dessa janela de 4h, não só o conteúdo da imagem em si). Só **1/11 (9%)**
   fez pergunta aberta de verdade (*"que tipo de papel"*). Os outros **5/11 (45,5%)** só
-  agradeceram/cumprimentaram sem confirmar nada em texto (ex. *"Obrigado."*, *"Obrigo Laércio!"*)
+  agradeceram/cumprimentaram sem confirmar nada em texto (ex. *"Obrigado."*, *"Obrigo CLIENTE-091!"*)
   — **limite importante**: não dá pra saber por esses casos se a equipe decidiu o produto sem
   perguntar (fora do chat, verbalmente ou só executando) ou se a conversa continuou por outro
   canal; o log não mostra a decisão.
@@ -512,7 +510,7 @@ nenhuma pista textual):
   segunda pergunta do Edvam**: pra pelo menos uma fatia real e não pequena dos casos (documentos
   óbvios tipo fatura/boleto/comprovante — o padrão mais comum da amostra), a equipe já consegue
   decidir "isso vai ser impressão P&B, R$X" só olhando o arquivo, sem precisar perguntar "o que
-  você deseja fazer?" — mas o caso do Leone/Romildo/Brayan é sempre documento **de página única e
+  você deseja fazer?" — mas o caso do CLIENTE-031/CLIENTE-131/CLIENTE-130 é sempre documento **de página única e
   claramente identificável** (boleto/fatura = impressão simples P&B); não há exemplo na amostra de
   direcionamento sem pergunta pra arquivos ambíguos (fotos de objeto, artes gráficas, documentos
   de múltiplas páginas com finalidade não óbvia) — nesses, o padrão observado nas seções 9.1/9.3
@@ -571,7 +569,7 @@ nenhuma pista textual):
 14. **(Demanda 204) Reforça 2x, com casos novos e independentes, que a taxa de conversão real é
     subestimada pela taxa medida só via `jsgrafica_pedidos`**: achei mais 2 casos de venda real
     que acontece de fato (com entrega/retirada confirmada na conversa) mas nunca vira registro
-    formal no sistema — mesmo padrão do caso Ana Paula (161), agora com 3 exemplos concretos no
+    formal no sistema — mesmo padrão do caso CLIENTE-110 (161), agora com 3 exemplos concretos no
     total.
 15. **(Demanda 204) Contaminação do log distorce outlier bruto de forma concreta e mensurável**: a
     maior sessão do dataset inteiro (182 mensagens) era 100% bot da Neoenergia/Celpe, não
@@ -656,32 +654,32 @@ Li o conteúdo real de 8 sessões-outlier (não só contei) — cada uma tem uma
 diferente, nenhuma é "só demorou":
 
 1. **Confusão com a Dizu Refeições no início da própria conversa que depois vira pedido real de
-   gráfica** (`558183106106`): a equipe respondeu com o cardápio de quentinha por engano ("Bom
+   gráfica** (`CLIENTE-137`): a equipe respondeu com o cardápio de quentinha por engano ("Bom
    dia, cardápio dia 08/07/26... Faça seu pedido aqui"), a cliente corrige ("Seria pra imprimir"),
    segue normalmente depois — mostra que a confusão da Dizu (seção 2) às vezes acontece do lado
    da EQUIPE, não só do cliente.
-2. **Negociação de forma de pagamento não padrão** (mesma sessão, `558183106106`): cliente propõe
+2. **Negociação de forma de pagamento não padrão** (mesma sessão, `CLIENTE-137`): cliente propõe
    pagar em dinheiro na hora + a equipe repassar o Pix depois ("você teria 9 reais em espécie pra
    eu lhe mandar em Pix?") — variação do fluxo normal Pix/dinheiro que exige negociação extra.
-3. **Dúvida de especificação de formatação/tamanho** (`558183559074`): pede impressão de uma
+3. **Dúvida de especificação de formatação/tamanho** (`CLIENTE-128`): pede impressão de uma
    mensagem religiosa longa, depois muda de ideia várias vezes ("eu queria mais espalhado",
    "papel simples oficio", "as letras grande", "este 4por4 é o tamanho do oficio?") — cliente não
    tem vocabulário técnico de gráfica pra especificar de uma vez.
 4. **Múltiplos documentos com problema técnico de arquivo protegido por senha**
-   (`558184216944`, Roseane Carvalho, mesmo caso já citado na seção 9.1): vários boletos/faturas
+   (`CLIENTE-123`, mesmo caso já citado na seção 9.1): vários boletos/faturas
    com senha de acesso, a equipe não consegue abrir 2 deles ("teve duas que não consegui") —
    atraso de 4,5h vem de dificuldade técnica real, não indecisão do cliente.
-5. **Coleta de dados pessoais pra localizar documento (2ª via de conta)** (`558182243517`,
-   Mirian): manda nome completo, data de nascimento e e-mail sem que a equipe peça formalmente —
+5. **Coleta de dados pessoais pra localizar documento (2ª via de conta)** (`CLIENTE-138`,
+   CLIENTE-138): manda nome completo, data de nascimento e e-mail sem que a equipe peça formalmente —
    inerente ao tipo de serviço (2ª via exige identificação), não desvio.
-6. **Cliente indeciso sobre a própria especificação técnica** (`558188081062`): quer imprimir
+6. **Cliente indeciso sobre a própria especificação técnica** (`CLIENTE-139`): quer imprimir
    foto mas não sabe o tamanho do quadro/porta-retrato ("Eu não sei kkkk. Só tenho o quadro. Mas
    n sei o tamanho") — trava por falta de informação do próprio cliente, não por dúvida da
    equipe.
-7. **Pedido de alteração/edição do arquivo antes de imprimir** (`558197406233`): pergunta se dá
+7. **Pedido de alteração/edição do arquivo antes de imprimir** (`CLIENTE-140`): pergunta se dá
    pra editar o PDF pra remover páginas em branco antes de imprimir — intenção diferente de
    "imprimir como está", categoria própria (edição de conteúdo, não só impressão).
-8. **Múltiplas etapas de acabamento combinadas** (`558191414184`): imprimir + plastificar + saber
+8. **Múltiplas etapas de acabamento combinadas** (`CLIENTE-061`): imprimir + plastificar + saber
    se dá pra dobrar, cliente leva papel específico próprio — mais etapas de decisão que uma
    impressão simples de 1 passo.
 
@@ -706,19 +704,19 @@ WhatsApp, não atendimento):
    pedindo CPF e confirmando troca de remédio — zero relação com a gráfica. Reforça, com um caso
    extremo, o achado antigo de contaminação do log (`project_log_dados_contaminados`).
 2. **Venda real que acontece de verdade mas nunca vira registro no sistema**
-   (`558198748766`, 57 mensagens): cliente recorrente cobra 8 convites faltando de uma encomenda
+   (`CLIENTE-141`, 57 mensagens): cliente recorrente cobra 8 convites faltando de uma encomenda
    anterior, negocia Pix, reclama de diferença de preço vs. pedido anterior, organiza entrega por
    Uber Moto com endereço — **conversa termina com a entrega de fato acontecendo** ("Ele chegou"),
    mas não existe nenhum `jsgrafica_pedido` vinculado a esse telefone. **Confirma e reforça o
-   achado da 161 (caso Ana Paula)**: a taxa de conversão medida só por `jsgrafica_pedidos` segue
+   achado da 161 (caso CLIENTE-110)**: a taxa de conversão medida só por `jsgrafica_pedidos` segue
    subestimando venda real — aqui com um segundo exemplo concreto e independente.
 3. **Pedido real que aparenta ter sido atendido informalmente, mesmo padrão do item 2**
-   (`5581920027625`, Vânia — cliente recorrente já conhecida, 47 mensagens): pede composição de
+   (`CLIENTE-142` — cliente recorrente já conhecida, 47 mensagens): pede composição de
    foto (rosto do filho colado em jogador de futebol), pergunta o valor, organiza retirada por
    terceiro ("meu filho... o gordinho, ele que vai buscar") — termina em "Ok, obrigado", sinal de
    resolução, sem pedido formal.
 4. **Pergunta de preço repetida sem resposta visível no log — risco real de atrito**
-   (`558187752472`, 47 mensagens): quer AJUSTAR um documento (nome, estado civil, RG→CPF, data de
+   (`CLIENTE-143`, 47 mensagens): quer AJUSTAR um documento (nome, estado civil, RG→CPF, data de
    nascimento, trocar foto — parece atualização de currículo/documento), pergunta o valor **3
    vezes** ("Quanto ficaria?", "Vc mim passando o valor ja pago logo", "Fica quanto?") sem
    nenhuma resposta da equipe aparecer na janela da sessão — candidato real a "cliente queria mas
@@ -861,14 +859,14 @@ suficiente pra comparar sem esticar o critério). Não precisou ajustar o corte.
 
 | Telefone | Nome | Sessões | Serviço típico | % começa por mídia | Outlier/debate? | Contaminação/Dizu |
 |---|---|---|---|---|---|---|
-| 558188768207 | Maria da Conceição Silva | 4 | 100% Impressão P&B A4 | 50% | Nenhuma (todas rápidas: 1-4 msgs, 1,8-39min) | Limpo |
-| 558199159103 | Jociane Araújo | 3 | Colorida/P&B A4 (100% rápido) | 0% | Nenhuma (4-7 msgs, 6,7-18,4min) | Limpo |
-| 558187613253 | Otto Silva | 4 | P&B A4/Xerox (100% rápido) | 25% | Nenhuma (2-5 msgs, 3-40min) | Limpo |
-| 558186508876 | Carmem Lúcia | 3 | Misto | 33% | **1/3 outlier** (Papel Couchê A3, 17 msgs/201min) | Limpo |
-| 558197252103 | André Américo | 3 | 100% Impressão P&B A4 | 67% | Nenhuma nas 3 de gráfica | **🔴 Confusão real e recorrente com a Dizu** — 2 pedidos de quentinha confirmados no mesmo número ("Eu quero 01 quentinha lombo ao molho madeira de 14,00 completo") |
-| 558191414184 | José Roberto Silva | 3 | Misto | 67% | **1/3 outlier** — é o próprio exemplo de "múltiplas etapas de acabamento" da seção 10.3 (imprimir+plastificar+dobrar) | Limpo |
-| 558186332369 | Vlademir Ribeiro | 3 | Maioria "lenta por natureza" (digitação/currículo) | 33% | **1/3 outlier grave** (2ª via, 1.331 min ≈ 22h) | Limpo |
-| 558187733689 | Vivian Cavalcante | 3 | Maioria papel foto especializado (negociação real) | 33% | **2/3 com 10+ mensagens** (fotos A4/A3, 139/35min) | Limpo |
+| CLIENTE-054 | CLIENTE-054 | 4 | 100% Impressão P&B A4 | 50% | Nenhuma (todas rápidas: 1-4 msgs, 1,8-39min) | Limpo |
+| CLIENTE-096 | CLIENTE-096 | 3 | Colorida/P&B A4 (100% rápido) | 0% | Nenhuma (4-7 msgs, 6,7-18,4min) | Limpo |
+| CLIENTE-042 | CLIENTE-042 | 4 | P&B A4/Xerox (100% rápido) | 25% | Nenhuma (2-5 msgs, 3-40min) | Limpo |
+| CLIENTE-032 | CLIENTE-032 | 3 | Misto | 33% | **1/3 outlier** (Papel Couchê A3, 17 msgs/201min) | Limpo |
+| CLIENTE-083 | CLIENTE-083 | 3 | 100% Impressão P&B A4 | 67% | Nenhuma nas 3 de gráfica | **🔴 Confusão real e recorrente com a Dizu** — 2 pedidos de quentinha confirmados no mesmo número ("Eu quero 01 quentinha lombo ao molho madeira de 14,00 completo") |
+| CLIENTE-061 | CLIENTE-061 | 3 | Misto | 67% | **1/3 outlier** — é o próprio exemplo de "múltiplas etapas de acabamento" da seção 10.3 (imprimir+plastificar+dobrar) | Limpo |
+| CLIENTE-030 | CLIENTE-030 | 3 | Maioria "lenta por natureza" (digitação/currículo) | 33% | **1/3 outlier grave** (2ª via, 1.331 min ≈ 22h) | Limpo |
+| CLIENTE-043 | CLIENTE-043 | 3 | Maioria papel foto especializado (negociação real) | 33% | **2/3 com 10+ mensagens** (fotos A4/A3, 139/35min) | Limpo |
 
 Nenhum dos 8 já está em `jsgrafica_telefones_autorizados` (checado, zero sobreposição com a
 whitelist atual — que hoje só tem números de teste/interno, ver 12.5).
@@ -877,7 +875,7 @@ whitelist atual — que hoje só tem números de teste/interno, ver 12.5).
 
 O critério pedia "maioria das sessões em serviço rápido **E** maioria começando por mídia sem
 legenda". Na prática, **nenhum dos 3 melhores candidatos passa de 50% em "começa por mídia"**
-(Maria da Conceição 50%, Otto Silva 25%, Jociane Araújo 0%) — a maioria das sessões desses
+(CLIENTE-054 50%, CLIENTE-042 25%, CLIENTE-096 0%) — a maioria das sessões desses
 clientes começa por TEXTO, não mídia. Isso é um achado relevante pro Edvam, não só um detalhe: **a
 Fase 1 de hoje (escopo só sessão que começa por mídia sem legenda) não vai cobrir a maior parte
 das interações reais nem dos clientes mais "seguros"** — mesmo os candidatos ideais vão continuar
@@ -888,42 +886,42 @@ que "total de sessões desse cliente".
 
 ### 12.4 Lista ordenada final (mais seguro → menos seguro)
 
-1. **558188768207 (Maria da Conceição Silva)** — melhor candidato geral: 100% das sessões em
+1. **CLIENTE-054** — melhor candidato geral: 100% das sessões em
    Impressão P&B A4 (o serviço com o SLA mais bem medido), zero sessão-outlier, zero sinal de
    contaminação, 50% das sessões já começam por mídia (o maior entre os 3 primeiros).
-2. **558187613253 (Otto Silva)** — 100% em serviço rápido (P&B A4/Xerox), zero outlier, zero
+2. **CLIENTE-042** — 100% em serviço rápido (P&B A4/Xerox), zero outlier, zero
    contaminação. Só 25% começa por mídia — vai acionar o agente com menos frequência que o #1.
-3. **558199159103 (Jociane Araújo)** — 100% em serviço rápido, zero outlier, zero contaminação,
+3. **CLIENTE-096** — 100% em serviço rápido, zero outlier, zero contaminação,
    mas **nenhuma sessão observada começou por mídia** — candidato mais "seguro" no papel, mas o
    que menos deve interagir com o agente na prática hoje.
-4. **558186508876 (Carmem Lúcia)** — maioria (2/3) limpa, mas 1/3 é um outlier real (produto de
+4. **CLIENTE-032** — maioria (2/3) limpa, mas 1/3 é um outlier real (produto de
    papel especial, não o catálogo rápido) — incluir com atenção, não é tão limpo quanto 1-3.
-5. **558191414184 (José Roberto Silva)** — já tem padrão CONHECIDO de debate (múltiplas etapas de
+5. **CLIENTE-061** — já tem padrão CONHECIDO de debate (múltiplas etapas de
    acabamento, seção 10.3) — **recomendo esperar a demanda 208 (gatilhos) concluir** antes de
    incluir esse, já que o gatilho específico pra esse padrão ainda não está pronto.
-6. **558186332369 (Vlademir Ribeiro)** e **558187733689 (Vivian Cavalcante)** — **não
+6. **CLIENTE-030** e **CLIENTE-043** — **não
    recomendados pra essa primeira leva**: maioria das sessões de ambos está fora do escopo
    "rápido" da Fase 1 (digitação/currículo o primeiro; papel foto especializado com negociação
-   real o segundo), incluindo 1 outlier grave de 22h no caso do Vlademir.
-7. **558197252103 (André Américo) — EXCLUÍDO, não recomendado de jeito nenhum agora**: apesar do
+   real o segundo), incluindo 1 outlier grave de 22h no caso do CLIENTE-030.
+7. **CLIENTE-083 — EXCLUÍDO, não recomendado de jeito nenhum agora**: apesar do
    padrão de pedido de gráfica ser limpo (3/3 sessões em P&B A4, sem outlier), esse número tem
    **confusão real e recorrente com a Dizu Refeições** — 2 pedidos de quentinha confirmados no
    mesmo telefone. Colocar esse número na whitelist do agente é risco real de o agente confundir
    pedido de comida com pedido de gráfica no mesmo fio de conversa.
 
 **Sugestão de tamanho inicial** (o Edvam decide, mas o dado sugere algo concreto): começar com os
-**2-3 primeiros da lista** (Maria da Conceição, Otto Silva, e opcionalmente Jociane Araújo) —
-são os únicos com 100% de padrão limpo E zero contaminação. Adicionar Carmem Lúcia só depois de
-validar os 3 primeiros. Deixar José Roberto Silva pra depois da 208. Não incluir Vlademir, Vivian
-e André Américo nesta rodada.
+**2-3 primeiros da lista** (CLIENTE-054, CLIENTE-042, e opcionalmente CLIENTE-096) —
+são os únicos com 100% de padrão limpo E zero contaminação. Adicionar CLIENTE-032 só depois de
+validar os 3 primeiros. Deixar CLIENTE-061 pra depois da 208. Não incluir CLIENTE-030, CLIENTE-043
+e CLIENTE-083 nesta rodada.
 
 ### 12.5 Checagem técnica (item 4 do escopo, já embutida na tabela 12.2)
 
 - Nenhum dos 8 está em `jsgrafica_telefones_autorizados` — a whitelist atual só tem números de
   teste/interno (número pessoal do Edvam, contato "Cliente Teste", 1 número da própria Dizu usado
   como teste, 1 bot de outro projeto, 1 sem histórico) — zero conflito.
-- Contaminação/Dizu checada individualmente por candidato (não só um sinal agregado) — só o André
-  Américo deu positivo, com conteúdo real confirmado antes de excluir (não foi só o sinal de
+- Contaminação/Dizu checada individualmente por candidato (não só um sinal agregado) — só o
+  CLIENTE-083 deu positivo, com conteúdo real confirmado antes de excluir (não foi só o sinal de
   palavra-chave, li a mensagem real).
 
 ### 12.6 Honesto sobre limites
@@ -934,6 +932,6 @@ e André Américo nesta rodada.
 - O critério de "sem debate" usa a mesma definição de outlier da 204 (contagem de
   mensagens/tempo) — não é garantia absoluta de que a sessão "limpa" de um candidato no passado
   vai continuar limpa no futuro, é a melhor estimativa com o dado disponível.
-- Depende parcialmente da 208 (gatilhos pendentes) pra decidir sobre o candidato #5 (José Roberto
-  Silva) — se a 208 concluir e cobrir o gatilho de "múltiplas etapas de acabamento", esse
+- Depende parcialmente da 208 (gatilhos pendentes) pra decidir sobre o candidato #5 (CLIENTE-061)
+  — se a 208 concluir e cobrir o gatilho de "múltiplas etapas de acabamento", esse
   candidato pode subir de posição.

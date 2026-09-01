@@ -1,10 +1,20 @@
 # 273 — Investigar 19 workflows [DESCONTINUADO] que sumiram do n8n
 
-Status: aprovada
+Status: concluída
 Criada em: 2026-08-15
 Aprovada em: 2026-08-15
-Concluída em: —
+Concluída em: 2026-08-31 (resolvida como efeito colateral da demanda 351)
 Chat executor: 01 - N8N JS GRAFICA
+
+## Resolução final (2026-08-31, achado da demanda 351)
+Nada sumiu de verdade. A ferramenta usada nesta investigação (MCP `search_workflows`/
+`get_workflow_details`) só enxerga workflow ativo, por isso nunca achava nenhum dos 19
+descontinuados por ID nem por nome. `GET /workflows` direto na API REST do n8n lista todos,
+ativos e inativos, sem exceção, confirmado: os 19 (mais o 206, agora 20) estão lá, intactos,
+conteúdo original preservado. A demanda 242 (que descontinuou/renomeou os 19) estava certa desde
+sempre. Cautela registrada em `pm/conhecimento/mapa-chats-especialistas.md`: verificação futura
+feita só por MCP pode reportar workflow ativo como sumido por engano, sempre cruzar com API REST
+direta quando disponível.
 
 ## Contexto
 Pedido do Edvam (2026-08-14): reconferir todos os workflows n8n da JS Gráfica e atualizar a

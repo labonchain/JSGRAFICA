@@ -7,10 +7,13 @@
 // 02-DADOS (não criadas por este chat, ver pm/demandas/354-*.md) — este
 // arquivo assume que já existem.
 //
-// "Aprovar" publica NA HORA (chama a Z-API de verdade nesse instante). Não
-// existe ainda um robô de disparo agendado (demanda pedida à parte ao
-// 01-N8N, pedido do Edvam em 29/08, roda a cada 30min) — `scheduled_at`
-// fica só como registro de planejamento até esse robô existir.
+// "Aprovar" publica NA HORA (chama a Z-API de verdade nesse instante).
+// "Agendar" (demanda 362) marca `status='approved'` com `scheduled_at` no
+// futuro SEM chamar a Z-API — o robô de disparo agendado (demanda 355, n8n,
+// roda a cada 30min, lê `status='approved'` e `scheduled_at` passado) é
+// quem publica de verdade quando a hora chega. Antes da 362, nada gravava
+// esse estado: só existia pending -> published na hora, o robô ficava sem
+// post real pra processar (achado do 01-N8N testando a 355 ponta a ponta).
 
 import { supabaseAdmin } from './supabase-admin';
 import { enviarMensagem, enviarImagem, enviarVideo } from './zapi';
@@ -120,6 +123,29 @@ export async function cancelarPostCanal(id: number): Promise<void> {
     .update({ status: 'cancelled', updated_at: new Date().toISOString() })
     .eq('id', id);
   if (error) throw error;
+}
+
+// Demanda 362: agenda pra publicação futura SEM publicar agora. Só marca o
+// estado (`approved` + `scheduled_at`); quem chama a Z-API de verdade é o
+// robô da 355, quando `scheduled_at` chegar. Exige data futura pra não criar
+// um "approved" com hora já passada que ficaria preso esperando o próximo
+// ciclo do robô sem necessidade — se a intenção é publicar já, o caminho é
+// "aprovar", não "agendar".
+export async function agendarPostCanal(id: number): Promise<CanalPost> {
+  const post = await buscarPost(id);
+  if (post.status !== 'pending') throw new Error('Só dá pra agendar post pendente');
+  if (new Date(post.scheduled_at).getTime() <= Date.now()) {
+    throw new Error('Data/hora do agendamento precisa ser no futuro. Pra publicar já, use "Aprovar e publicar agora".');
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from('jsgrafica_canal_posts')
+    .update({ status: 'approved', erro_detalhe: null, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .select()
+    .single();
+  if (error || !data) throw error ?? new Error('Falha ao agendar post do Canal');
+  return data;
 }
 
 // Publica de verdade agora, chamando a Z-API (reusa enviarMensagem/

@@ -61,9 +61,26 @@ messageId reais), não suposição:
    não `send-message-image`/`send-message-video` (esses retornam 404). Documentação da Z-API usa
    nomes de página diferentes dos nomes de endpoint reais em alguns casos, conferir sempre o
    endpoint de verdade, não só o nome da página de doc.
-2. **A limitação de conteúdo informada pelo suporte da Z-API (sem áudio/documento) não bateu no
-   teste real**: tanto áudio quanto documento retornaram sucesso (200 + ID real) ao enviar pro
-   canal. Só `send-location` deu erro (400), esse sim consistente com "não suportado".
+2. **A limitação de conteúdo informada pelo suporte da Z-API (sem áudio/documento) só bateu
+   parcialmente com o teste real**: tanto áudio quanto documento retornaram sucesso (200 + ID
+   real) ao ENVIAR pro canal, mas isso não significa que o WhatsApp realmente publica.
+   **Confirmado visualmente em 30/08 (checagem real do Edvam no app)**:
+   - **Áudio**: aparece de verdade, funciona como nota de voz reproduzível. Suporte da Z-API
+     estava errado nesse caso.
+   - **Documento**: **NÃO aparece no canal**, apesar do 200 + ID real na chamada da API. É
+     exatamente o cenário de risco que a pesquisa original alertava ("a API aceita o envio mas
+     não confirma se o conteúdo realmente aparece") — aqui aconteceu de verdade. Suporte da
+     Z-API estava certo nesse caso, mas por acidente (a API não devolve erro nenhum pra avisar).
+   - **Conclusão final e definitiva pro Canal**: funciona de verdade **texto, imagem, vídeo
+     comum e áudio**. Documento NÃO funciona (API mente, silenciosamente descartado pelo
+     WhatsApp). `send-location` dá erro 400 (não suportado, consistente).
+4. **Campo `picture` da metadata nunca é preenchido nesta conta**: `GET .../newsletter?phone={id}`
+   retornou `picture: null` mesmo com a foto de perfil aplicada e visível de verdade no app
+   (confirmado com print real do WhatsApp, 2026-08-30). **O campo `preview` da mesma resposta é
+   quem tem a URL de verdade** (confirmado: baixar essa URL retorna a imagem JPEG real, bate
+   visualmente com o selo aplicado). Usar `picture ?? preview` em qualquer lugar do código que
+   precise mostrar a foto atual do canal, nunca só `picture` sozinho.
+
 3. ~~Não existe endpoint de leitura/confirmação nesta conta~~ **Corrigido**: o endpoint de
    metadados documentado como `newsletter-metadata` (path) está errado, o real é
    `GET .../newsletter?phone={id}` (query param, não path). Retorna metadados reais (`state`,

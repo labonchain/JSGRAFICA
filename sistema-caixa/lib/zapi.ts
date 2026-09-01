@@ -155,7 +155,14 @@ export interface MetadataCanal {
   id?: string;
   name?: string;
   description?: string;
+  // Achado real (354, 30/08): `picture` nunca vem preenchido nesta conta,
+  // mesmo com foto de perfil aplicada de verdade e confirmada visível no
+  // canal (testado: baixar a URL de `preview` retorna a imagem real). Quem
+  // consome este tipo deve sempre usar `picture ?? preview`, nunca só
+  // `picture`. Não é bug da chamada de update, é campo que a Z-API/WhatsApp
+  // não popula na resposta de metadata desta conta.
   picture?: string | null;
+  preview?: string | null;
   state?: string;
   inviteLink?: string;
   viewMetadata?: { mute?: string; role?: string };

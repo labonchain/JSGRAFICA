@@ -1,9 +1,9 @@
 # 357 - Subir o código do caixa-js-grafica pro GitHub (repo público compartilhado)
 
-Status: aprovada
+Status: concluída
 Criada em: 2026-08-30
 Aprovada em: 2026-08-30
-Concluída em: (vazio até conclusão)
+Concluída em: 2026-08-31
 Chat executor: 03 - APP JS GRAFICA
 
 ## Contexto
@@ -80,4 +80,67 @@ achado urgente antes de continuar.
 demanda 329 (correção definitiva de sessão/segredo).
 
 ## Relato de execução
-(preenchido pelo 03-APP ao concluir)
+
+**Concluída em 2026-08-31.**
+
+**Abordagem técnica**: em vez de `git init` direto em `caixa-js-grafica` (arriscava reconciliar
+históricos não relacionados num repo compartilhado ativo), cloneI `labonchain/JSGRAFICA` num
+diretório separado (scratchpad), montei as pastas novas dentro do clone e só então commitei/dei
+push a partir dele. Resultado é o mesmo (código no ar em `labonchain/JSGRAFICA`), método mais
+seguro pro repo em uso paralelo.
+
+**Auditoria de segredo (antes de qualquer commit)**:
+- 🔴 **Achado urgente, reportado ao PM antes de continuar**: chave `service_role` do Supabase
+  compartilhado (LabON, `ref: arqkdnexpederquztegn`) em texto puro em 2 arquivos de
+  `pm/backups/*.json` (JWT decodificado e confirmado `role: service_role`), e tokens Z-API reais
+  (WhatsApp) em texto puro em 27 dos 65 arquivos de `pm/backups/*.json` (capturados em `pinData`
+  de execução real fixada no n8n). Decisão do Edvam (via PM): manter `pm/backups/` só localmente,
+  nunca no repositório público, adicionar ao `.gitignore` do repositório. A decisão de rotacionar
+  a chave `service_role` ficou como item separado, em aberto, não bloqueou esta demanda.
+- Varredura de `SECRET`/`_KEY`/`TOKEN`/`PASSWORD`/`service_role` no código de `caixa-js-grafica`
+  (`app/`, `lib/`, `components/`): nenhum valor hardcoded, só nomes de variável/campo e referência
+  via `process.env` ou coluna de banco.
+- Único texto de senha remanescente: a senha antiga do Admin (`075644js2026`) citada em 3 arquivos
+  de demanda histórica (030, 329, STATUS.md). Já invalidada de propósito na demanda 329 e já
+  documentada como publicamente exposta no `CLAUDE.md` do projeto — tratado como registro
+  histórico morto, não como segredo vivo, não removido (mesmo critério do item 6: dado de negócio/
+  histórico pode ficar, segredo técnico vivo não).
+- `.gitignore` de `caixa-js-grafica` já cobria `.env*`/`node_modules`/`.next`/`.vercel` desde
+  antes; confirmado (via `git ls-tree` na árvore enviada) que nenhum `.env`/`.env.local` real
+  subiu. `sistema-caixa/.env.local.example` (só placeholder, sem valor real) foi incluído de
+  propósito, corrigido num commit pequeno adicional depois de eu notar que o `.gitignore` genérico
+  (`.env*`) tinha excluído ele por engano na primeira leva.
+
+**Estrutura escolhida**: `sistema-caixa/` para o `caixa-js-grafica` completo (inclui `pm/` exceto
+`pm/backups/`) e `site-institucional/` para o site estático da raiz (`index.html` + `imagens/`,
+~156MB, nenhum arquivo isolado passa de 13MB, não bate limite do GitHub). Pastas já existentes do
+repo (`assets/`, `conteudos/`, `docs/`, `.github/`, `.tmp/`, `README.md`, `CONTRIBUINDO.md`)
+intactas, confirmado via `git status`/`git ls-tree` que nada foi apagado ou sobrescrito.
+
+**Git**: commit único e limpo (657 arquivos), `git pull` antes do push (repo teve commits novos em
+paralelo do pipeline de conteúdo, só em `docs/`, merge sem conflito), depois `git push`. Confirmado
+no ar via `git ls-tree -r origin/main` (não local): `sistema-caixa/` e `site-institucional/`
+presentes, `sistema-caixa/pm/backups/` ausente, nenhum `.env` real presente,
+`sistema-caixa/.env.local.example` presente.
+
+**Teste**: só verificação estrutural (lista de arquivos antes/depois de subir, árvore do commit
+remoto), não é um teste funcional do app (esta demanda é só versionamento, não muda comportamento
+do sistema em produção, nenhum deploy novo necessário).
+
+**Achados fora do escopo**: nenhum além do já reportado (segredo em `pm/backups/`).
+
+**Addendo, 2026-08-31 (fecha o achado de segurança por completo)**: a decisão de rotacionar a
+chave `service_role` seguiu em aberto por escolha do Edvam, mas ele confirmou que os 2 arquivos
+com a chave e os 27 arquivos com token Z-API real podiam ser apagados do disco local (todos
+histórico morto, backups pré-mudança de demandas já concluídas há semanas/meses, nenhum servindo
+de referência ativa pra reverter workflow em uso, confirmado um por um antes de apagar). Movi
+primeiro pra uma pasta de quarentena fora de `pm/` (passo intermediário reversível), depois o
+Edvam confirmou diretamente ("pode apagar isso sim") e apaguei os 29 arquivos de vez. Revarri
+`pm/backups/` com os mesmos padrões (`z-api-token` literal, JWT `service_role`) depois de apagar:
+zero ocorrência restante. **Esse achado de segurança está fechado, não é mais "decisão consciente
+de deixar em aberto"** (só a decisão sobre rotacionar a chave em si segue em aberto, sem urgência,
+já que o arquivo que a expunha não existe mais).
+
+**Status final: concluída.**
+
+PRONTO PRA CLEAR

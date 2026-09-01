@@ -1,9 +1,9 @@
 # 351 - Atualizar o mapa de workflows n8n (desatualizado desde meados de agosto)
 
-Status: aprovada
+Status: concluída
 Criada em: 2026-08-29
 Aprovada em: 2026-08-29
-Concluída em: (vazio até conclusão)
+Concluída em: 2026-08-31
 Chat executor: 01 - N8N JS GRAFICA
 
 ## Contexto
@@ -38,4 +38,29 @@ já pede (desligar o `206`), esta demanda é só documentação.
 `pm/conhecimento/mapa-workflows-n8n.md`, demandas 295-299, demanda 299 (desligamento do `206`).
 
 ## Relato de execução
-(preenchido pelo 01-N8N ao concluir)
+
+Levantamento completo via API REST do n8n (`GET /workflows`, paginado, 380 workflows na conta
+inteira, filtrado por nome `grafica`/`jsg`) - fonte de verdade real, não por memória.
+
+**Adicionados como ativos de verdade**: `296 - CAMINHO C FERRAMENTAS` e
+`297 - CAMINHO C AGENTE`, confirmados `active:true`.
+
+**206 atualizado**: removido da seção "awaiting decisão" (vazia agora), adicionado à tabela de
+descontinuados formalmente (mesma demanda 299, executada antes desta na mesma sessão).
+
+**Achado maior, resolve a demanda 273 (aberta desde 15/08)**: os "19 workflows sumidos" nunca
+sumiram - a ferramenta usada naquela investigação (`search_workflows`/`get_workflow_details` via
+MCP) só enxerga workflow ativo, por isso não achava nenhum dos 19 inativos por ID nem por nome.
+`GET /workflows` direto na API REST lista todos, ativos e inativos, sem exceção - confirmei os 19
++ o 206 (agora 20) todos lá, intactos. Nada foi perdido, a demanda 242 estava certa desde sempre.
+Isso fecha a demanda 273 - recomendo o PM marcar como resolvida.
+
+**Outra divergência achada e corrigida**: o `06 - JSGRAFICA | PEDIDOS` estava descrito no mapa
+como "ativo real, mas nós de envio desabilitados" - desatualizado. Confirmado via API que o
+workflow INTEIRO está `active:false` desde a demanda 303 (27/08). Corrigido a descrição e movido
+pra seção própria (nem "ativo de verdade" nem "[DESCONTINUADO]" formalmente, categoria própria
+criada pra não confundir com os outros dois grupos).
+
+**Status final: concluída.** Todos os 3 critérios de aceite da demanda cumpridos (296/297
+adicionados, 206 atualizado, resto revisado e 2 divergências reais corrigidas: a do 273 e a do
+06-PEDIDOS).

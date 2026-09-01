@@ -268,10 +268,31 @@ tela "⚙️ Configurações" (identidade, seguidores, exclusão) funcionando em
 técnica completa (endpoints reais confirmados por teste, a doc pública da Z-API já divergiu 4
 vezes na mesma integração) em `pm/conhecimento/guia-canal-whatsapp-automacao.md`.
 
-**Falta ainda**: robô de disparo agendado (demanda 355, a cada 30min, pra post agendado publicar
-sozinho) — até existir, "aprovar" publica na hora, não dá pra agendar pro futuro de verdade.
-Contador de seguidores não disponível via API nesta conta/plano da Z-API (confirmado, não é bug).
-"Seguir outros canais" ainda não implementado, decisão de negócio pendente.
+**Robô de disparo agendado concluído (demanda 355, 2026-08-31)**: workflow n8n
+`355 - JSGRAFICA | CANAL DISPARO AGENDADO`, roda a cada 30min, publica sozinho post que estava
+agendado. Ação real "📅 Agendar pra esse horário" (demanda 362, distinta de "Aprovar e publicar
+agora") marca `status='approved'` sem chamar a Z-API na hora, testada de ponta a ponta. Contador
+de seguidores não disponível via API nesta conta/plano da Z-API (confirmado, não é bug). "Seguir
+outros canais" ainda não implementado, decisão de negócio pendente.
+
+**🔴 Contador de visualizações de Status, causa raiz encontrada e corrigida (demanda 367,
+2026-08-31)**: a função `jsgrafica_contar_visualizacoes_status` somava eventos `RECEIVED`
+(entrega automática, 82,5% da base, ninguém abriu de verdade) junto com `READ` (visualização
+real, 18,9%), inflando o painel em 8x a 20x sobre o número real do WhatsApp nativo. Corrigido com
+`and v.status = 'READ'` no LEFT JOIN da função (backup salvo em
+`pm/backups/jsgrafica_contar_visualizacoes_status_pre-demanda367_2026-08-31.sql`), testado contra
+5 posts reais, painel já mostra o número certo. **Ainda em aberto (demanda 363, parte 1)**:
+Status postado via API não alcança todo cliente real (achado da Zuzeide, 72 interações reais,
+nunca vê Status via API, só o manual), causa exata ainda não confirmada (hipóteses de
+sincronização/agenda de contato já testadas e derrubadas com dado real), aguardando o Edvam
+seguir com o suporte da Z-API.
+
+**🎨 Geração de imagem via IA pra peças de Marketing, em teste (demandas 361/364/366)**: workflow
+n8n gera foto realista de produto via Gemini gratuito (`364`), 3 tipos de fundo testados no mesmo
+produto (`366`): produto isolado, painel de cor complementar dentro da própria foto (recomendado,
+mockup real com título/CTA sobre o painel, foto e tipografia como peça só), e cena lifestyle
+ambientada (opção pontual, não padrão). **Aguardando aprovação do Edvam** da variação recomendada
+antes de virar padrão de produção.
 
 ## Log de mensagens (`jsgrafica_log_msgs_privadas`/`_grupos`)
 
@@ -286,7 +307,13 @@ na configuração da conta; mensagens antigas nunca tiveram `read_at` de verdade
 
 - **Sem imagens de produto**
 - **Sem auto-resposta ao cliente via WhatsApp** — inbox é só leitura + resposta manual
-- Sugestão de IA é um botão, não automático
+- Sugestão de IA é um botão, não automático. **Corrigido (demanda 368, 2026-08-31)**: a rota
+  (`app/api/inbox/sugestao-resposta/route.ts`) não consultava `jsgrafica_produtos`, só o
+  histórico da conversa, e a IA negava por suposição genérica serviços que a gráfica presta de
+  verdade. Agora injeta a lista real de serviços ativos no prompt (`buscarCatalogoServicos()` em
+  `lib/inboxContexto.ts`), com regra explícita de nunca negar o que está na lista. O contexto de
+  conversa (`buscarContextoConversa`) usa as últimas 15 mensagens (`QTD_MENSAGENS_CONTEXTO`, sem
+  filtro de tempo), bidirecional (cliente e equipe, marcado `[cliente]`/`[nós]` no prompt).
 - Z-API **está conectado** (verificado ao vivo em 2026-07-08 — a nota antiga de "deslogado
   temporariamente" ficou desatualizada). O agente de atendimento automático continua pausado por
   decisão separada (risco de banimento) — reconectar Z-API não reativa isso sozinho.

@@ -55,5 +55,27 @@ infraestrutura).
 `pm/demandas/339-squad-brand-manual-marca-js-grafica.md`, `opensquad/CLAUDE.md`,
 `opensquad/_opensquad/core/`, `pm/conhecimento/produtos-digitais-templates-editaveis.md`.
 
-## Relato de execução
-(preenchido pelo 07-Marketing ao concluir)
+## Relato de execução (em andamento)
+
+**Iniciada em 2026-08-31, executor 07-Marketing, com confirmação direta do Edvam.**
+
+Squad `js-grafica-produtos-digitais` desenhado (`opensquad/squads/js-grafica-produtos-digitais/`),
+reaproveitando `_opensquad/core/` da 339, pipeline próprio (6 passos: curadoria de conteúdo →
+checkpoint → produção → checkpoint intermediário → revisão final → checkpoint final), 3 personas
+novas (Vitória, Rafael, Marcela, sem repetir nomes já usados no `js-grafica-brand`). Detalhe da
+diferença de desenho vs. squad de marca em `README.md` do squad: aqui o checkpoint de conteúdo
+vem ANTES de qualquer arte, porque o gargalo real é curadoria de fato/informação, não direção
+criativa.
+
+Achado antes de começar: não tive acesso ao doc "Subprojeto PRODUTOS" (Google Drive) que tem a
+ficha completa dos 2 casos reais (EDU-KIT-002, REL-KIT-001) — perguntei direto ao Edvam, ele não
+tinha o link à mão. Decisão tomada com ele: seguir sem o doc, com o próprio squad levantando o
+conteúdo como parte do trabalho (não travar esperando o link).
+
+Escopo desta primeira run: só `EDU-KIT-002` (peças 2 a 8, 7 cartazes de trabalho escolar) — a
+demanda permite "EDU-KIT-002 OU REL-KIT-001" como primeiro caso, escolhido o EDU por já ter
+peça 1 existente (mesmo que pausada) e ser menor (7 peças vs. 20 do REL). `REL-KIT-001` fica
+pra uma run seguinte deste mesmo squad, não desta demanda ainda.
+
+Passo 1 (Vitória, curadoria de conteúdo) rodando. Relato continua depois do checkpoint 2
+(aprovação do conteúdo pelo Edvam).

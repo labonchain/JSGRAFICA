@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { chamarGemini, contextoDataHoraAtual } from '@/lib/gemini';
-import { buscarContextoConversa } from '@/lib/inboxContexto';
+import { buscarContextoConversa, buscarCatalogoServicos } from '@/lib/inboxContexto';
 
 // Sugestão de resposta (demanda 048) — só preenche o campo de texto do
 // Inbox pro atendente revisar/editar. Nunca envia nada sozinha.
@@ -11,13 +11,20 @@ export async function POST(req: NextRequest) {
     const { phone, nomeCliente } = await req.json();
     if (!phone) return NextResponse.json({ error: 'phone obrigatório' }, { status: 400 });
 
-    const { linhasConversa, pedido } = await buscarContextoConversa(phone);
+    const [{ linhasConversa, pedido }, catalogo] = await Promise.all([
+      buscarContextoConversa(phone),
+      buscarCatalogoServicos(),
+    ]);
     if (linhasConversa.length === 0) {
       return NextResponse.json({ error: 'Sem histórico de mensagens pra essa conversa ainda' }, { status: 422 });
     }
 
     const contextoPedido = pedido
       ? `\nPedido vinculado a esta conversa: ${pedido.servico_nome ?? 'serviço não especificado'}${pedido.quantidade ? `, quantidade ${pedido.quantidade}` : ''}${pedido.valor_final ? `, valor R$ ${Number(pedido.valor_final).toFixed(2)}` : ''}, status: ${pedido.status}.`
+      : '';
+
+    const contextoCatalogo = catalogo
+      ? `\n\nLista real e atual de serviços que a JS Gráfica presta hoje (fonte: catálogo oficial, agrupado por categoria):\n${catalogo}`
       : '';
 
     const prompt = `${contextoDataHoraAtual()}
@@ -27,9 +34,10 @@ Você é um atendente da JS Gráfica, uma gráfica rápida no Ibura, Recife (PE)
 Regras importantes:
 - Não invente preços, prazos ou informações que não estejam explícitas na conversa ou no pedido vinculado abaixo.
 - Se precisar de uma informação que não está disponível, seja genérico e ofereça confirmar em seguida.
+- Nunca diga que a JS Gráfica não presta um serviço que está na lista de serviços reais abaixo. Se o cliente perguntar sobre algo que não está na lista, não afirme categoricamente que a gráfica não faz — diga que vai confirmar com a equipe, em vez de negar.
 - Responda só com o texto da mensagem sugerida — sem aspas, sem explicações, sem "Sugestão:".
 
-Cliente: ${nomeCliente || 'não identificado'}${contextoPedido}
+Cliente: ${nomeCliente || 'não identificado'}${contextoPedido}${contextoCatalogo}
 
 Conversa (mais recente por último):
 ${linhasConversa.join('\n')}`;

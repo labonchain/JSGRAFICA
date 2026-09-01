@@ -1,11 +1,193 @@
 # Índice de demandas
 
-## Estado atual (topo, atualizado em 2026-08-29)
+## Estado atual (topo, atualizado em 2026-08-31)
+
+**Rodada de decisões do Edvam (31/08)**:
+- **🟢 Segurança resolvida por completo**: os 2 arquivos com `service_role` e os 27 com token
+  Z-API real, todos em `pm/backups/` (achado da 357), foram **apagados** do disco local pelo
+  03-APP (confirmado: nenhum era referência ativa, demandas associadas já concluídas há semanas;
+  nova varredura confirma zero ocorrência restante). Não é mais item em aberto.
+- **Financeiro**: confirmado, não mexer agora (312, 313, e as 2 decisões da 337 seguem paradas).
+- **350** (publicar Kit Delivery no Site V2): segura junto com a 346 (cancelada), sem prazo novo.
+- **360** (nova): 08-Produtos retoma a pesquisa de produtos digitais do zero, validação real de
+  demanda antes de qualquer peça, backlog anterior (346/347/NEG-KIT-001) só como referência de
+  aprendizado. Aprovada e despachada.
+- **348**: confirmada pelo Edvam, 07-Marketing pode iniciar agora.
+- **358** (site-v2 pro GitHub): concluída (09-Site V2, 30/08). Auditoria dos 2 commits locais
+  limpa, sem segredo. Código no ar em `labonchain/JSGRAFICA/site-v2/`, confirmado via API do
+  GitHub, pastas existentes intactas, sem bloqueio de permissão no push.
+
+**Reinício de PC (31/08), time todo reidentificado com sucesso** (histórico de conversa
+preservado em cada janela, só o endereço técnico mudou):
+- **355**: **concluída em 2026-08-31**. Workflow `355 - JSGRAFICA | CANAL DISPARO AGENDADO`
+  (`N6MNCiQvNUicwvHR`) criado, testado com posts reais inseridos via SQL, publicação e marcação
+  de status confirmadas, post de teste (id=5) **confirmado visualmente pelo Edvam** no canal
+  real. Achado importante virou demanda 362 (robô fica sem trabalho até existir ação real de
+  agendar no Admin), não bloqueia esta demanda em si, o robô está pronto e correto.
+- **361**: em iteração ativa (3ª rodada). Round 1 (composição assimétrica/ticket): fraco, Edvam
+  rejeitou. **Achado técnico que gerou a 364**: o processo é código (HTML/CSS/SVG renderizado por
+  navegador), sem foto real nem geração de imagem, teto real é "cartaz/etiqueta gráfica limpa",
+  nunca foto de produto profissional (objeto simulado em SVG fica com "cara de clip art"). Round 2
+  (com foto real gerada via Gemini/364, caso da caneca P4-07): foto aprovada, mas layout ao redor
+  (tipografia/grid/efeitos decorativos) ainda "tosco". Round 3 (mesmo link, redesenhado): 07-
+  Marketing corrigiu hierarquia tipográfica, reconstruiu em grid de 8px real, removeu efeitos
+  decorativos (rotação/furo/carimbo) que ele mesmo percebeu não vinham do manual de marca real.
+  Link: https://claude.ai/code/artifact/d9f2f7d4-5715-4517-bb9f-cd14ce45a9b1 — **aguardando
+  aprovação do Edvam** antes de escalar pra mais casos ou decidir sobre as 32 peças antigas.
+- **362**: **concluída em 2026-08-31**. Ação real "📅 Agendar pra esse horário" no Canal (distinta
+  de "Aprovar e publicar agora"), marca `status='approved'` sem chamar a Z-API. Testado de ponta a
+  ponta (agendamento futuro confirmado sem publicar, data passada rejeitada). Robô da 355 não foi
+  acionado de propósito (evitar publicação real só de teste); confirmação ao vivo fica disponível
+  se o Edvam quiser (agendar 1-2min no futuro e esperar o ciclo). Deploy em produção confirmado.
+- **🔴 363**: **causa raiz confirmada com caso real** (31/08). Status postado via API só alcança
+  os 1.717 contatos sincronizados pelo dispositivo vinculado da Z-API, não os 3.032 contatos reais
+  ativos da gráfica (~2/3 de fora). Confirmado com caso concreto: cliente real recorrente
+  (Zuzeide, 72 interações, atendida várias vezes) nunca foi sincronizada, exatamente o padrão
+  relatado (só vê os 3 Status manuais). Status manual do celular não depende dessa sincronização,
+  por isso alcança todo mundo. **Mitigação em andamento**: achado endpoint documentado `POST /contacts` ("Adicionar contatos",
+  aceita lote), mais direto que os 3 candidatos genéricos de resync (sem documentação, descartados
+  como opção principal). Edvam já mandou as 3 perguntas de segurança pro suporte da Z-API
+  (habilitado no plano? risco de queda de sessão? limite por chamada?), aguardando resposta antes
+  de qualquer teste real. Ainda pendente: Edvam confirmar configuração de
+  Privacidade > Status (pode ajudar mas não resolve o gap de sincronização sozinho). Achado
+  secundário: 1 contato com `phone` guardando LID em vez de telefone real (bug já visto antes).
+- **364**: **concluída em 2026-08-31**, via Gemini em vez de OpenAI (decisão do Edvam, custo zero
+  na camada gratuita). Reaproveitou credencial Gemini já existente no n8n (do antigo
+  `JSGRAFICA_ATENDIMENTO_AI`, pausado). Testado com o briefing real do P4-07: quadrado (1:1) saiu
+  fiel ao briefing, conferido visualmente, sem custo. Achado real: proporção vertical (9:16) não
+  é controlável de verdade nesse modelo gratuito (`gemini-2.5-flash-image`), sempre volta
+  quadrado; recomendação aplicada: gerar só o quadrado, 07-Marketing recompõe pro formato vertical
+  na composição HTML/CSS que já faz de qualquer forma (mesmo ajuste que seria necessário mesmo
+  com OpenAI, nenhum provedor bate o pixel exato do briefing). Só ficou implementado o Gemini,
+  não OpenAI como opção configurável (ajuste pequeno se quiserem manter os dois depois). Imagem
+  gerada volta na resposta do webhook (base64), quem chama salva o arquivo.
+  **Decisão pendente do Edvam**: automação completa (n8n commitando sozinho no GitHub) seria
+  demanda nova (credencial GitHub/PAT), por ora quem chama salva manualmente.
+- **08-Produtos**: travado na 360 esperando o Edvam responder o que especificamente não convenceu
+  no Kit Delivery Brasil (346/347).
+
+**Handshake pós-clear do PM (31/08, sessão nova, endereço js-grafica-d9)**: as 9 janelas do time
+reconfirmadas (mesmos endereços do handshake anterior, sem reinício de PC), nenhuma pendência
+nova além do já registrado acima, exceto:
+- **365** (nova, retroativa): **concluída em 2026-08-31**. 06-Atendimento anonimizou os 3
+  documentos de conhecimento do atendimento (`manual-resposta-ia-100-clientes.md`,
+  `mapa-jornada-atendimento-whatsapp.md`, `blueprint-conversas-exemplo-agente.md`) antes de irem
+  pro GitHub público, redigindo nome/telefone/data de nascimento/e-mail de cliente real. Escopo
+  ampliado (data de nascimento/e-mail, além do combinado nome/telefone) confirmado diretamente
+  pelo Edvam na sessão do executor. 06-Atendimento sinalizou PRONTO PRA CLEAR.
+- **01-N8N** sinalizou um próximo item de fila ainda sem número formal: exportação dos workflows
+  n8n pro GitHub, com auditoria de segredo obrigatória antes de subir qualquer coisa. Ainda não
+  virou demanda.
+- **🔴 Gap de sincronização GitHub, achado em 2026-08-31, ainda sem número formal**: nenhuma pasta
+  local do workspace tem `.git` próprio (exceto `site-v2/`), o clone real usado nas demandas
+  357/358 pra subir `sistema-caixa/`/`site-institucional/` não foi localizado ainda nesta sessão.
+  Commit mais recente em `sistema-caixa/` no GitHub é de 31/08 00:32, então nada de hoje (365-368,
+  inclusive os 2 fixes reais em produção) está sincronizado. Perguntado ao 03-APP onde fica o
+  clone, aguardando resposta. Documentado em `CLAUDE.md` raiz pra toda sessão nova checar antes de
+  assumir que o GitHub reflete o estado atual.
+
+**Rodada de pedidos do Edvam (31/08, pós-handshake)**:
+- **363, parte 2 (contador do painel), 2ª rodada, causa fora do nosso código**: a explicação
+  inicial ("é cumulativo, não é bug") foi retratada com dado real (print do WhatsApp do Edvam
+  batido contra o painel, inflação real de 8x a 20x). Investigação do 01-N8N no node real
+  (`Gravar Visualização Status`, workflow `03 - STATUS MSG`) descarta a hipótese de contaminação
+  de correlação no nosso workflow, ele só grava fielmente o que a Z-API manda no `body` do
+  webhook, sem lógica nenhuma de atribuição/mistura de `message_id`. Achado novo: 1 `participant`
+  específico aparece como "visualização" em praticamente TODO post publicado nas últimas 72h,
+  hora a hora, sem falhar quase nenhuma, comportamento não humano. A magnitude das "visualizações
+  fantasma" (~900) é próxima do total de contatos sincronizados pela Z-API já achado na parte 1
+  (1.717). **Hipótese mais forte agora**: o callback de visualização de Status da Z-API pode não
+  ser "essa pessoa abriu e viu de verdade", pode ser mais próximo de "contato sincronizado/
+  entregue", reenviado a cada post novo. **Precisa de resposta do suporte da Z-API (Igor)**: "o
+  callback de status view (`status@broadcast`/`MessageStatusCallback`) reflete visualização real
+  e individual confirmada pelo destinatário, ou pode incluir contato que só recebeu/está na lista
+  sincronizada, mesmo sem abrir o Status de fato? Existe reenvio do mesmo evento de visualização
+  a cada nova postagem?" **Hipótese do Edvam testada e descartada**: não é o mesmo `message_id`
+  se repetindo (revisita do mesmo Status antigo), são `message_id` DIFERENTES a cada linha, 1 por
+  hora, batendo com cada post novo publicado (18 de 19 linhas únicas pro mesmo participant em 72h,
+  1 só repetição de 3min depois). Reforça que é mecanismo automático marcando "visto" em cada post
+  novo assim que sai, não revisão de Status antigo. **Confirmação do Edvam**: o comportamento
+  esperado do WhatsApp é só contar visualização quando a pessoa abre e lê de verdade (não simples
+  entrega/sincronização), reforça que o "viewer" mecânico é uma anomalia real, não comportamento
+  humano possível, fortalece a pergunta pro Igor. **Resposta oficial do Igor (Z-API)**: "só é
+  entregue caso a pessoa abra o status e leia ele efetivamente" - descarta a hipótese de lista
+  sincronizada vazando pro callback, o evento exige visualização real. Isso reabre a pergunta:
+  quem é esse `participant` que aparece vendo praticamente todo post minutos depois de publicado,
+  hora a hora, 3 dias seguidos? Despachado ao 01-N8N: identificar se é contato real/conhecido da
+  gráfica ou número estranho sem outro rastro, e se o padrão se repete em outros participants
+  (isolado vs. sistemático). **Confirmado sistemático**: 967 de 1.560 participantes (62%) veem
+  16-30 posts diferentes cada, quase sempre minutos depois de cada publicação, sem bater com
+  contato real conhecido (~2% nos dois grupos, teste inconclusivo nesse ponto específico).
+  **Hipótese alternativa do Edvam testada** (poderia ser notificação real de Status ativada,
+  voltando a cada post novo): **descartada com dado mais forte ainda**. Distribuição completa
+  (1.569 participantes, 56 posts no total em 72h): vale em 6-15 posts vistos (só 7%), pico de 56%
+  concentrado estreitamente em 16-25, teto rígido em 36, **nenhum participant chega perto de ver
+  os 56 inteiros**. Formato incompatível com engajamento humano disperso e crescente (esperado:
+  cauda decrescente suave até perto do total), compatível com mecanismo de janela/sessão
+  limitada. Evidência forte o bastante pra levar de volta ao Igor com o dado bruto.
+  **Correção do Edvam (31/08)**: não existe conceito de "contatos sincronizados" na Z-API, a
+  causa raiz da parte 1 (endpoint `/contacts`, "1.717 sincronizados vs 3.032 reais") está
+  reaberta, despachada ao 07-Marketing pra reinterpretar o que esse endpoint retorna de verdade.
+  **Checagem de deduplicação (parte 2), pedida pelo Edvam**: RPC já deduplica revisita do mesmo
+  participant no mesmo post corretamente (`count(distinct participant)`), confirmado no código
+  real da função. Existe repetição real na base (15% dos pares participant+post repetem, até 19x
+  um caso), mas isso já é ignorado pelo dedup, não explica a inflação. Causa segue sendo número
+  alto de participants DISTINTOS por post (~900-1.000), não revisita da mesma pessoa.
+  **Parte 1 reaberta pelo 07-Marketing**: `/contacts` da Z-API, pela doc oficial, não é
+  "sincronização de dispositivo vinculado" (interpretação anterior errada), é quem tem WhatsApp E
+  está salvo na agenda do telefone da gráfica + participante de grupo. Dado empírico (65,8% fora,
+  Zuzeide inclusa) continua real, só a explicação muda. **Ponto real em aberto**: privacidade
+  "Meus contatos" do Status é mútua, deveria bloquear igual pra manual e API na mesma conta, mas
+  Zuzeide só não vê o via-API, vê o manual normalmente, diferença de mecanismo não identificada.
+  **Edvam confirmou: Zuzeide ESTÁ salva na agenda do telefone.** Isso quebra a interpretação nova
+  do `/contacts` também (deveria aparecer na lista segundo a doc, não aparece na prática).
+  Busca exaustiva do 07-Marketing (18 páginas, 5 formatos de telefone, busca por nome) não achou
+  ela em `/contacts` de jeito nenhum. As 3 hipóteses causais testadas nesta investigação
+  (sincronização de dispositivo vinculado; acúmulo de recibo em lote; contato salvo/não salvo na
+  agenda) foram todas derrubadas por dado real. **Edvam vai falar direto com o 01-N8N e com a
+  Z-API a partir daqui**, sem relay do PM. 363 continua `aprovada` (não fechada).
+- **✅ 367**: **concluída em 2026-08-31, causa raiz real encontrada e CORRIGIDA**. Hipótese de
+  vazamento entre clientes retratada (eram Status manual real com 3 itens, não outro cliente).
+  Causa raiz de verdade: `jsgrafica_contar_visualizacoes_status` não filtrava o campo `status` do
+  evento, somava `RECEIVED` (82,5% da base, só entrega automática, ninguém abriu) junto com `READ`
+  (18,9%, visualização real). Contando só `READ`, os números batem com a ordem de grandeza do
+  WhatsApp nativo (ex.: painel mostrava 961/930/962/918/987, real era 48/70/100/87/120, quase
+  idêntico ao print do Edvam de 45-114). **Correção aplicada e testada em produção**: `and v.status
+  = 'READ'` adicionado no LEFT JOIN da função (não em WHERE, preserva post sem view retornando 0),
+  backup salvo antes (`pm/backups/jsgrafica_contar_visualizacoes_status_pre-demanda367_2026-08-31.sql`).
+  Testado com chamada real da função pós-mudança: retornou 120/87/100/49/71 pros mesmos 5 posts,
+  bate com o cálculo manual. **Painel de Marketing → Conteúdo já mostra o número real agora**
+  (dezenas, não centenas), vale conferir visualmente na próxima vez que abrir a tela. Fecha a
+  parte 2 da 363 de vez. Parte 1 (alcance, `/contacts`) segue em aberto.
+- **✅ 368**: **concluída em 2026-08-31**. Causa raiz: `app/api/inbox/sugestao-resposta/route.ts`
+  nunca consultava `jsgrafica_produtos`, só o histórico da conversa, o Gemini negava serviço real
+  por suposição genérica ("agendamento de RG" = `prod-042`, ativo). Corrigido com nova função
+  `buscarCatalogoServicos()` em `lib/inboxContexto.ts`, injeta lista real de serviços ativos no
+  prompt, regra explícita de nunca negar o que está na lista. Testado com caso real (RG, corrigiu)
+  e regressão (tatuagem/carro usado, continuou negando certo). Deploy no ar
+  (`dpl_HpvW1Vr9b6npio69qYqzPpQTwiaV`). 03-APP sinalizou PRONTO PRA CLEAR.
+- **366**: **concluída em 2026-08-31**. 3 variações de imagem testadas via 364/Gemini no mesmo
+  produto (caneca): A (produto isolado, já validada antes), B (painel de cor complementar dentro
+  da própria foto, saiu em `#274156`, bem próximo do Azul Sistema Escuro `#1E4363` da marca), C
+  (cena lifestyle ambientada). **Recomendação do 07-Marketing: variação B** é a mais forte pra
+  virar padrão de produção, mockup real provando o conceito (título/CTA direto sobre o painel,
+  sem card separado, foto e tipografia como uma peça só). C fica como opção pontual, não padrão.
+  Cor do painel gerado é aproximada, não confiável pra hex exato, composição final reserva ajuste
+  em CSS quando precisão de marca for crítica. Nenhuma peça publicada em canal real, só teste (3
+  chamadas ao webhook). Canvas: https://claude.ai/code/artifact/a831a8aa-6d23-4277-a167-f556bb7bf850
+  **Aguardando decisão do Edvam**: aprovar variação B como padrão antes de partir pra produção de
+  cards mais afiados.
+- **08-Produtos**: Edvam vai se alinhar direto com o chat sobre produtos digitais, sem relay do
+  PM.
+
+
 
 Esta seção é a foto do que importa agora. O resto do arquivo (Tabela mestra abaixo, e as
 seções mais antigas depois de "## Concluídas") é histórico completo, preservado, não apagado,
 só não é mais o primeiro lugar pra olhar. Se alguma coisa aqui parecer desatualizada, a Tabela
 mestra abaixo (uma linha por demanda, mais recente é a fonte por número) vale mais.
+
+## Histórico da seção "Estado atual" (28-31/08), preservado abaixo do resumo novo
 
 **Resultado do handshake pré-clear de 2026-08-28** (PM confirmou identidade e status real de
 cada janela via `ListAgents`/`SendMessage`, ver `pm/README.md` seção "Gestão de clear"). **Todas
@@ -39,20 +221,44 @@ janelas de PM em 28/08 à noite, resolvido, ver `pm/conhecimento/mapa-chats-espe
 - **348**: **aprovada e despachada em 2026-08-29** (339 concluída em 28/08, dependência
   satisfeita; escopo confirmado: só produção nova segue o manual de marca, nada existente é
   retrabalhado), executor 07-Marketing, aguardando relato de execução.
-- **349**: **aprovada em 2026-08-29**, despachada pro 01-N8N.
-- **299**: **decisão final tomada em 2026-08-29** - desligar o `206` definitivamente, não volta
-  mais a ser usado como fallback. Execução do desligamento despachada ao 01-N8N.
-- **351** (nova, 2026-08-29): atualizar `pm/conhecimento/mapa-workflows-n8n.md` (desatualizado,
-  sem 296/297, ainda descrevia o `206` como fallback congelado). Aprovada e despachada ao 01-N8N.
-- **352**: **parcial**, executada com prioridade antes das outras 3 (ordem combinada direto entre
-  Edvam e 01-N8N). Canal real criado (`id: 120363412925013708@newsletter`), texto/imagem/vídeo
-  testados com sucesso real (HTTP 200 + IDs reais). 2 achados de pesquisa corrigidos no
-  `guia-canal-whatsapp-automacao.md` (nomes de endpoint certos são `send-image`/`send-video`;
-  áudio e documento retornaram sucesso no teste real, contradizendo o que o suporte da Z-API tinha
-  informado). Falta: (1) Edvam confirmar a foto de perfil antes de aplicar, (2) aplicar a foto,
-  (3) **checagem visual manual do canal real** (não existe endpoint de leitura nesta conta, API
-  aceita o envio mas não confirma se o conteúdo realmente aparece). **Checagem visual confirmada
-  pelo Edvam em 29/08, canal funcionando de verdade.**
+- **349**: **concluída em 2026-08-31**. Deploy feito e confirmado 2x de forma independente.
+  Extensão real medida antes de corrigir: `read_at` nunca foi gravado em nenhuma das 28.904
+  mensagens desde fev/2026 (100% quebrado desde sempre, não dá pra recalcular histórico, payload
+  bruto nunca foi guardado); `delivered_at` funcionava em 6,5% dos casos. Corrigido no node
+  `PROCESSAR STATUS` pra reconhecer `MessageStatusCallback` de verdade. Teste de ponta a ponta
+  contra webhook real de produção: evento sintético de leitura gravou `read_at` certo no Supabase,
+  regressão do ramo `status@broadcast` confirmada sem impacto (nem passa pelo node alterado).
+- **299**: **concluída em 2026-08-31**. `206` desligado de verdade (`active: false`, backup salvo
+  antes), confirmado que já estava sem conexão de entrada. Renomeado pro padrão
+  `[DESCONTINUADO] 206 - JSGRAFICA | AGENTE FASE B` (achado à parte corrigido na hora: nome ainda
+  dizia "conectado, whitelist", desatualizado desde a desconexão de 18/08). Nada apagado, mesmo
+  padrão dos outros 19 workflows descontinuados.
+- **351**: **concluída em 2026-08-31**. Mapa atualizado via levantamento real na API do n8n (380
+  workflows na conta, não por memória): 296/297 adicionados como ativos, 206 movido pra
+  descontinuados, `06-PEDIDOS` corrigido (estava `active:false` inteiro desde a 303, não só nós
+  de envio desabilitados). **Bônus, fecha a demanda 273** (aberta desde 15/08, "19 workflows
+  sumidos"): não sumiu nada, a ferramenta MCP usada naquela investigação só enxerga workflow
+  ativo, API REST direta lista todos. Demanda 273 pode ser marcada como resolvida.
+- **359**: **concluída em 2026-08-31**. 39 briefings revisados contra o catálogo real
+  (`jsgrafica_produtos`, 112 itens). 15 já vinham aprovados de antes. Dos 19 que precisavam de
+  decisão real: 17 liberados (aprovação do Edvam), 3 (`P3-06` Declarações MEI, `P3-07`
+  Licenciamento de veículo, `P3-08` Consulta CadÚnico) movidos pra `EM_CHECAGEM`, sem SKU
+  correspondente no catálogo real, o Edvam não sabe se a gráfica presta esses serviços de verdade
+  e precisa confirmar com a equipe. Respeitou a regra do próprio pipeline (nenhum chat aprova
+  `BRIEFING_APROVADO` sozinho), nada de preço/prazo/promoção inventado. Handoff completo pro
+  squad de produção em `docs/operacao/HANDOFF_359_revisao_briefings.md`.
+- **352**: **concluída em 2026-08-30**. Canal real criado (`id: 120363412925013708@newsletter`,
+  nome "JS Gráfica", 1 seguidor real). Checagem visual final do Edvam confirma capacidade
+  definitiva do Canal: **texto, imagem, vídeo comum e áudio funcionam de verdade**; **documento
+  NÃO funciona** (API retorna sucesso mas o WhatsApp descarta em silêncio, achado real do risco
+  que a pesquisa original alertava); `send-location` dá erro 400 (não suportado, consistente).
+  Foto de perfil confirmada aplicada (o campo `picture` da metadata nunca é preenchido nesta
+  conta, `preview` é quem tem a URL real, achado à parte, ver guia). **Bug colateral real achado
+  e corrigido pelo 07-Marketing (354)**: a UI (`ConfiguracoesCanal.tsx`/preview "Como vai ficar")
+  só olhava `picture`, então nunca mostrava a foto de verdade mesmo aplicada, sempre caía no
+  ícone de fallback — corrigido pra `picture ?? preview`, deploy novo no ar. Todo o histórico de correção de endpoint errado
+  (`send-image`/`send-video` reais vs. documentados) está em
+  `pm/conhecimento/guia-canal-whatsapp-automacao.md`.
 - **353**: **concluída em 2026-08-29**, aprovada pelo Edvam. Mockup de 3 telas (Novo post, Plano
   de conteúdo, Como vai ficar) com Canal do WhatsApp como 3º destino (cor indigo própria, ícone
   📢), preview "Como vai ficar" em formato feed/linha do tempo rolável (diferente do carrossel de
@@ -73,6 +279,12 @@ janelas de PM em 28/08 à noite, resolvido, ver `pm/conhecimento/mapa-chats-espe
   da Z-API divergem da API real), tela mostra "—". "Seguir outros canais" fica fora até
   confirmação de negócio, gestão de administradores implementada mas nunca testada de verdade
   (sem admin disponível pra testar contra). Relato completo em `354-*.md`.
+  **Contradição resolvida (30/08)**: o relato original ("foto aplicada, confirmada visualmente")
+  estava certo afinal. O 01-N8N tinha reportado `picture: null` via `GET /newsletter?phone=`,
+  gerando dúvida real, mas o Edvam confirmou com print direto do WhatsApp: a foto está lá de
+  verdade (avatar + "Dados do canal"). Conclusão: **o endpoint de metadata não é confiável pro
+  campo `picture`** (mais um caso de divergência da Z-API, ver `guia-canal-whatsapp-automacao.md`),
+  não é um bug do fluxo de aplicação da foto. Nada a corrigir no código.
   **Correção de processo (mesmo dia)**: o 07-Marketing esqueceu o deploy padrão
   (`npx vercel --prod --yes`) ao concluir, o Edvam não via as mudanças em produção por isso;
   corrigido, deploy rodado e confirmado no ar. **Reconfirmação de seguidores**: com o Edvam já
@@ -94,17 +306,24 @@ janelas de PM em 28/08 à noite, resolvido, ver `pm/conhecimento/mapa-chats-espe
   mesmo padrão desde a 327/342). Libera o teste ponta a ponta da 354 e da 355. Pendência real:
   falta o 07-Marketing confirmar que o schema bate com o código já escrito (item 3 do critério
   de aceite), relato completo em `356-schema-canal-whatsapp.md`.
-- **357/358** (novas, 2026-08-30): subir todo o código da JS Gráfica pro GitHub, repositório
-  já existente `labonchain/JSGRAFICA` (**público**, criado pelo Edvam, já em uso pelo pipeline de
-  conteúdo via GPT em `assets/`/`conteudos/`/`docs/`/`.github/`, não mexer nessas pastas).
-  357 = `caixa-js-grafica` + site institucional (03-APP), 358 = `site-v2` (09-Site V2). Auditoria
-  de segredo rigorosa obrigatória antes de qualquer push (histórico real de credencial exposta,
-  demanda 302). Ambas aprovadas e despachadas, em andamento.
-- **348 (lembrete)**: continua aprovada no arquivo, mas o 07-Marketing ainda não começou, aguarda
-  confirmação direta do Edvam pra iniciar nesta sessão.
-- **313** e **312**: seguem `proposta`, sem decisão. O Edvam pediu explicitamente pra não mexer
-  em Financeiro hoje (29/08), mesmo sendo o fim de semana combinado pra outras 2 decisões
-  financeiras (ver abaixo).
+- **🔴 Achado de segurança pendente, decisão consciente de não agir ainda (2026-08-30)**: chave
+  `service_role` real do Supabase compartilhado do LabOnchain exposta em texto puro em 2 arquivos
+  de `pm/backups/` (achado durante a auditoria da 357). Afeta outros clientes além da JS Gráfica
+  (Kuidu, Dizu Refeições). Edvam decidiu **não rotacionar por enquanto**, mantida em aberto de
+  propósito, não esquecida. `pm/backups/` já está excluída do push pro GitHub (não é mais risco
+  de exposição pública), o risco que resta é só o arquivo local já existir com a chave.
+- **357**: **concluída em 2026-08-31**. Código no ar em `labonchain/JSGRAFICA/sistema-caixa/`
+  (caixa-js-grafica completo, incluindo `pm/` exceto `pm/backups/`) e
+  `labonchain/JSGRAFICA/site-institucional/` (site da raiz). Clonou o repo num diretório separado
+  em vez de `git init` direto (mais seguro pra repo compartilhado ativo). Auditoria de segredo:
+  nenhum valor hardcoded real, só a senha antiga do Admin (já invalidada desde a 329) mantida como
+  registro histórico. Achado urgente da chave `service_role`/tokens Z-API em `pm/backups/` tratado
+  à parte (pasta excluída do push, decisão de rotação da chave ainda em aberto). Commit e push
+  precisaram de aprovação direta do Edvam (bloqueio do classificador de permissão). Pastas do
+  pipeline GPT confirmadas intactas. PRONTO PRA CLEAR.
+- **348**: confirmada pelo Edvam em 31/08, 07-Marketing iniciou.
+- **313** e **312**: seguem `proposta`, sem decisão. O Edvam confirmou de novo em 31/08 pra não
+  mexer em Financeiro por ora.
 
 **Decisões financeiras da demanda 337, Edvam confirmou em 29/08 que não vai mexer nelas hoje
 apesar de ser o fim de semana combinado**: recalibrar o `saldo_acumulado` do fechamento diário
@@ -498,13 +717,19 @@ casos mais ambíguos foram lidos na íntegra de novo, cruzando com demandas post
 322 | ✅ | **Urgente, confirmado com execução real (`1576461`, ~12:52 local)**: `Processar Evento`, branch `document` (anexo tipo "documento" do WhatsApp, ex. imagem enviada pelo seletor de arquivo em vez de foto comprimida), mapeava `caption = rawZapi.document?.title ?? null` — `title` é sempre o nome de exibição do arquivo (ex. "WhatsApp Image 2026-08-25 at 18.36.45.jpeg"), preenchido mesmo sem legenda real nenhuma (`document.caption` era `null` de verdade no payload). Isso fazia todo documento-imagem sem legenda parecer "com legenda" pra 2 consumidores reais: (1) bloqueava a análise Gemini Vision da demanda 319 (`É Mídia Visual Sem Legenda?` nunca via vazio); (2) **pior**, `AJUSTAR DESTINO AGENTE FASE B` também via o `caption` poluído, avaliava o contato como NÃO elegível pro Caminho C (`297`) e caía no fallback padrão do `Switch Destino` pro agente legado `JSGRAFICA_ATENDIMENTO_AI` — que não tem guardrail de preço nenhum e **cotou errado pra cliente real hoje** ("R$ 9,00" numa foto 10x15 que custa R$ 2,50 no catálogo real), violando ativamente a decisão de produto documentada no CLAUDE.md de mantê-lo pausado/sem tráfego. Fix de 1 linha: `caption = rawZapi.document?.caption ?? null`, mesmo padrão já correto no branch `image` irmão (`rawZapi.image?.caption`) e no branch `hydratedTemplate.header.document` (também já usava `.caption`). Validado contra o caso real de hoje (fix faz `caption` virar `null`, dispara os 2 consumidores corretamente), contra documento COM legenda real (comportamento de roteamento idêntico, só o texto gravado passa a ser o certo em vez do nome do arquivo), confirmado branch `image` intocado e `fileName` sem conflito (campo de saída separado). Aplicado via `PUT`, confirmado com `GET` fresco separado: diff final é exatamente 1 node alterado (`Processar Evento`), 1 linha dentro do `jsCode` (de 419), conexões idênticas byte a byte ao backup. Nenhuma execução real disparada. Ver `pm/demandas/322-document-caption-mapeado-do-title-desviava-pro-agente-legado.md` | 2026-08-27
 323 | ✅ | **Urgente, confirmado com execução real (`1576879`, ~16:04 UTC)**: quando a IA do Caminho C (`297`) decidia sozinha, no meio do raciocínio, chamar `escalar_para_humano` (Camada 2 — diferente dos gates determinísticos Dizu/Alto Toque/Guardrail-bloqueado, que escalam por caminho próprio e não passam por este node), o node `Contatos: Reivindicar Atendimento (raw)` (criado na 321) disparava ~1,4s depois a caminho do envio da resposta final e **revertia silenciosamente** o `status_atendimento='escalado'`/`atendente=null` que a escalação real acabara de gravar, de volta pra `em_atendimento`/`Agente Atendimento` — porque o guard OR do PATCH (`atendente.is.null,atendente.eq.'Agente Atendimento'`) batia por acaso já que a escalação tinha acabado de zerar `atendente`. Confirmado ao vivo: telefone `5521965185667` estava em `em_atendimento`/`Agente Atendimento` apesar de ter sido genuinamente escalado (motivo `proposta_negada`) e a resposta "Chamando a equipe" ter sido genuinamente enviada. Fix: adicionada condição AND `status_atendimento=neq.escalado` no filtro do PATCH — confirmado nas `connections` do workflow que só o caminho "IA decide sozinha" passa por esse node (os 3 gates determinísticos vão direto pra `Montar Envio Z-API`). Aplicado via `PUT`, confirmado com `GET` fresco separado: diff final é exatamente 1 node alterado (`Contatos: Reivindicar Atendimento (raw)`), conexões idênticas byte a byte ao backup. Telefone `5521965185667` corrigido nas 2 colunas (`escalado`/`null`), confirmado por `RETURNING`. **Achado crítico na própria validação obrigatória do fix**: a suposição de que "Chamando a equipe" já era enviada por outro node no caminho de escalação estava errada (investigação real do `296` inteiro confirma que não existe nenhum node de envio WhatsApp lá) — o fix sozinho suprimiria a confirmação ao cliente nesse cenário; achado não ficou só documentado, virou a demanda 324, **corrigida no mesmo dia**. Ver `pm/demandas/323-contatos-reivindicar-atendimento-reverte-escalado.md` | 2026-08-27
 324 | ✅ | **Efeito colateral real da 323, achado na própria validação obrigatória dela, corrigido no mesmo dia**: com o fix da 323 sozinho, quando a IA escala via `escalar_para_humano` no meio do turno (Camada 2), o claim de `Contatos: Reivindicar Atendimento (raw)` passa a afetar 0 linhas de propósito (proteção nova da 323) → `Reivindicacao Falhou?` bloqueava o envio → a confirmação "Chamando a equipe" nunca chegava ao cliente (investigação real confirmou que não existe nenhum node de envio WhatsApp alternativo no caminho de escalação do `296` — `Enviar Z-API` no `297` é o único envio do turno). Fix: `Contatos: Avaliar Reivindicacao` ganhou detecção de escalonamento via `_intermediateSteps` (mesma técnica já usada em `Guardrail Validacao Saida`, mesmo nome de tool `'Tool_Escalar_Para_Humano'`) — se a IA chamou `escalar_para_humano` neste turno, `_reivindicado` vira `true` incondicionalmente (libera o envio da confirmação), sem alterar o PATCH da 323 (que continua rodando e continua não sobrescrevendo o estado `escalado` real — só o resultado dele passa a ser ignorado neste cenário específico). Validado por conferência de lógica contra a execução real `1576879` (já baixada, não reexecutada): com o código novo, o mesmo input real teria dado `_reivindicado=true`. Confirmado sem regressão no caminho normal (sem escalonamento, idêntico à produção) e na proteção original "humano assumiu no meio do caminho" (demanda 321, continua bloqueando). Aplicado via `PUT`, confirmado com `GET` fresco separado: diff final é exatamente 1 node alterado (`Contatos: Avaliar Reivindicacao`), conexões idênticas byte a byte ao backup. Telefone `5521965185667` não tocado de novo (já corrigido na 323). Nenhuma execução real/sintética disparada. Ver `pm/demandas/324-escalonamento-camada-2-sem-envio-apos-fix-323.md` | 2026-08-27
-354 | ✅ | **Concluída em 29/08, executor 07-Marketing, testada com dado real, confirmada pelo Edvam.** Implementação real (não mockup) das 4 áreas da 353: `lib/zapi.ts` ganhou funções de gestão do canal (nome/descrição/foto/metadata/seguidores/excluir/admin), `lib/canalWhatsapp.ts` novo faz CRUD de posts com integração DIRETA à Z-API (sem fila compartilhada do LabOnchain, schema próprio proposto ao 02-DADOS e aplicado por eles na 356), rotas `app/api/marketing/canal/*`, `ModalPost.tsx`/`TelaMarketingConteudo.tsx` estendidos com Canal como 3º destino real + aba Configurações nova, `ComoVaiFicarCanal.tsx`/`ConfiguracoesCanal.tsx` novos. 2 bugs reais achados e corrigidos só testando contra a API de verdade (não por leitura de doc): `metadataCanal` devolve array não objeto; `update-newsletter-*` usa campo `id`, não `phone`, no corpo (doc de referência errada, confirmado com erro real 400 antes da correção). Endpoint de "listar seguidores" não encontrado em 8 variações testadas de verdade (doc pública e `llms.txt` da Z-API divergem entre si e da API real), reconferido depois do Edvam confirmar que já segue o canal (descartando "só falha com 0 seguidores") — mesmo resultado, registrado como limitação da conta/plano, não bloqueia. Testado com post real publicado (`message_id` real) e identidade/foto do canal atualizadas de verdade (fecha de quebra a foto que tinha ficado pendente da 352) — **tudo confirmado visualmente pelo Edvam**. Robô de disparo agendado (30/30min) pedido à parte, repassado ao PM pra virar demanda pro 01-N8N. **Achado de processo, corrigido no mesmo dia**: esqueci o deploy (`npx vercel --prod --yes`) no primeiro relato, só tinha testado local/via API — Edvam não via nada em produção; corrigido, deploy confirmado no ar (`pdv.jsgrafica.site`, rotas do Canal presentes no build). Ver `pm/demandas/354-implementar-canal-whatsapp-marketing-conteudo.md` | 2026-08-29
+366 | ✅ | **Concluída em 31/08, executor 07-Marketing, pedido direto do Edvam.** Teste de tipos de imagem gerada via workflow 364 (Gemini) antes de padronizar prompt de produção: variação A (produto isolado, reaproveitada), variação B (painel de cor sólida complementar dentro da própria foto, saiu em `#274156` bem próximo do Azul Sistema Escuro `#1E4363`) e variação C (cena lifestyle ambientada). Mockup real provando o conceito (`DemoComposta.dc.html`, título/apoio/CTA direto sobre o painel da variação B, sem card separado). Recomendação registrada: variação B é a mais forte pra virar padrão (generaliza bem, texto encaixa direto na foto), variação C fica como opção pontual (objetos extras competem com o produto, não generaliza), cor do painel gerado deve ser tratada como aproximada, não hex exato. Canvas: https://claude.ai/code/artifact/a831a8aa-6d23-4277-a167-f556bb7bf850. Nenhuma peça publicada em canal real. Ver `pm/demandas/366-teste-variacoes-imagem-fundo-complementar.md` | 2026-08-31
+367 | 🔴 | **proposta, executor 01-N8N (fora do meu domínio, só leitura via MCP)**: logar payload bruto completo do webhook `03 - JSGRAFICA | STATUS MSG` (mudança só aditiva, não muda comportamento atual) pra diagnosticar de onde vêm as ~900 visualizações/hora inventadas por post (real é 45-114). Achei o node exato que grava sem validação (`Gravar Visualização Status`), simulei a correção óbvia (gravar só 1 id por evento) e ela NÃO resolve nada (testado contra dado real, resultado quase idêntico ao bugado). Autocrítica registrada a pedido do Edvam: 3 hipóteses causais diferentes propostas em sequência na 363 foram todas derrubadas por dado real, nenhuma vinha de documentação, deviam ter sido marcadas como não confirmadas desde o início. Ver `pm/demandas/367-logar-payload-cru-webhook-status-msg-jsgrafica.md` | 2026-08-31
+363 | 🟡 | **Em andamento, executor 07-Marketing. Parte 1 (alcance) REABERTA em 31/08 depois de correção do Edvam**: "sincronização de contato do dispositivo vinculado" não existe como conceito real da Z-API, era interpretação errada minha. Doc oficial da Z-API esclarece: `/contacts` = contatos com WhatsApp salvos na agenda do telefone + membros de grupo, não sincronização. O dado empírico (Zuzeide e 65,8% de amostra fora da lista) continua real, mas não fecho mais como causa raiz confirmada — a regra de privacidade "Meus contatos" do Status é mútua e deveria valer igual pra manual/API (mesma conta), então ainda falta mecanismo real explicando por que só a via API não alcança. Reconfirmado com rigor depois (Edvam confirmou que ela ESTÁ salva na agenda real): refeita a busca do zero em 1.720 contatos, 5 variações de telefone + busca por nome, zero resultado, as 2 interpretações tentadas foram refutadas pelo mesmo caso real. Recomendação registrada: abrir chamado direto com o suporte da Z-API, não dá mais pra resolver só testando o endpoint de fora. Parte 2 (contador do painel) CORRIGIDA em 31/08 depois do Edvam mandar número real do WhatsApp**: explicação anterior ("acúmulo de recibo em lote, não é bug") estava ERRADA, descartada com dado real (painel mostra 8-20x mais que o WhatsApp nativo pro MESMO post no mesmo horário, e a magnitude fica quase igual entre post de 5h atrás e post de poucos minutos, o que não bate com acúmulo ao longo do tempo). Achado real isolado com precisão: quase toda a inflação vem de linhas "limpas" (sem fan-out de vários ids), então o achado anterior sobre linhas com até 13 ids não é a causa principal. Query SQL confirmada correta. Hipótese mais forte agora: contaminação de correlação no workflow compartilhado `03 - STATUS MSG` (atribuindo evento de visualização de qualquer cliente da fila LabOnchain ao message_id mais recente monitorado da JS Gráfica, não ao que realmente é sobre). Repassado ao 01-N8N investigar a lógica do workflow, fora do meu acesso/domínio. Parte 1 (alcance) (subiu de prioridade máxima em 31/08, à frente da 361).** Achado urgente real do Edvam: Status via API não chega pra todos os contatos (print de cliente real que só via os 3 Status manuais). Investigado com dado real (não suposição): endpoint `/contacts` da Z-API (paginado, achado agora) mostra só 1.717 contatos sincronizados pelo dispositivo vinculado, contra 3.032 reais em `jsgrafica_contatos` (~2/3 dos ativos fora). Telefone real do cliente do print (`+55 81 9849-5607`, "Zuzeide", 72 interações reais) confirmado como NÃO sincronizado, bate exato com o relato. Causa raiz: Status via API só alcança quem está sincronizado no dispositivo vinculado, manual não depende disso. 3 candidatos de endpoint de resync achados (`/contacts/sync`/`/update`/`/refresh`, respondem diferente de "not found") mas não testados com POST por risco real de derrubar a conexão WhatsApp de produção — repassado ao 01-N8N avaliar. Ainda falta: Edvam confirmar config de Privacidade > Status (pedido, não crítico mais pra causa raiz), e objetivo original da demanda (comparação agendado vs. manual + validação do contador de views da 345) segue pendente depois de fechar a mitigação. Ver `pm/demandas/363-investigar-visualizacoes-status-agendado-vs-manual.md` | 2026-08-31
+362 | ✅ | **Concluída em 31/08, executor 07-Marketing, testada de ponta a ponta.** Ação real de "Agendar" pro Canal do WhatsApp, distinta de "Aprovar e publicar agora": `agendarPostCanal` (`lib/canalWhatsapp.ts`) marca `status='approved'` + `scheduled_at` futuro SEM chamar a Z-API (rejeita explicitamente data passada, erro claro apontando pra usar "Aprovar" nesse caso); rota `PATCH /api/marketing/canal` ganhou a ação `agendar`; `ModalPost.tsx` ganhou botão "📅 Agendar pra esse horário" ao lado de "✓ Aprovar e publicar agora" (só quando `status==='pending'`), texto de ajuda reescrito explicando a diferença. Achado confirmado antes de mexer: nada no código anterior gravava `status='approved'`, só existia `pending -> published` na hora, por isso o robô da 355 (pronto e testado) ficava sem post real pra processar. Testado de ponta a ponta com login real (`/api/auth/login-admin`) e posts reais via API (`scripts/teste-362-agendar-canal.ts`): agendar com data futura confirma `status=approved`/`message_id=null`/`published_at=null` (nenhuma chamada real à Z-API aconteceu); agendar com data passada é rejeitado (HTTP 500 com mensagem clara); posts de teste cancelados no fim. `npx tsc --noEmit` limpo. Deploy em produção confirmado (`pdv.jsgrafica.site`). Fora de escopo (não mexido, por pedido explícito): o robô da 355 em si — o robô já foi testado antes e passa a ter post real pra achar a partir de agora; validação do robô processando de fato quando a hora chegar fica pro 01-N8N confirmar, não simulei isso aqui. Ver `pm/demandas/362-acao-agendar-post-canal-sem-publicar-na-hora.md` | 2026-08-31
+361 | 🟡 | **Em andamento, executor 07-Marketing.** Feedback real do Edvam sobre as 32 peças do Canal: visual genérico demais, "sem graça", parece template pronto (não é sobre copy, já aprovada). Diagnóstico técnico honesto dado ao Edvam (pedido dele, ver histórico de conversa 31/08): a produção é 100% HTML/CSS/SVG renderizado por navegador real (Playwright), sem geração de imagem por IA, sem foto real, sem ilustração desenhada à mão — o teto real dessa técnica é "design gráfico limpo tipo cartaz/etiqueta", não "foto de produto profissional". Primeiro exemplo (composição assimétrica, ticket perfurado, tipografia dominante, carimbo no lugar de pílula de logo) publicado em canvas (Claude Design) pro Edvam avaliar, ainda achou fraco. Decisão do Edvam: testar caminho de gerar imagem por IA fora do processo (GPT externo que ele já opera), começando pequeno pelo caso P4-07 (caneca). Briefing de imagem detalhado escrito e publicado (`conteudos/2026/08/BLOCO-007_P4-07_P4-08_P4-09/briefing-imagem/CANAL_P4-07_20260831_BRIEFING-IMAGEM_v01.md`): foto real de produto, caneca branca lisa sem estampa (não mostra resultado específico já pronto), 2 enquadramentos (1080x1080 e 1080x1920) com respiro reservado pra composição posterior. Produção nova sinalizada como pausada em `docs/LEIA_PRIMEIRO.md` do repositório. Aguardando o Edvam rodar o briefing no GPT dele e trazer a imagem de volta; só depois disso componho a peça final por cima em HTML/CSS. Ver `pm/demandas/361-revisar-direcao-visual-pecas-canal.md` | 2026-08-31
+359 | ✅ | **Concluída em 31/08, executor 07-Marketing, aprovada pelo Edvam nas 2 decisões que exigiam humano.** Revisão dos 39 briefings do pipeline de conteúdo GPT em `labonchain/JSGRAFICA`. Leu os 3 docs de processo do repo antes de mexer (achado importante: a especificação técnica proíbe qualquer chat de marcar `BRIEFING_APROVADO` sozinho, só "Coordenação/usuário" — por isso levou as decisões reais pro Edvam em vez de aprovar sozinho). 15 dos 39 já estavam aprovados de decisões anteriores; revisou os 19 restantes contra o catálogo real (`jsgrafica_produtos`, 112 itens): 17 limpos (aprovados pelo Edvam), 3 (`P3-06`/`P3-07`/`P3-08`, Declarações MEI/Licenciamento de veículo/CadÚnico) citam serviço sem SKU correspondente no catálogo real — Edvam confirmou que não sabe se são prestados de verdade, movidos pra `EM_CHECAGEM` em vez de aprovados. Registro mestre do repo atualizado (32 IDs liberados pra produção) + handoff novo (`docs/operacao/HANDOFF_359_revisao_briefings.md`) documentando cada decisão. Nenhum preço/prazo/promoção inventado foi aprovado. Ver `pm/demandas/359-revisar-briefings-pipeline-conteudo-gpt.md` | 2026-08-31
+354 | ✅ | **Concluída em 29/08, executor 07-Marketing, testada com dado real, confirmada pelo Edvam.** Implementação real (não mockup) das 4 áreas da 353: `lib/zapi.ts` ganhou funções de gestão do canal (nome/descrição/foto/metadata/seguidores/excluir/admin), `lib/canalWhatsapp.ts` novo faz CRUD de posts com integração DIRETA à Z-API (sem fila compartilhada do LabOnchain, schema próprio proposto ao 02-DADOS e aplicado por eles na 356), rotas `app/api/marketing/canal/*`, `ModalPost.tsx`/`TelaMarketingConteudo.tsx` estendidos com Canal como 3º destino real + aba Configurações nova, `ComoVaiFicarCanal.tsx`/`ConfiguracoesCanal.tsx` novos. 2 bugs reais achados e corrigidos só testando contra a API de verdade (não por leitura de doc): `metadataCanal` devolve array não objeto; `update-newsletter-*` usa campo `id`, não `phone`, no corpo (doc de referência errada, confirmado com erro real 400 antes da correção). Endpoint de "listar seguidores" não encontrado em 8 variações testadas de verdade (doc pública e `llms.txt` da Z-API divergem entre si e da API real), reconferido depois do Edvam confirmar que já segue o canal (descartando "só falha com 0 seguidores") — mesmo resultado, registrado como limitação da conta/plano, não bloqueia. Testado com post real publicado (`message_id` real) e identidade/foto do canal atualizadas de verdade (fecha de quebra a foto que tinha ficado pendente da 352) — **tudo confirmado visualmente pelo Edvam**. Robô de disparo agendado (30/30min) pedido à parte, repassado ao PM pra virar demanda pro 01-N8N. **Achado de processo, corrigido no mesmo dia**: esqueci o deploy (`npx vercel --prod --yes`) no primeiro relato, só tinha testado local/via API — Edvam não via nada em produção; corrigido, deploy confirmado no ar (`pdv.jsgrafica.site`, rotas do Canal presentes no build). **30/08, investigação extra**: 01-N8N reportou `picture: null` na metadata real, questionando se a foto tinha sido aplicada de verdade; investigado de forma independente (baixei a URL de `preview` agora, imagem real 200 OK, é o selo certo) e confirmado pelo Edvam com print real do WhatsApp — não é bug de fluxo, `picture` simplesmente nunca é preenchido nesta conta (mais 1 divergência da Z-API), `preview` é quem tem a URL real. Achado colateral real e corrigido: minha própria UI só olhava `picture`, por isso nunca mostrava a foto aplicada — `ConfiguracoesCanal.tsx` e o preview "Como vai ficar" agora usam `picture ?? preview`. Deploy novo confirmado. Ver `pm/demandas/354-implementar-canal-whatsapp-marketing-conteudo.md` | 2026-08-29
 353 | ✅ | **Concluída em 29/08, executor 07-Marketing, aprovada pelo Edvam.** Mockup do Canal do WhatsApp como 3º destino em Marketing → Conteúdo (Novo post, Plano de conteúdo, Como vai ficar), usando classes/tokens reais lidos direto de `ModalPost.tsx`/`TelaMarketingConteudo.tsx`, cor própria (indigo) pro Canal. Diferencial pedido pela demanda: preview "Como vai ficar" do Canal é perfil + linha do tempo rolável (feed permanente), não o carrossel de tela cheia do Status. Achado de processo corrigido antes de publicar: calendário inicial usava `<sc-for>` do motor de template do canvas, que só roda dentro do runtime publicado — trocado por grade estática depois de checagem por renderização real (Playwright) mostrar `{{d.num}}` literal fora do runtime. Sem código/API real (fora de escopo desta demanda). Link do mockup aprovado: https://claude.ai/code/artifact/7d3bf87c-cda2-4aaf-97a9-6a8e38be6b6f. **Adendo mesmo dia, a pedido direto do Edvam**: 4º artboard "Configurações do Canal" mapeando os endpoints de gestão da Z-API (identidade/seguidores/admins/exclusão do canal próprio + seção "Seguir outros canais" marcada como hipótese não confirmada), aprovado no mesmo link. Ver `pm/demandas/353-mockup-canal-whatsapp-marketing-conteudo.md` | 2026-08-29
 350 | 🟡 | **aprovada, sequencial, bloqueada até a 346 concluir**: publicar Kit Delivery Brasil no catálogo do Site V2, primeira demanda real do chat novo 09-SITE V2. Ver `pm/demandas/350-publicar-kit-delivery-brasil-site-v2.md` | 2026-08-28
 349 | 🔴 | **proposta, achado real da 344 (bug pré-existente, não urgente)**: `PROCESSAR STATUS` nunca bate `raw.type` real da Z-API (`MessageStatusCallback`), então `status`/`delivered_at`/`read_at` de mensagem 1:1 nunca são gravados, há muito tempo. Ver `pm/demandas/349-processar-status-nunca-bate-tipo-real-callback.md` | 2026-08-28
 348 | 🔴 | **proposta, 08-Produtos, bloqueada até a 339 concluir**: squad de produção pra kits com curadoria pesada (EDU-KIT-002, REL-KIT-001), reaproveitando a infra opensquad da 339. Ver `pm/demandas/348-squad-producao-produtos-digitais.md` | 2026-08-28
-347 | 🔴 | **proposta, 08-Produtos**: 6 templates avulsos vendáveis agora (topo de bolo, cartão de visita, convite, etiqueta, rótulo, cartaz), processo atual sem esperar squad. Ver `pm/demandas/347-templates-avulsos-vendaveis-agora.md` | 2026-08-28
-346 | 🟡 | **aprovada, despachada pro 08-Produtos em 28/08**: fechar o gate de ATIVO do Kit Delivery Brasil (NEG-KIT-001) — 30 artes já reais, faltam os 5 requisitos do Subprojeto PRODUTOS (Canva master, licença, custo, prova física, validação comercial com 10 ofertas reais). Publicação no Site V2 vira demanda separada (350), sequencial. Ver `pm/demandas/346-fechar-gate-ativo-kit-delivery-brasil.md` | 2026-08-28
+347 | ❌ | **cancelada em 29/08 (decisão do Edvam, nunca chegou a ser aprovada)**: 6 templates avulsos vendáveis agora (topo de bolo, cartão de visita, convite, etiqueta, rótulo, cartaz). Não é pra apagar nada, só sinalizar que não é trabalho a fazer em breve — retomar só se fizer sentido depois do squad da 348. Ver `pm/demandas/347-templates-avulsos-vendaveis-agora.md` | 2026-08-29
+346 | ❌ | **cancelada em 29/08 (decisão do Edvam)**: fechar o gate de ATIVO do Kit Delivery Brasil (NEG-KIT-001) nesse formato. Não avança como estava desenhada; o NEG-KIT-001/as 30 artes reais ficam como referência, não como base a continuar. 350 (publicação no Site V2) ficou sem pré-requisito satisfeito, também parada. Ver `pm/demandas/346-fechar-gate-ativo-kit-delivery-brasil.md` | 2026-08-29
 345 | ✅ | **Concluída em 28/08, executor 03-APP.** Terceira peça (342 → 344 → 345). Investigação prévia confirmou a correlação: `labon_status_queue.response_zapi->>'messageId'` bate com o valor dentro do `ids` (jsonb) de `jsgrafica_status_visualizacoes`; achado real: mesma pessoa gera linha duplicada (Z-API reenvia callback), contagem precisa ser `count(distinct participant)`. Função Postgres nova `jsgrafica_contar_visualizacoes_status` (security invoker, EXECUTE revogado de anon/authenticated) faz a agregação deduplicada; `app/api/marketing/conteudo` anexa `visualizacoes` em cada post publicado (webhook compartilhado do LabOnchain não expõe `response_zapi`, buscado direto via `supabaseAdmin`); UI nova: coluna "👁️ Viram" no Plano de conteúdo, selo "👁️ N" nos cards de "Como vai ficar" (só posts publicados). Testado com dado real: função SQL com `messageId` reais, `curl` autenticado confirmando números crescendo (213 no post mais recente) e 0 nos posts publicados antes da 344 subir hoje (esperado, não é bug — mecanismo de log é novo). Playwright real logado como Edvam confirma coluna e selos visíveis com os números certos, print tirado. Ver `pm/demandas/345-contador-visualizacoes-status-marketing.md` | 2026-08-28
 344 | ✅ | **concluída (28/08)**: ramo `status@broadcast` do `03 - STATUS MSG` passa a gravar 1 INSERT leve em `jsgrafica_status_visualizacoes` em vez do fluxo pesado (2 consultas + UPDATE que nunca acha nada). 2 bugs reais cometidos e corrigidos na própria demanda antes de fechar: operação errada no node Supabase (`insert` não existe, é `create`) e um IF com schema de versão errada que fazia TUDO cair no ramo novo, inclusive conversa 1:1 real, por ~2min até a correção - 2 mensagens reais afetadas, corrigidas retroativamente (6 linhas mal roteadas removidas, `last_update_at` das 2 mensagens ajustado). Testado com 80 execuções reais pós-correção, 0 erro, conversa 1:1 confirmada intacta. Achado novo fora de escopo reportado ao PM: `PROCESSAR STATUS` nunca preenche `status`/`delivered_at`/`read_at` de verdade pra nenhuma mensagem (checa `raw.type` errado), bug pré-existente, candidato a demanda própria. Ver `pm/demandas/344-workflow-status-msg-gravar-log-visualizacao.md` | 2026-08-28
 343 | ✅ | **concluída (08-Produtos, 28/08)**: organizado backlog de produtos digitais em 3 demandas formais priorizadas (346/347/348), achado real: NEG-KIT-001 já tem 30 artes prontas, é o item mais perto de vender de verdade. Ver `pm/demandas/343-organizar-produtos-digitais-com-squad-mkt-ticket-medio.md` | 2026-08-28

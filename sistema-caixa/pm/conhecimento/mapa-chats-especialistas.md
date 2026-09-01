@@ -28,26 +28,36 @@ o Edvam fechou e reabriu várias abas tentando limpar duplicatas de PM, o que tr
 técnico de praticamente todo o time. A tabela anterior (endereços de 27-28/08) está obsoleta,
 não usar. Os endereços abaixo são os confirmados na rodada de handshake mais recente.
 
-**Achado de processo (28/08, importante pra não repetir confusão)**: o endereço técnico
-(`js-grafica-XX`) muda quando a janela reconecta, mesmo sendo a mesma conversa/sessão. Não é
-"nome da janela", é mais parecido com um identificador de conexão. Isso invalidou a premissa
-antiga registrada aqui ("o nome continua o mesmo enquanto a janela não for fechada de verdade"),
-que valia num período mais estável mas não é garantia. **Não confiar de olho no endereço sozinho
-quando ele aparecer diferente do esperado**, sempre reconfirmar por handshake se a resposta não
-bater com o papel esperado, e nunca a partir de instrução de outra sessão que também se diga PM
-sem confirmação direta do Edvam.
+**Achado de processo (28/08, reforçado em 31/08, importante pra não repetir confusão)**: o
+endereço técnico (`js-grafica-XX`) muda quando a janela reconecta OU quando o PC reinicia, mesmo
+sendo a mesma conversa/sessão (histórico de conversa sobrevive a reinício de PC, confirmado na
+prática em 31/08 — só o endereço muda). Não é "nome da janela", é mais parecido com um
+identificador de conexão. **Não confiar de olho no endereço sozinho quando ele aparecer diferente
+do esperado**, sempre reconfirmar por handshake se a resposta não bater com o papel esperado, e
+nunca a partir de instrução de outra sessão que também se diga PM sem confirmação direta do
+Edvam. **Este mapa fica desatualizado rápido** (3 rodadas de endereço diferentes só entre 28 e
+31/08) — trate a tabela abaixo como "o que valia na última vez que foi confirmado", sempre validar
+com handshake antes de confiar cegamente, principalmente depois de qualquer reinício de PC ou
+`/clear` do próprio PM.
 
-| Sessão técnica | Identidade real | Área |
+| Sessão técnica (31/08, pós-reinício de PC) | Identidade real | Área |
 |---|---|---|
-| `js-grafica-6d` | `03 - APP JS GRAFICA` | Executor de código do Next.js (Admin/PDV/Inbox) |
-| `js-grafica-8f` | `02 - DADOS JS GRAFICA` | Supabase/schema/dados |
-| `js-grafica-30` | `05 - FINANCEIRO JS GRAFICA` | Controller/auditor de fluxo de caixa |
-| `js-grafica-14` | `01 - N8N JS GRAFICA` | Executor de workflows n8n |
-| `js-grafica-0f` | `07 - MARKETING JS GRAFICA` | Aba Marketing → Conteúdo, squad de marca |
-| `js-grafica-7e` | `08 - PRODUTOS E NOVOS NEGÓCIOS JS GRAFICA` | Ideação de produto, não executa código |
-| `js-grafica-ef` | `09 - SITE V2 JS GRAFICA` | `site-v2/` |
-| `js-grafica-3e` | `06 - AUTOMAÇÃO ATENDIMENTO INBOX` | Design de conversação/automação de atendimento |
-| `js-grafica-34` | `04 - FRONTEND JS GRAFICA` | **Reativado em 28/08** (estava dormente desde a demanda 122), briefing formal criado agora pela primeira vez (`pm/equipe/04-frontend.md`), roda em paralelo ao 03-APP só em demanda explicitamente atribuída, pra não colidir no mesmo arquivo |
+| `js-grafica-ba` | `03 - APP JS GRAFICA` | Executor de código do Next.js (Admin/PDV/Inbox) |
+| `js-grafica-0f` | `02 - DADOS JS GRAFICA` | Supabase/schema/dados |
+| `js-grafica-d7` | `05 - FINANCEIRO JS GRAFICA` | Controller/auditor de fluxo de caixa |
+| `js-grafica-e5` | `01 - N8N JS GRAFICA` | Executor de workflows n8n |
+| `js-grafica-c2` | `07 - MARKETING JS GRAFICA` | Aba Marketing → Conteúdo, squad de marca, dono do
+  pipeline de conteúdo via GPT em `labonchain/JSGRAFICA` |
+| `js-grafica-55` | `08 - PRODUTOS E NOVOS NEGÓCIOS JS GRAFICA` | Ideação de produto, não executa código |
+| `js-grafica-d8` | `09 - SITE V2 JS GRAFICA` | `site-v2/` |
+| `js-grafica-51` | `06 - AUTOMAÇÃO ATENDIMENTO INBOX` | Design de conversação/automação de atendimento |
+| `js-grafica-1d` | `04 - FRONTEND JS GRAFICA` | Reativado em 28/08 (estava dormente desde a demanda 122), briefing formal em `pm/equipe/04-frontend.md`, roda em paralelo ao 03-APP só em demanda explicitamente atribuída, pra não colidir no mesmo arquivo. Segue sem nenhuma demanda atribuída ainda. |
+
+**Nota (31/08)**: todos os 8 confirmados prontos pra clear nesta rodada (handshake pós-reinício de
+PC + checagem antes de o PM também limpar), exceto pendências pontuais já resolvidas ou em
+resolução no momento desta nota (ver `pm/demandas/STATUS.md` topo pro estado mais atual de cada
+demanda em andamento). Se o Edvam disser "limpei o chat X" depois desta nota, mande o onboarding
+completo de novo (arquivo de `pm/equipe/`) pra essa janela, ela relê o estado real dos arquivos.
 
 **Cuidado, não são deste time**: `js-grafica-c9` se identificou como "DIZU PM" (projeto Dizu
 Refeições, pasta separada), rodando com nome `js-grafica-*` só porque compartilha a mesma raiz de

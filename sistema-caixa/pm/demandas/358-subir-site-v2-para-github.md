@@ -1,9 +1,9 @@
 # 358 - Subir o código do site-v2 pro GitHub (repo público compartilhado)
 
-Status: aprovada
+Status: concluída
 Criada em: 2026-08-30
 Aprovada em: 2026-08-30
-Concluída em: (vazio até conclusão)
+Concluída em: 2026-08-30
 Chat executor: 09 - SITE V2 JS GRAFICA
 
 ## Contexto
@@ -54,4 +54,40 @@ Mesmo cuidado da 357: repositório público e compartilhado, sempre `pull` antes
 (mesma decisão, outro projeto).
 
 ## Relato de execução
-(preenchido pelo 09-Site V2 ao concluir)
+
+**Concluída em 2026-08-30.**
+
+**Auditoria de segredo (2 commits locais existentes, `0662f6a`/`6c1b34b`)**:
+- Nenhum arquivo `.env*` em nenhum momento do histórico (`git log --diff-filter=A --name-only`, vazio).
+- Nenhum arquivo com nome secret/key/credential no histórico.
+- `git log -p --all` buscando `SUPABASE_SERVICE_ROLE`, `service_role`, `api_key`, `secret`,
+  `token`, `senha`: só ocorrências de documentação (regras dizendo "nunca usar service_role") e
+  nome de variável (`process.env.SUPABASE_PUBLISHABLE_KEY`), nenhum valor real.
+  Uma ocorrência de "senhas do cliente" era texto de descrição de serviço (Gov.br), não segredo.
+- Busca por padrão de JWT longo (`eyJ...`) nos diffs: nenhuma ocorrência.
+- `git ls-files` confirmado sem nenhum `.env*` rastreado (123 arquivos tracked no total).
+- `.gitignore` já cobre `.env`, `.env.local`, `.env.*.local`, `.vercel`, `node_modules`, `.next`.
+- Conclusão: histórico local limpo, não precisou reescrever nada.
+
+**Abordagem técnica**: mesmo método usado na demanda 357 (mais seguro pro repo compartilhado com
+processo paralelo ativo). Não usei os 2 commits locais nem subtree — cloneI `labonchain/JSGRAFICA`
+num diretório de scratchpad isolado, copiei o conteúdo rastreado do `site-v2` (via
+`git archive HEAD`, garante que só arquivos commitados entram, nenhum arquivo solto tipo
+`.env.production` que existe no disco local) pra dentro de `site-v2/` no clone, um commit único e
+limpo (123 arquivos), `git pull --ff-only` antes e depois de montar o commit, `git push` (sem
+`--force`). O histórico local antigo de 2 commits continua intacto no projeto local, só não foi
+replicado no repositório público.
+
+**Confirmação pós-push (via API do GitHub, não só local)**:
+- `site-v2/` presente na árvore de `main` do repositório remoto.
+- Nenhum arquivo `.env*` na árvore remota dentro de `site-v2/`.
+- Pastas já existentes (`assets/`, `conteudos/`, `docs/`, `.github/`, `sistema-caixa/`,
+  `site-institucional/`) intactas, nada sobrescrito ou apagado.
+- Push: `0715287..0dc9f2f main -> main`, sem bloqueio de permissão do Claude Code (diferente do
+  que aconteceu com 03-App/01-N8N na mesma leva de demandas).
+
+**Achados fora do escopo**: nenhum.
+
+**Status final: concluída.**
+
+PRONTO PRA CLEAR

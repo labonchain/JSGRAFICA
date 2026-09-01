@@ -1,59 +1,35 @@
 # Mapa dos workflows n8n da JS Gráfica
 
-## ⚠️ Reconferência 2026-08-15 — achado não resolvido, precisa de investigação real
+## ✅ Reconferência 2026-08-31 (demanda 351) — fonte de verdade atual, revalidada item a item
 
-Reconferido item a item (por ID direto, não por busca por nome — a busca por nome só retorna
-workflow **ativo**, nunca inativo, achado confirmado nesta mesma sessão ao procurar o `206`).
-Resultado:
+Levantamento completo e direto: `GET /workflows` (API REST, paginado, 380 workflows na conta
+inteira, todos os clientes da infra LabOnchain), filtrado por nome `grafica`/`jsg`. **31
+workflows relacionados à JS Gráfica no n8n hoje.**
 
-- **Os 9 workflows "ativos de verdade"** (tabela abaixo) foram todos confirmados intactos, sem
-  nenhuma mudança não documentada, e **nenhum deles tem qualquer ligação com o `206`** (confirmado
-  também nesta sessão, ver `pm/OBJETIVOS-MACRO.md`).
-- **19 dos 20 workflows marcados `[DESCONTINUADO]` (todos exceto o `02 - LOG MSG ENVIADAS`) não
-  foram encontrados** — `get_workflow_details` retorna "Workflow not found" pra cada um dos 19
-  IDs, e nenhum aparece numa listagem completa da conta inteira (86 workflows, todos os clientes
-  da infra LabOnchain). **Isso contradiz diretamente o que a demanda 242 registrou** ("nada foi
-  apagado, só renomeado, com backup de cada um antes").
-- **Não sabemos ainda se foram de fato excluídos, movidos pra um espaço que a ferramenta
-  disponível não alcança, ou outra coisa** — não dá pra confirmar por essa via (MCP read-only).
-  Precisa de checagem direta (API REST real com `N8N_API_KEY`, ou login na UI do n8n).
-- **Mitigante real**: existe backup local do JSON de cada um desses 19, feito antes da mudança da
-  242, em `pm/backups/*_pre-demanda242_2026-07-29.json` — mesmo que tenham sido excluídos de
-  verdade, o conteúdo não está perdido, só precisaria ser reimportado se algum dia fizer falta
-  (nenhum deles tem uso real hoje, todos já confirmados sem execução há meses antes de 242).
-- IDs afetados: `qgsRciU2jkdmNh3H`, `weZ7s8aTdXQVkfuj`, `irS4TAWZ0ZZzsbrl`, `pu07Sszovj7sXw4S`,
-  `lCTcDAPimObpxeX0`, `Q9JCj7f7V0MaFxrD`, `AdUZR8s56rLNA1z6`, `WzZjKQXPSkrtkmva`,
-  `Xl26yPvOrzN2Ulc6`, `oaDvxiH71P2mDY5e`, `WCq0NtyPg6xPww7g`, `UZZC0f4Wq4AwN6n2`,
-  `auNxq03A6GvAjE63`, `oT9MVac5w2ssmkSs`, `RNXLKTWO1pdrTaUk`, `aSUXVowvgRGRLYC2`,
-  `fxKu7kI4u0FSDPpb`, `izHYeXjPSH0qNdZm`, `Re6Uqk2LS4qmWWjn`.
+**Achado da reconferência de 2026-08-15 (demanda 273) - RESOLVIDO nesta revalidação**: os 19
+workflows `[DESCONTINUADO]` que pareciam ter sumido nunca estiveram perdidos - a causa era a
+ferramenta usada naquela sessão (`search_workflows`/`get_workflow_details` via MCP), que só
+enxerga workflow **ativo**, nunca inativo, então buscar por ID ou por nome não encontrava nenhum
+dos 19 (todos `active:false`). `GET /workflows` direto na API REST traz todos, ativos e inativos,
+sem exceção - todos os 19 (mais o `206`, descontinuado agora na demanda 299) estão lá, intactos,
+com o conteúdo original preservado. Nada foi perdido, a demanda 242 estava certa desde o início.
+Não precisa mais reverificar isso - a lição fica registrada: pra listar workflow inativo, sempre
+usar a API REST direto (`GET /workflows`), nunca `search_workflows` do MCP.
 
-**Ver demanda 273** (`pm/demandas/273-investigar-workflows-descontinuados-sumidos.md`) — achado
-formal de investigação aberto, seguindo a regra de nunca deixar achado só documentado.
-
----
-
-**Revalidado por completo em 2026-07-29/30 (demanda 242)** — levantamento anterior (2026-07-10)
-catalogava só 8 workflows "ativos" e presumia que 2 workflows tinham sido removidos quando na
-verdade só estavam inativos. Esta versão é a fonte de verdade única e definitiva: levantada
-direto na API REST do n8n (`GET /workflows`, busca por `grafica`/`jsg` no nome em toda a conta,
-não só nos já catalogados), com evidência real por workflow (execução recente, settings, config
-da Z-API) — não por memória.
-
-**São 29 workflows relacionados à JS Gráfica no n8n hoje** (a conta n8n é compartilhada com ~10
-outros clientes da mesma infraestrutura — ver `reference_labonchain_infra` na memória do projeto).
-
-## ✅ Ativos de verdade (confirmado por execução real recente)
+## ✅ Ativos de verdade (`active:true`, confirmado via API REST em 2026-08-31)
 
 | Workflow | ID | Gatilho | Confirmação |
 |---|---|---|---|
-| `01 - JSGRAFICA \| LOG MSG RECEBIDAS` | `lcFEt1kbyqNfTS89` | Webhook (Z-API) | Execução real hoje, sucesso |
-| `03 - JSGRAFICA \| STATUS MSG` | `hg12ud3yo5mTu3XI` | Webhook (Z-API `deliveryCallbackUrl`) | Execução real hoje, sucesso |
-| `06 - JSGRAFICA \| PEDIDOS` | `WDOixH8LKyh0DDGq` | Webhook (chamado por 01/ATENDIMENTO_AI) | Execução real hoje, sucesso |
-| `12 - JSGRAFICA \| SYNC CONNECTED_PHONE` | `zfxfDZPQyHnOa4a1` | Schedule, 20 em 20min | Execução real hoje, sucesso |
-| `13 - JSGRAFICA \| LEMBRETE PIX PENDENTE` | `17o7HPeASEqoqqnZ` | Schedule, de hora em hora | Execução real hoje, sucesso |
-| `JSGRAFICA_ATENDIMENTO_AI` | `TCbbF5z5dvAOhWsS` | Webhook | Execução real hoje, sucesso — mas envio ao cliente travado por whitelist de 5 números (decisão de produto, não bug) |
-| `JS GRAFICA \| REPORT SHEETS` | `taL2rh7MO2qujYEc` | Schedule (30min + 6h/19h) | **Corrigido na 242** — ver achado 1 abaixo |
-| `JSGRAFICA \| REPORT SHEETS` | `KofIBAIFmZgPNCSc` | Schedule (30min + 19h) | **Corrigido na 242** — ver achado 1 abaixo |
+| `01 - JSGRAFICA \| LOG MSG RECEBIDAS` | `lcFEt1kbyqNfTS89` | Webhook (Z-API) | Roteia sessão real, inclusive pro `297` (ver linha abaixo) |
+| `03 - JSGRAFICA \| STATUS MSG` | `hg12ud3yo5mTu3XI` | Webhook (Z-API `deliveryCallbackUrl` + `messageStatusCallbackUrl`, mesmo endpoint) | Corrigido de vez na demanda 349 (30-31/08): agora trata `MessageStatusCallback`/`READ`/`READ_BY_ME`/`SENT`/`RECEIVED`, não só os tipos literais `DeliveryCallback`/`ReadCallback`. `read_at` nunca tinha funcionado antes, testado de ponta a ponta em produção |
+| `296 - JSGRAFICA \| CAMINHO C FERRAMENTAS (TESTE ISOLADO)` | `aO6iktSzcYtVZ6B5` | Sub-workflow (chamado pelo `297`) | Ferramentas de código puro do agente Caminho C (preço, Pix, criar pedido, cancelar, escalar) - sempre recalculam da fonte real. Nome ainda diz "TESTE ISOLADO" mas está em produção real desde 18/08 (demanda 299) |
+| `297 - JSGRAFICA \| CAMINHO C AGENTE (TESTE ISOLADO)` | `JeN7VMYMeQEJgd0b` | Webhook (chamado pelo `01`) | Agente de IA real (`@n8n/n8n-nodes-langchain.agent`) que responde ao cliente hoje, dentro da whitelist - substituiu o `206` no roteamento real desde 18/08 (demanda 299), decisão final de manter e desligar o `206` de vez tomada em 29/08. Nome ainda diz "TESTE ISOLADO", desatualizado, considerar renomear numa próxima demanda |
+| `12 - JSGRAFICA \| SYNC CONNECTED_PHONE` | `zfxfDZPQyHnOa4a1` | Schedule, 20 em 20min | Sem mudança |
+| `13 - JSGRAFICA \| LEMBRETE PIX PENDENTE` | `17o7HPeASEqoqqnZ` | Schedule, de hora em hora | Sem mudança |
+| `JSGRAFICA_ATENDIMENTO_AI` | `TCbbF5z5dvAOhWsS` | Webhook | Ativo no n8n, mas pausado pro cliente por decisão de produto (risco de banimento) - não confundir com o `297`, que é quem responde de verdade hoje |
+| `JS GRAFICA \| REPORT SHEETS` | `taL2rh7MO2qujYEc` | Schedule (30min + 6h/19h) | Sem mudança desde a correção da 242 |
+| `JSGRAFICA \| REPORT SHEETS` | `KofIBAIFmZgPNCSc` | Schedule (30min + 19h) | Sem mudança desde a correção da 242 |
+| `[DESCONTINUADO] 02 - JSGRAFICA \| LOG MSG ENVIADAS` | `e0hz8JrWRM4XTLEM` | Webhook | Continua tecnicamente `active:true`, mas sem chamador real (quem loga envio hoje é o app) - ver tabela de descontinuados abaixo |
 
 **Atenção**: `JS GRAFICA \| REPORT SHEETS` e `JSGRAFICA \| REPORT SHEETS` são DOIS workflows
 diferentes, não duplicata um do outro — nomes quase idênticos por acidente/histórico, mas com
@@ -63,9 +39,15 @@ sem querer.
 
 ## 🟡 Awaiting decisão (não é "ativo" nem "descontinuado")
 
+Vazio hoje - o único item que estava aqui (`206`) teve decisão final tomada pelo Edvam em
+2026-08-29 (desligar de vez, não usar mais como fallback) e foi formalmente descontinuado na
+demanda 299 (31/08). Ver tabela de descontinuados abaixo.
+
+## 🔵 Inativo por decisão de produto, mas NÃO renomeado `[DESCONTINUADO]`
+
 | Workflow | ID | Situação |
 |---|---|---|
-| `206 - JSGRAFICA \| AGENTE FASE B (TESTE ISOLADO)` | `M5WZ6zHAe625XyJm` | `inactive`, mas testado manualmente com o número do Edvam em 2026-07-29 (Fase B da automação de atendimento). Aguardando decisão do Edvam pra conectar no roteamento real — ver `pm/OBJETIVOS-MACRO.md`. **Não confundir com descontinuado.** |
+| `06 - JSGRAFICA \| PEDIDOS` | `WDOixH8LKyh0DDGq` | `active:false` de verdade (não é só "nós de envio desabilitados" como versões antigas deste mapa diziam - o workflow inteiro foi desativado na demanda 303, 27/08, depois de um bug real de dado em produção). Quem cria pedido de verdade hoje é o "Criar pedido" do Inbox no app Next.js. Não tem o prefixo `[DESCONTINUADO]` porque a lógica de negócio ainda pode servir de referência futura, mas não confundir com "ativo" |
 
 ## ⚪ Descontinuados formalmente (demanda 242, 2026-07-29) — prefixo `[DESCONTINUADO]` aplicado no nome
 
@@ -95,6 +77,7 @@ meses) antes de sinalizar — nenhum foi desativado ou apagado, só renomeado. B
 | `[DESCONTINUADO] JSGRAFICA_STATUS_WPP` | `fxKu7kI4u0FSDPpb` | Zero execuções já registradas — rascunho anterior ao `03` |
 | `[DESCONTINUADO] VALIDAÇÃO DE NUMEROS JS GRAFICA` | `izHYeXjPSH0qNdZm` | Script utilitário pontual (`manualTrigger` só), zero execuções já registradas |
 | `[DESCONTINUADO] JSGRAFICA_AGENT_DIZU_CONTEXTO_USER_` | `Re6Uqk2LS4qmWWjn` | O mais antigo de todos (dez/2025, anterior a qualquer workflow real da JS Gráfica em 04/03/2026) — nome mistura JSGRAFICA+DIZU (outro cliente do mesmo Edvam). Provável resíduo de template copiado, nunca deveria ter sido rotulado como workflow da JS Gráfica. Zero execuções já registradas |
+| `[DESCONTINUADO] 206 - JSGRAFICA \| AGENTE FASE B` | `M5WZ6zHAe625XyJm` | **Novo, demanda 299/31-08**: piloto do agente novo (`297`) rodou 18 a 27/08, decisão final do Edvam em 29/08 foi desligar o `206` de vez, não usar mais como fallback de reversão. Desativado (`active:false`) e renomeado nesta demanda, seguindo o mesmo padrão dos outros 19. Nada apagado, backup em `pm/backups/206-jsgrafica-agente-fase-b_pre-desligamento-definitivo_2026-08-31.json` |
 
 ## 🔧 Achado 1 (demanda 242) — os 2 REPORT SHEETS estavam quebrados, agora corrigidos
 
@@ -126,11 +109,13 @@ real, não confirmada... antes de usar esse workflow como base de qualquer coisa
 confirmar com o Edvam se ele de fato recebe essa mensagem às 19h") — a resposta é: **não estava
 recebendo, por bug real, corrigido agora**.
 
-## Achado 2 (2026-07-10, ainda válido) — o workflow de PEDIDOS (06) não envia mensagem via n8n
+## Achado 2 (2026-07-10, atualizado em 2026-08-31) — o workflow de PEDIDOS (06) não roda mais
 
-A lógica de negócio inteira existe no workflow, mas os nós que chamam a Z-API estão
-`disabled: true`. Não é bug — o fluxo real de pedido hoje é o "Criar pedido" do Inbox no app
-Next.js, não mais este workflow n8n. Só registrar pra não confundir.
+Descrição antiga (até a revalidação de 31/08): "a lógica de negócio inteira existe no workflow,
+mas os nós que chamam a Z-API estão `disabled: true`" - isso ficou desatualizado. Confirmado via
+API REST: o workflow inteiro está `active:false` desde a demanda 303 (27/08, bug real de dado em
+produção, ver `HISTORICO.md`), não é mais "só os nós de envio desligados". Fluxo real de pedido
+hoje é o "Criar pedido" do Inbox no app Next.js, não mais este workflow n8n.
 
 ## Achado 3 (2026-07-10, ainda válido) — padrão comum de envio de WhatsApp
 

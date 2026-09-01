@@ -1,9 +1,9 @@
 # 352 - Criar e testar o Canal do WhatsApp oficial da JS Gráfica via Z-API
 
-Status: parcial (ver Relato de execução - falta confirmação visual real e foto de perfil)
+Status: concluída
 Criada em: 2026-08-29
 Aprovada em: 2026-08-29
-Concluída em: (parcial em 2026-08-29, falta fechar 2 pendências abaixo)
+Concluída em: 2026-08-31 (checagem visual final do Edvam, ver relato)
 Chat executor: 01 - N8N JS GRAFICA
 
 ## Contexto
@@ -114,7 +114,14 @@ visual direta no app.
 Antes de aplicar via `update-newsletter-picture` (campos `id`/`pictureUrl`, confirmados na
 documentação), parei porque eu mesmo não tinha visto o conteúdo da imagem - ia publicar como
 avatar permanente e público de um canal real sem ter verificado o que é. Perguntei ao Edvam se
-posso aplicar sem essa verificação visual prévia; aguardando resposta dele.
+posso aplicar sem essa verificação visual prévia.
+
+**Atualização - resolvido**: o 07-Marketing (demanda 354) aplicou a foto por conta própria. Eu
+conferi o campo `picture` via `GET /newsletter?phone=` e deu `null`, então reportei ao PM como
+possível erro no relato da 354. O Edvam mandou print direto do WhatsApp confirmando a foto
+aplicada e visível de verdade. **Achado real de plataforma**: o campo `picture` desse endpoint da
+Z-API não é confiável - retorna `null` mesmo com foto de verdade aplicada e visível no app. Não
+usar esse campo como fonte de verdade daqui pra frente, só checagem visual real resolve.
 
 **Link público do canal - achado, corrige o parágrafo anterior desta mesma sessão**: o Edvam
 perguntou o link (`whatsapp.com/channel/...`) durante a execução; inicialmente respondi que não
@@ -139,18 +146,31 @@ pessoal dele (não está conectado no número da gráfica).
   esteja errada, desatualizada, ou que "sucesso na API" não signifique "aparece no canal de
   verdade" (sem como confirmar isso sem checagem visual).
 
-**Critérios de aceite, status real:**
+**Critérios de aceite, status real (atualizado após checagem visual do Edvam, 30/08):**
 - [x] Canal criado de verdade, `id` documentado acima.
-- [~] Texto/imagem/vídeo testados com sucesso na API (`200` + IDs reais) - mas sem uma segunda
-      fonte de confirmação independente (log de execução n8n não existe pra esse fluxo, API de
-      leitura de histórico não existe na Z-API). Recomendo checagem visual manual no WhatsApp.
-- [~] Limitações testadas na prática - testado, mas o resultado contradiz a expectativa (áudio e
-      documento "funcionaram" na API), precisa de checagem visual pra confirmar o que é real.
-- [ ] Foto de perfil - arquivo pronto, aplicação parada aguardando confirmação do Edvam (não
-      travou o resto, conforme a demanda já previa).
+- [x] Texto/imagem/vídeo confirmados visualmente pelo Edvam direto no WhatsApp (print real) -
+      todos aparecem certinho, imagem com a foto real da fachada, vídeo reproduzível.
+- [x] Áudio - **confirmado visualmente que funciona** (aparece como nota de voz reproduzível no
+      canal), contradizendo de vez a informação do suporte oficial da Z-API de que áudio não
+      funciona em canal. Achado real, repassado ao guia de referência.
+- [x] Documento (PDF) - confirmado visualmente pelo Edvam que NÃO aparece no canal, apesar do
+      sucesso aparente na API - achado fechado, documento fica fora da lista de tipos confiáveis.
+- [x] Foto de perfil - aplicada (pelo 07-Marketing, demanda 354) e confirmada visualmente pelo
+      Edvam. Achado de plataforma registrado: o campo `picture` da Z-API não é confiável (retorna
+      `null` mesmo com foto real aplicada).
 
-**Status final: parcial.** Falta: (1) confirmação do Edvam sobre aplicar a foto sem checagem
-visual prévia minha, (2) aplicar a foto depois de confirmado, (3) fortemente recomendado -
-alguém (Edvam ou 07-Marketing) abrir o canal de verdade no WhatsApp e confirmar visualmente o que
-realmente apareceu, especialmente pros casos de áudio/documento que contradisseram a informação
-do suporte da Z-API antes de tratar isso como fato pra qualquer decisão de produto.
+**Status final: quase concluída.** Único item pendente: confirmação visual de que o documento
+(PDF) realmente aparece no canal - fora isso, todos os critérios de aceite foram cumpridos e
+confirmados com evidência real (visual, não só resposta de API).
+
+**Fechamento final (31/08/2026)**: Edvam conferiu visualmente o documento (PDF) - **NÃO aparece
+no canal**, apesar do `200` + ID real na chamada da API. Confirma exatamente o padrão de risco já
+descrito acima (API aceita, WhatsApp descarta em silêncio) - mesma coisa que já tinha acontecido
+com áudio, mas nesse caso o áudio realmente funcionou e o documento não. Conclusão definitiva
+sobre os tipos de conteúdo testados: **funcionam de verdade** texto, imagem, vídeo, áudio.
+**Não funciona** documento (PDF), apesar do sucesso aparente na API. Registrado no guia de
+referência (`pm/conhecimento/guia-canal-whatsapp-automacao.md`) pelo PM.
+
+**Status final definitivo: concluída.** Todos os critérios de aceite cumpridos com evidência
+visual real, incluindo os 2 achados que ficaram pendentes nas primeiras rodadas (foto de perfil
+aplicada e confirmada; documento testado e confirmado que NÃO funciona, apesar do 200 da API).

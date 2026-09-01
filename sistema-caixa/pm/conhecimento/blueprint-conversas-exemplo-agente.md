@@ -81,10 +81,10 @@ reclamação registrada:
 
 | Cliente | Por quê |
 |---|---|
-| Maria da Conceição Silva | Sempre pede o mesmo serviço simples, nunca gerou confusão |
-| Otto Silva | Mesmo perfil, pedido direto, sem complicação |
-| Jociane Araújo | Mesmo perfil, já respondeu bem a perguntas do tipo "cor ou preto e branco?" |
-| Lidiane Oliveira (opcional, 4º nome) | Mesmo perfil, adicionado numa revisão mais recente |
+| CLIENTE-054 | Sempre pede o mesmo serviço simples, nunca gerou confusão |
+| CLIENTE-042 | Mesmo perfil, pedido direto, sem complicação |
+| CLIENTE-096 | Mesmo perfil, já respondeu bem a perguntas do tipo "cor ou preto e branco?" |
+| CLIENTE-034 (opcional, 4º nome) | Mesmo perfil, adicionado numa revisão mais recente |
 
 Depois que esse grupo acumular pelo menos 10 pedidos feitos pelo agente, se pelo menos 8 em cada
 10 forem aprovados por você/Gabi sem precisar editar nada, libera pra incluir mais gente. Se
@@ -119,7 +119,7 @@ descrever nada (seção acima). Quando é documento/PDF, o comportamento real da
 nunca perguntar o que é. Reage com um agradecimento curto ou já vem com o preço direto.
 
 ```
-🔵 REAL (Carmem Lúcia)
+🔵 REAL (CLIENTE-032)
   [manda foto de uma conta, sem escrever nada]
 
 🟡 SIMULADO
@@ -172,7 +172,7 @@ nunca perguntar o que é. Reage com um agradecimento curto ou já vem com o pre�
 │ 🤖 Gerado automaticamente, revise antes      │
 │    de aprovar                                 │
 │                                                │
-│ Carmem Lúcia, 558186508876                    │
+│ CLIENTE-032                    │
 │ IMPRESSÃO 2ª VIA CONTA                        │
 │ R$ 2,20 · Pix                                 │
 │                                                │
@@ -257,7 +257,7 @@ Currículo aparece com muita frequência nos 340 clientes reais lidos (demanda 2
 sempre como pedido de **montagem/edição**, não impressão pura.
 
 ```
-🔵 REAL (Jamilly)
+🔵 REAL (CLIENTE-082)
   Bom dia
 🔵 REAL
   Quanto é mesmo pra criar um currículo ?
@@ -268,7 +268,7 @@ sempre como pedido de **montagem/edição**, não impressão pura.
   Em PDF
 
 🔵 REAL
-  Oi, Jamilly! Seu currículo já está produção, assim que estiver pronto enviaremos para sua
+  Oi, CLIENTE-082! Seu currículo já está produção, assim que estiver pronto enviaremos para sua
   correão antes de gerar o pdf, valor 5,00
 ```
 
@@ -277,7 +277,7 @@ montar o currículo sozinho. É um serviço que envolve dado pessoal e redação
 arquivo pronto (mesmo princípio já documentado pra qualquer coleta de dado pessoal).
 
 **Nota da demanda 277**: esta conversa é um exemplo real de sessão que começa por TEXTO PURO
-(Jamilly nunca manda mídia até depois da escalação). Até a 277, o agente não reagia a isso porque
+(CLIENTE-082 nunca manda mídia até depois da escalação). Até a 277, o agente não reagia a isso porque
 o gatilho só disparava pra mídia. Com a expansão da 277, esta é exatamente a conversa que passa a
 disparar o agente direto: o texto sinaliza "criar currículo", cai no mesmo gatilho de Serviço Alto
 Toque que a mídia já usa, e escala do mesmo jeito.
@@ -335,7 +335,7 @@ padrão real é mandar direto o código Pix, sem cravar o número em português.
 🔵 REAL (cliente)
   Bom dia
 🔵 REAL
-  Manuela Moreira
+  CLIENTE-144
 🔵 REAL
   Pode imprimir só a primeira folha
 
@@ -345,7 +345,7 @@ padrão real é mandar direto o código Pix, sem cravar o número em português.
 
 **(b) Produto sob encomenda, o agente NÃO inventa um valor, manda o Pix direto:**
 ```
-🔵 REAL (Rafaela)
+🔵 REAL (CLIENTE-145)
   Bom dia!
 🔵 REAL
   Gostaria de 20 unidades dessa imagem no tamanho 2,5 x 2,5 cm no papel adesivo
@@ -481,10 +481,10 @@ Sessão nova, sem nenhuma mídia. Quando o texto já nomeia produto/quantidade c
 segue direto pra proposta, o mesmo padrão que documento óbvio já usa pra mídia.
 
 ```
-🔵 REAL (Maria Clara)
+🔵 REAL (CLIENTE-092)
   Boa tarde.
 🔵 REAL
-  Maria Clara Gonçalves de Andrade
+  CLIENTE-092
 🔵 REAL
   Quanto é o preço de 30 xerox
 🔵 REAL
@@ -511,17 +511,17 @@ fecha um produto específico, o agente pergunta 1 coisa objetiva, igual já faz 
 antes de qualquer lista.
 
 ```
-🔵 REAL (Débora Borges)
+🔵 REAL (CLIENTE-146)
   Olá! Vim pelo site e preciso de um orçamento.
 🔵 REAL
-  Débora Borges
+  CLIENTE-146
 🔵 REAL
   Ola boa tarde
 🔵 REAL
   Vocês fazem panfletos?
 
 🔵 REAL
-  Oi Débora, boa tarde! Que bom que veio pelo site. Me diz o que você precisa pra eu te ajudar
+  Oi CLIENTE-146, boa tarde! Que bom que veio pelo site. Me diz o que você precisa pra eu te ajudar
   com o orçamento. 😊
 
 🔵 REAL
@@ -564,13 +564,13 @@ de texto).
 
 ## Exemplo 11: Contexto de conversa recente evita repetir pergunta já feita (novo, demanda 291)
 
-Cliente recorrente, José Roberto Silva (`558191414184`, lote 06 da demanda 256), documentado como
+Cliente recorrente, CLIENTE-061 (lote 06 da demanda 256), documentado como
 um dos clientes mais engajados do mês, várias visitas com produtos diferentes (P&B A4, papel
 foto, plastificação, xerox). Numa das visitas reais, ele perguntou sobre banner sem fechar o
 pedido:
 
 ```
-🔵 REAL (José Roberto, 09/07)
+🔵 REAL (CLIENTE-061, 09/07)
   este vou verificar o valor e tamanho, é um banner, não sei se vocês trabalham, quando chegar ai
   conversamos
 
@@ -582,7 +582,7 @@ A conversa fecha sem resposta do cliente (achado real: mensagem sem resposta cap
 prova de mau atendimento, é limite de captura, ver Parte 2). Semanas depois, numa sessão nova:
 
 ```
-🟡 SIMULADO (José Roberto)
+🟡 SIMULADO (CLIENTE-061)
   Lembra do banner que perguntei? Fecha esse tamanho mesmo
 
 ⚙️ SISTEMA: o agente busca as últimas mensagens reais desse telefone (contexto de conversa
@@ -606,7 +606,7 @@ igual, é aplicada em toda fala nova do agente, não só quando há algo pra cor
 
 ## Exemplo 12: Régua de correção, o que manter e o que corrigir (novo, demanda 291)
 
-Reaproveitando a própria citação real do Exemplo 3 (Jamilly, currículo), a resposta real da
+Reaproveitando a própria citação real do Exemplo 3 (CLIENTE-082, currículo), a resposta real da
 equipe tem um erro de digitação genuíno: "sua **correão** antes de gerar o pdf" (queria dizer
 "correção"). Se o agente algum dia gerar uma mensagem nova inspirada nesse padrão de resposta
 (currículo em produção, aviso de revisão antes do PDF final), a régua de correção decide o que
@@ -614,7 +614,7 @@ sobrevive e o que não:
 
 ```
 🔵 REAL (equipe, citação original, Exemplo 3)
-  Oi, Jamilly! Seu currículo já está produção, assim que estiver pronto enviaremos para sua
+  Oi, CLIENTE-082! Seu currículo já está produção, assim que estiver pronto enviaremos para sua
   correão antes de gerar o pdf, valor 5,00
 
 🟡 SIMULADO (mesma estrutura, régua de correção aplicada)
@@ -649,9 +649,9 @@ sem tentar coletar os dados sozinho.
 ```
 
 **Achado da demanda 277, Regra 4 do manual (234)**: essa cautela não é hipotética, é o que a
-própria equipe humana já faz hoje. 2 casos reais: `558198324841` (Iraneide Peixoto) só seguiu com
+própria equipe humana já faz hoje. 2 casos reais: `CLIENTE-090` só seguiu com
 o currículo depois de colar um template inteiro de campos ("Nome Completo: Endereço: Telefone:
-[...]") pro cliente preencher, nunca tentando adivinhar; `558189032016` (Luciana, agendamento de
+[...]") pro cliente preencher, nunca tentando adivinhar; `CLIENTE-057` (agendamento de
 identidade) a equipe pediu explicitamente "CPF e senha do Gov.br da pessoa" antes de agendar, e
 recusou avançar sem isso. Confirma: dado sensível trocado em texto puro no WhatsApp já é prática
 da equipe, o agente não está inventando um risco novo ao escalar isso, só reconhecendo o mesmo
@@ -757,9 +757,9 @@ Este blueprint passou por 8 rodadas de revisão antes de chegar na versão final
 ## Checkpoint da demanda 254 (preservado, ainda válido)
 
 **(a) Autoria das citações da Regra 9**: reconferido nos 40 casos qualitativos originais da 234.
-Das 4 citações do manual, **2 são reais e de autoria da EQUIPE**: `558187613253` (Otto Silva) e
-`558187734290` (Rodrigo Isidoro). **As outras 2 estão erradas** (`558188167372` sem citação real;
-`558196517857` nunca fez parte da subamostra lida), reportado ao PM, correção fora do escopo
+Das 4 citações do manual, **2 são reais e de autoria da EQUIPE**: `CLIENTE-042` e
+`CLIENTE-044`. **As outras 2 estão erradas** (`CLIENTE-049` sem citação real;
+`CLIENTE-078` nunca fez parte da subamostra lida), reportado ao PM, correção fora do escopo
 desta demanda mexer no arquivo da 234.
 
 **(b) Precedente real de resposta a cancelamento/escalação por texto**: na época da 254, busca
@@ -782,11 +782,11 @@ Exemplo 9 e 10:
 - **Regra 2 (documento óbvio → direto) e Regra 3 (ambíguo → pergunta 1 coisa) não são específicas
   de mídia**: as citações originais da Regra 3 no manual (234) já incluem casos onde a equipe
   pergunta "colorido ou preto e branco?" e "qual a forma de pagamento?" em sequência, o mesmo
-  padrão vale quando o pedido chegou por texto (caso Maria Clara, Exemplo 9; caso Débora Borges,
+  padrão vale quando o pedido chegou por texto (caso CLIENTE-092, Exemplo 9; caso CLIENTE-146,
   Exemplo 10) ou por imagem (Exemplo 2). A régua de "pergunta 1 coisa objetiva de cada vez, nunca
   lista de cara" já era comportamento geral da equipe, não amarrado ao tipo de mídia.
 - **Regra 4 (dado pessoal → template estruturado, nunca adivinhação) tem evidência real
-  específica de texto puro**: `558198324841` (Iraneide, currículo) e `558189032016` (Luciana,
+  específica de texto puro**: `CLIENTE-090` (currículo) e `CLIENTE-057` (
   agendamento com CPF/senha Gov.br), ambos citados no manual, são conversas que começam e
   continuam inteiramente por texto. Essa é exatamente a Regra 4 que motivou a ressalva original da
   demanda 243 (esperar antes de automatizar texto), mas o achado confirma que a régua de escalar
@@ -839,7 +839,7 @@ o 01-N8N tenha uma demanda de implementação sem ambiguidade:
    `/curr[ií]culo|digita[çc][ãa]o|prova|antecedente|foto composta|composi[çc][ãa]o/i`, cobre
    currículo, digitação, prova, antecedente, mas **não cobre "conta gov"**, mesmo a Regra 4 do
    manual (234) citando exatamente um caso de agendamento com CPF/senha de Gov.br
-   (`558189032016`, Luciana) como o tipo de risco que motiva a escalação. Recomendação: adicionar
+   (`CLIENTE-057`) como o tipo de risco que motiva a escalação. Recomendação: adicionar
    termos ao regex, por exemplo `gov\.?br|conta gov|senha do gov`, antes de conectar texto em
    produção, sem isso, um cliente que escreve "preciso de ajuda com conta gov" pode não ser
    pego pelo gatilho de alto toque, dependendo do que o Gemini extrair como
@@ -939,7 +939,7 @@ medir antes/depois já demonstrada nas demandas 108/284.
 classificadas/escaladas como Serviço Alto Toque (currículo, digitação, antecedentes, conta gov,
 dado pessoal em geral) **nunca entram no contexto livre reenviado pro Gemini**. Não é resumida,
 não é mascarada parcialmente, fica de fora por completo. Justificativa: essas mensagens podem
-conter CPF, endereço, senha de Gov.br (achado real da Regra 4, casos Iraneide/Luciana), e o
+conter CPF, endereço, senha de Gov.br (achado real da Regra 4, casos CLIENTE-090/CLIENTE-057), e o
 contexto de conversa recente é justamente pra gerar texto de baixo risco (saudação, transição,
 continuidade de pedido), não pra reenviar dado sensível de uma interação anterior pra uma API
 externa numa mensagem não relacionada. Detecção de "isso é sensível" reaproveita o MESMO gatilho
@@ -1027,36 +1027,36 @@ citação exata recorrente, não só um padrão geral).
 
 | # | Mensagem do agente | Classificação | Evidência |
 |---|---|---|---|
-| 1 | "Obrigado! 😉" (Ex.1) | EVIDÊNCIA DIRETA | Citação exata recorrente, ex. 558171188980 e 558181692717, lote 00 da demanda 256 |
+| 1 | "Obrigado! 😉" (Ex.1) | EVIDÊNCIA DIRETA | Citação exata recorrente, ex. CLIENTE-004 e CLIENTE-147, lote 00 da demanda 256 |
 | 2 | "Já te digo o valor" (Ex.1) | PADRÃO GERAL | Regra 1: confirmação objetiva antes de preço (achado 162) |
 | 3 | "2ª via de conta, R$ 2,20. Confirma?" (Ex.1) | PADRÃO GERAL | Regra 2: estrutura produto+preço direto |
 | 4 | Texto do Pix completo (Ex.1) | EVIDÊNCIA DIRETA | Literal: `montarTrechoPix()`, `lib/pedidos.ts` |
-| 5 | "Obrigado! 😊" (Ex.1, depois do Pix) | EVIDÊNCIA DIRETA | Otto Silva / Rodrigo Isidoro (Regra 9) |
+| 5 | "Obrigado! 😊" (Ex.1, depois do Pix) | EVIDÊNCIA DIRETA | CLIENTE-042 / CLIENTE-044 (Regra 9) |
 | 6 | "✅ Recebemos seu pagamento!..." (Ex.1) | EVIDÊNCIA DIRETA | Literal: `montarMensagemPagamentoConfirmado()` |
 | 7 | "O que você precisa fazer com essa imagem?" (Ex.2) | HIPÓTESE | Sem citação exata, grounded no achado geral de que a equipe sempre pergunta antes de decidir |
 | 8 | Lista de 6 categorias + Outro, como fallback (Ex.2) | REGRA DE NEGÓCIO | Decisão do Edvam (demanda 272, 2026-08-14), mapeada 1:1 contra os 110 produtos ativos reais; substitui a lista de 9 grupos da 256 (nunca implementada de fato) e a lista de 15 nomes técnicos que estava em produção no workflow `206` (achado da 208); mecanismo técnico de lista testado na 206; títulos ajustados ao limite real de lista (demanda 260) |
 | 9 | "Anotado 😊" / "Já te chamo com o valor" (Ex.2) | HIPÓTESE | Frase de transição sem citação exata |
-| 10 | "Quanto é mesmo pra criar um currículo?" / resposta da equipe (Ex.3) | EVIDÊNCIA DIRETA | Jamilly, `558197037824`, lote 09 da demanda 256 |
-| 11 | "ok" / "Chamando a equipe pra montar certinho" (Ex.3) | HIPÓTESE | "ok" é citação real de padrão curto (ex. 558196053836, lote 08); a transição de escalação em si não tem citação exata. Desde a demanda 277, esta mesma linha também é o que dispara quando a sessão começa por TEXTO puro sinalizando currículo (Jamilly nunca manda mídia nesta conversa), reforçado por mais 2 citações reais da Regra 4 do manual 234 (Iraneide, Luciana, ver "Outros casos rápidos") |
+| 10 | "Quanto é mesmo pra criar um currículo?" / resposta da equipe (Ex.3) | EVIDÊNCIA DIRETA | CLIENTE-082, `CLIENTE-082`, lote 09 da demanda 256 |
+| 11 | "ok" / "Chamando a equipe pra montar certinho" (Ex.3) | HIPÓTESE | "ok" é citação real de padrão curto (ex. CLIENTE-148, lote 08); a transição de escalação em si não tem citação exata. Desde a demanda 277, esta mesma linha também é o que dispara quando a sessão começa por TEXTO puro sinalizando currículo (CLIENTE-082 nunca manda mídia nesta conversa), reforçado por mais 2 citações reais da Regra 4 do manual 234 (CLIENTE-090, CLIENTE-057, ver "Outros casos rápidos") |
 | 12 | "3 coloridas + 1 P&B, isso mesmo?" (Ex.4) | PADRÃO GERAL | Regra 1, corrigido na demanda 254; abertura "Recebemos tudo" removida na 260 por não ter precedente |
-| 13 | "Valor impressão 1,20." (Ex.5a) | EVIDÊNCIA DIRETA | Manuela Moreira, `558186050094`, lote 03 da demanda 256 |
-| 14 | "recebido, assim que sair do corte avisaremos..." (Ex.5b) | EVIDÊNCIA DIRETA | Rafaela Alburqueque, `558188787312`, lote 06 da demanda 256 |
+| 13 | "Valor impressão 1,20." (Ex.5a) | EVIDÊNCIA DIRETA | CLIENTE-144, `CLIENTE-144`, lote 03 da demanda 256 |
+| 14 | "recebido, assim que sair do corte avisaremos..." (Ex.5b) | EVIDÊNCIA DIRETA | CLIENTE-145, `CLIENTE-145`, lote 06 da demanda 256 |
 | 15 | "Sem problemas, cancelado! 😊" (Ex.6, não pago) | REGRA DE NEGÓCIO | Decisão do Edvam, demanda 259; texto revisado na 260 pra tirar travessão |
 | 16 | "Você já pagou esse. Vou pedir pra equipe processar a devolução" (Ex.6, pago) | REGRA DE NEGÓCIO | Decisão do Edvam, demanda 259 |
 | 17 | "Esse já foi entregue. Vou verificar e te aviso" (Ex.6, entregue) | REGRA DE NEGÓCIO | Decisão do Edvam, demanda 259 |
-| 18 | "Opa, vi o comprovante!" / sequência completa (Ex.7) | HIPÓTESE | Cenário construído pra ilustrar a Regra 5, não reconstrução; "Opa" é interjeição real (ex. 558183413115, lote 01) |
-| 19 | "É xerox" aceito sem correção (xerox ambíguo) | PADRÃO GERAL | Maria Clara, `558198673450`, lote 10 da demanda 256, princípio de não forçar terminologia |
+| 18 | "Opa, vi o comprovante!" / sequência completa (Ex.7) | HIPÓTESE | Cenário construído pra ilustrar a Regra 5, não reconstrução; "Opa" é interjeição real (ex. CLIENTE-149, lote 01) |
+| 19 | "É xerox" aceito sem correção (xerox ambíguo) | PADRÃO GERAL | CLIENTE-092, `CLIENTE-092`, lote 10 da demanda 256, princípio de não forçar terminologia |
 | 20 | "Chamando a equipe" (dado pessoal genérico) | HIPÓTESE | Transição sem precedente; abertura "Recebemos sua imagem" removida na 260 |
 | 21 | "Combinado! Acerta na retirada 😊" (retirada) | HIPÓTESE | Regra 6 documenta o padrão do cliente, não uma fala equivalente da equipe |
 | 22 | "Chamando a equipe pra ouvir certinho" (áudio) | PADRÃO GERAL | Seção 1 da base (255): áudio tem conversão baixíssima (11%), quase nunca resolvido por texto; abertura "Recebemos seu áudio" removida na 260 |
 | 23 | "Chamando a equipe" (padrão Dizu, Ex.8) | REGRA DE NEGÓCIO | Detecção reincorporada em 2026-08-14 (revertendo remoção da 259); comportamento de "nunca afirmar número errado" é achado real da demanda 246, mas a decisão de reincorporar como permanente é regra de negócio nova desta sessão |
-| 24 | "a xerox p/b 0,45 colorida 1,20" (Ex.9, texto objetivo) | EVIDÊNCIA DIRETA | Maria Clara, `558198673450`, lote 10 da demanda 256, mesma citação já usada em "Outros casos rápidos" (xerox ambíguo), aqui reenquadrada como texto puro objetivo |
-| 25 | "Oi Débora, boa tarde!... Me diz o que você precisa pra eu te ajudar com o orçamento. 😊" (Ex.10, texto ambíguo) | EVIDÊNCIA DIRETA | Débora Borges, `558184640012`, lote 01 da demanda 256 |
+| 24 | "a xerox p/b 0,45 colorida 1,20" (Ex.9, texto objetivo) | EVIDÊNCIA DIRETA | CLIENTE-092, `CLIENTE-092`, lote 10 da demanda 256, mesma citação já usada em "Outros casos rápidos" (xerox ambíguo), aqui reenquadrada como texto puro objetivo |
+| 25 | "Oi CLIENTE-146, boa tarde!... Me diz o que você precisa pra eu te ajudar com o orçamento. 😊" (Ex.10, texto ambíguo) | EVIDÊNCIA DIRETA | CLIENTE-146, `CLIENTE-146`, lote 01 da demanda 256 |
 | 26 | Lista de 6 categorias + Outro, reaproveitada no Ex.10 | REGRA DE NEGÓCIO | Mesma lista/decisão do item 8 (demanda 272), reaproveitada sem alteração pro caminho de texto |
-| 27 | "Bom dia vai ser que tipo de papel" (Ex.11, mensagem antiga que vira contexto) | EVIDÊNCIA DIRETA | José Roberto Silva, `558191414184`, lote 06 da demanda 256 |
+| 27 | "Bom dia vai ser que tipo de papel" (Ex.11, mensagem antiga que vira contexto) | EVIDÊNCIA DIRETA | CLIENTE-061, `CLIENTE-061`, lote 06 da demanda 256 |
 | 28 | "Lembra do banner que perguntei? Fecha esse tamanho mesmo" (Ex.11, cliente) | HIPÓTESE | Fala nova do cliente, ilustrativa, não citação exata; o produto/contexto (banner, mesmo telefone) é real, a frase específica é simulada |
 | 29 | "Achei aqui, ainda não tinha fechado o tamanho do banner, confirma de novo pra mim?" (Ex.11, agente) | HIPÓTESE | Transição sem precedente exato, mas segue a régua de correção/voz (curto, sem travessão) e demonstra o mecanismo de contexto, não é reconstrução de conversa real |
-| 30 | "Oi! Seu currículo já tá em produção, mandamos pra revisão antes de gerar o pdf, valor 5,00" (Ex.12, régua de correção aplicada) | HIPÓTESE (derivada de EVIDÊNCIA DIRETA) | Reescrita da citação real do item 10 (Jamilly), aplicando a régua de correção desta demanda; a estrutura/conteúdo vem de citação real, o texto final é reescrito, não literal, por isso não é EVIDÊNCIA DIRETA pura |
+| 30 | "Oi! Seu currículo já tá em produção, mandamos pra revisão antes de gerar o pdf, valor 5,00" (Ex.12, régua de correção aplicada) | HIPÓTESE (derivada de EVIDÊNCIA DIRETA) | Reescrita da citação real do item 10 (CLIENTE-082), aplicando a régua de correção desta demanda; a estrutura/conteúdo vem de citação real, o texto final é reescrito, não literal, por isso não é EVIDÊNCIA DIRETA pura |
 
 **Leitura honesta desta tabela**: recontada linha por linha nesta revisão (achado: a contagem
 anterior dizia "6 evidência direta", a contagem real de linhas 1-23 já era 7, corrigido aqui, não
@@ -1119,13 +1119,13 @@ confiança da decisão 2 (taxa de aprovação sem edição).
   texto a um cancelamento espontâneo, por isso a política de cancelamento (Exemplo 6) é regra de
   negócio nova, não reconstrução, marcada como tal na tabela de verificação.
 - **2 das 4 citações da Regra 9 no manual da 234 estão erradas (achado da demanda 254, ainda não
-  corrigido no arquivo da 234)**: `558188167372` não tem "obg"/"Obrigado" na conversa real
-  capturada, e `558196517857` nunca fez parte da subamostra qualitativa lida, reportado ao PM.
+  corrigido no arquivo da 234)**: `CLIENTE-049` não tem "obg"/"Obrigado" na conversa real
+  capturada, e `CLIENTE-078` nunca fez parte da subamostra qualitativa lida, reportado ao PM.
 - **Regex de "Serviço Alto Toque?" não cobre "conta gov" (achado da demanda 277)**: o gatilho de
   escalação de dado pessoal, hoje testado com
   `/curr[ií]culo|digita[çc][ãa]o|prova|antecedente|foto composta|composi[çc][ãa]o/i`, não pega
   menção a "conta gov"/"gov.br", mesmo essa sendo exatamente o tipo de caso citado na Regra 4 do
-  manual (`558189032016`, Luciana, senha do Gov.br). Não é um problema criado pela 277 (o regex já
+  manual (`CLIENTE-057`, senha do Gov.br). Não é um problema criado pela 277 (o regex já
   existia assim pra mídia), mas expandir pra texto aumenta a chance real desse termo aparecer
   cru na mensagem do cliente (texto nomeia serviço com mais frequência que imagem). Recomendação
   registrada na especificação técnica acima, correção não implementada aqui.

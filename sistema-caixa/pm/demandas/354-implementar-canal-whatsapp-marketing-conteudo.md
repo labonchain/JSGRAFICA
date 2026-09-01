@@ -143,6 +143,29 @@ confirmada pelo Edvam.**
   diverge sobre o nome do campo do canal entre as páginas). Marcado explicitamente no código como
   não confirmado.
 
+### Investigação extra (30/08, achado do 01-N8N, depois confirmado como falso alarme pelo Edvam)
+01-N8N reportou `picture: null` na metadata real do canal, questionando se a foto realmente tinha
+sido aplicada (ou se era só sucesso aparente na UI). Investiguei de forma independente, sem confiar
+nem no relato anterior nem no achado do 01-N8N: baixei a URL de `preview` da metadata direto (não é
+print antigo, é chamada real feita agora) — voltou uma imagem JPEG real, 200 OK, e é o selo certo
+(conferido visualmente). Confirmação final: o Edvam mandou print real do WhatsApp confirmando a
+foto no ar. **Não é bug de fluxo** (a chamada de update sempre funcionou de verdade) — é só que o
+campo `picture` da resposta de metadata nunca é preenchido nesta conta (mais uma divergência real
+da Z-API, quem tem a URL de verdade é sempre `preview`).
+
+**Achado colateral real, corrigido**: como minha própria UI (`ConfiguracoesCanal.tsx` e o preview
+"Como vai ficar" em `TelaMarketingConteudo.tsx`) só olhava `metadata.picture`, ela NUNCA mostrava a
+foto aplicada de verdade (sempre caía no ícone de fallback), mesmo com a foto real no ar — bug
+próprio, sem relação com o disparo da chamada. Corrigido: os 2 lugares agora usam
+`picture ?? preview`. `MetadataCanal` (`lib/zapi.ts`) documentado com o achado. Deploy novo
+confirmado no ar depois da correção.
+
+**Conferência extra pedida pelo 01-N8N (mesmo ceticismo, nome/descrição)**: metadata real (mesma
+chamada da investigação acima, feita agora, não reaproveitando resposta antiga) confirma
+`name`/`description` batendo exatamente com o valor real aplicado (`JS Gráfica` / `Gráfica rápida
+no Ibura, Recife-PE...`) — diferente de `picture`, esses 2 campos SÃO preenchidos de verdade na
+metadata, sem o mesmo problema. Sem achado novo aqui.
+
 ### Correção de processo (achado do Edvam depois do primeiro relato)
 Esqueci o deploy (`npx vercel --prod --yes`) antes do primeiro relato — só tinha testado local/via
 API, o Edvam não via nada em produção. Corrigido: deploy rodado, confirmado com rotas

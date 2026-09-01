@@ -66,7 +66,9 @@ const DOW = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 export function TelaMarketingConteudo() {
   const [posts, setPosts] = useState<PostStatus[]>([]);
   const [postsCanal, setPostsCanal] = useState<CanalPost[]>([]);
-  const [metadataCanal, setMetadataCanal] = useState<{ name?: string; picture?: string } | null>(null);
+  // `picture` nunca é preenchido pela Z-API nesta conta (achado real, 354,
+  // 30/08) — `preview` é quem tem a URL de verdade, sempre usar `picture ?? preview`.
+  const [metadataCanal, setMetadataCanal] = useState<{ name?: string; picture?: string | null; preview?: string | null } | null>(null);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
   const [canal, setCanal] = useState<Canal>("whatsapp");
@@ -108,7 +110,7 @@ export function TelaMarketingConteudo() {
   useEffect(() => {
     if (canal !== "canal" || metadataCanal !== null) return;
     fetch("/api/marketing/canal/config").then(r => r.json()).then(d => {
-      if (d?.metadata) setMetadataCanal({ name: d.metadata.name, picture: d.metadata.picture });
+      if (d?.metadata) setMetadataCanal({ name: d.metadata.name, picture: d.metadata.picture, preview: d.metadata.preview });
     }).catch(() => {});
   }, [canal, metadataCanal]);
 
@@ -402,7 +404,7 @@ export function TelaMarketingConteudo() {
         </>
         )
       ) : canal === "canal" ? (
-        <ComoVaiFicarCanal posts={postsCanalOrdenados} fotoCanal={metadataCanal?.picture} nomeCanal={metadataCanal?.name} onAbrirPost={setCanalPostSelecionado} />
+        <ComoVaiFicarCanal posts={postsCanalOrdenados} fotoCanal={metadataCanal?.picture ?? metadataCanal?.preview} nomeCanal={metadataCanal?.name} onAbrirPost={setCanalPostSelecionado} />
       ) : (
         <ComoVaiFicarWhatsApp posts={postsOrdenados} onAbrirPost={setPostSelecionado} />
       )}

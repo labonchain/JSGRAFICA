@@ -36,6 +36,39 @@ onde a equipe cria, agenda, aprova e acompanha posts de WhatsApp Status e Instag
 do Supabase fora do que já existe (propõe pro 02-DADOS), o resto do `caixa-js-grafica` fora de
 Marketing/Conteúdo (isso é 03-APP).
 
+## 🆕 Atualização de estado (2026-08-31), leia antes de confiar nas seções antigas abaixo
+
+Muita coisa mudou desde 19/08. As seções de onboarding mais abaixo (mockup, Instagram, achado de
+segurança) continuam corretas, mas incompletas. Resumo do que se acumulou no seu domínio:
+
+- **Manual de marca (demanda 339, concluída)**: você construiu o primeiro manual de marca real
+  da JS Gráfica via squad opensquad (`opensquad/_opensquad/core/`), aprovado pelo Edvam. Logo
+  (selo da lâmpada, conceito "ideia + solução rápida", NÃO redesenhado, é decisão histórica do
+  Edvam preservada), paleta (Azul Sistema `#2C5F8A`), tipografia (Space Grotesk/Inter/IBM Plex
+  Mono). Exportado em `opensquad/exports/manual-de-marca-339/`.
+- **Canal do WhatsApp, 3º destino real em Marketing → Conteúdo (demandas 352-364, concluídas)**:
+  canal "JS Gráfica" criado e testado (texto/imagem/vídeo/áudio funcionam, documento não), post
+  real + agendamento real (distinto de "aprovar e publicar agora") + robô de disparo (30/30min).
+  Fala direto com a Z-API, **não usa `labon_status_queue`** (isso é só do Status). Guia técnico
+  completo: `pm/conhecimento/guia-canal-whatsapp-automacao.md`.
+- **Você é dono do pipeline de conteúdo via GPT** que roda em paralelo, escrevendo/commitando
+  direto no repositório `labonchain/JSGRAFICA` (público, também hospeda o código do sistema em
+  `sistema-caixa/`, não mexer nessas pastas). Estrutura: `conteudos/AAAA/MM/BLOCO-NNN.../`
+  (`briefings/`, `copy/`, `artes/`, `qa/`). Processo documentado no próprio repo:
+  `docs/LEIA_PRIMEIRO.md`, `docs/operacao/ESPECIFICACAO_TECNICA_OPERACAO_CANAL_JS_GRAFICA.md`,
+  `docs/direcao/DIRECAO_ARTE_E_CONTEUDO_CANAL_JS_GRAFICA_v1.md`. **Regra do próprio pipeline:
+  nenhum chat marca `BRIEFING_APROVADO` sozinho, só o Edvam.**
+- **Achado real sobre qualidade visual (demanda 361, em iteração)**: peça feita só em HTML/CSS/SVG
+  tem teto real ("cartaz/etiqueta gráfica limpa"), nunca fica com nível de foto de produto
+  profissional. Solução: workflow n8n (364, do 01-N8N) gera imagem realista via **Gemini
+  gratuito**, você compõe tipografia/logo por cima. Webhook:
+  `https://n8n.labonchain.xyz/webhook/jsgraficageracaoimagem` (POST, body
+  `{prompt, sizes, bloco, peca, file_prefix}`, resposta com `imagens[].base64`). Só `1:1` gera de
+  verdade hoje, `9:16` sempre volta quadrado, recomponha pro vertical na composição.
+- **🔴 Achado grave, ainda sob investigação (demanda 363)**: Status postado via automação (não
+  o Canal, o Status antigo) só alcança contatos "sincronizados" pela Z-API (~1/3 da base real).
+  Se você reabrir esse assunto, comece lendo o estado mais recente da 363 no `STATUS.md`.
+
 ## Como você age
 
 - Igual ao resto do time: investigação com dado real antes de implementar, checkpoint com o

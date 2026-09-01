@@ -8,6 +8,7 @@ export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import {
   listarPostsCanal, criarPostCanal, editarPostCanal, cancelarPostCanal, aprovarEPublicarPostCanal,
+  agendarPostCanal,
   type TipoCanalPost,
 } from '@/lib/canalWhatsapp';
 
@@ -54,15 +55,19 @@ export async function POST(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
-    const { id, acao, ...campos } = body as { id?: number; acao?: 'aprovar' | 'editar' | 'cancelar'; [k: string]: unknown };
+    const { id, acao, ...campos } = body as { id?: number; acao?: 'aprovar' | 'agendar' | 'editar' | 'cancelar'; [k: string]: unknown };
 
     if (!id) return NextResponse.json({ error: 'id obrigatório' }, { status: 400 });
-    if (!acao || !['aprovar', 'editar', 'cancelar'].includes(acao)) {
+    if (!acao || !['aprovar', 'agendar', 'editar', 'cancelar'].includes(acao)) {
       return NextResponse.json({ error: 'acao inválida' }, { status: 400 });
     }
 
     if (acao === 'aprovar') {
       const post = await aprovarEPublicarPostCanal(id);
+      return NextResponse.json({ post });
+    }
+    if (acao === 'agendar') {
+      const post = await agendarPostCanal(id);
       return NextResponse.json({ post });
     }
     if (acao === 'cancelar') {

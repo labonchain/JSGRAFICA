@@ -1,11 +1,11 @@
 # 299 - Caminho C, passo 5 e 6: conectar o agente novo no roteamento real, piloto de 4 dias, decidir o corte
 
-Status: aprovada (decisão final tomada, execução do desligamento despachada)
+Status: concluída
 Criada em: 2026-08-16
 Aprovada em: 2026-08-18
 Decisão final do Edvam em: 2026-08-29 - desligar o `206` definitivamente, não vai mais voltar a
 ser usado como fallback. Execução do desligamento despachada ao 01-N8N na mesma data.
-Concluída em: -
+Concluída em: 2026-08-31
 Chat executor: 01 - N8N JS GRAFICA
 
 ## Contexto
@@ -112,3 +112,25 @@ sequência original).
   execução do n8n (workflows `01` e `297`) e as tabelas do Supabase (`jsgrafica_memoria_conversas`,
   log de mensagens com a coluna `enviado_por` da demanda 294), não depende de nenhum monitoramento
   automático rodando durante esse tempo.
+
+**Desligamento definitivo do `206`, execução em 2026-08-31 (decisão do Edvam em 2026-08-29):**
+- Backup do estado atual salvo antes de qualquer mudança:
+  `pm/backups/206-jsgrafica-agente-fase-b_pre-desligamento-definitivo_2026-08-31.json`.
+- Confirmado antes de desativar: `206` continua sem nenhuma conexão de entrada no workflow `01`
+  (buscado direto da API, nenhuma referência a `HTTP 206`/`206` nas conexões) - isolado desde a
+  demanda original, nada mudou nesse ponto.
+- Desativado de verdade via API REST do n8n (`POST /workflows/{id}/deactivate`), confirmado
+  `active: false`.
+- Renomeado pro padrão `[DESCONTINUADO]` já usado pelos outros 19 workflows retirados (achado
+  fora do escopo, corrigido na hora: o nome ainda dizia "conectado, whitelist", desatualizado
+  desde que a demanda original desconectou o tráfego em 18/08) - agora
+  `[DESCONTINUADO] 206 - JSGRAFICA | AGENTE FASE B`.
+- Reconfirmado de forma independente (nova busca no n8n, não só o retorno das chamadas) -
+  `active: false`, nome novo confirmado.
+- Nada apagado - `206` continua existindo intacto no n8n, só desativado e renomeado, mesmo padrão
+  de segurança usado nos outros descontinuados (tecnicamente ainda seria possível reverter
+  reativando e reconectando, mas deixou de ser o caminho de reversão oficial do time - essa é a
+  decisão registrada aqui).
+
+**Status final: concluída.** Piloto rodado, decisão tomada pelo Edvam, desligamento definitivo
+executado e confirmado.

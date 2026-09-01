@@ -1,0 +1,2240 @@
+[
+  {
+    "id": "prod-107",
+    "nome": "CONTA GOV",
+    "categoria": "Consulta Online",
+    "descricao": null,
+    "preco": 15,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-052",
+    "nome": "ACESSO / ENVIO DOCUMENTOS",
+    "categoria": "Consulta Online",
+    "descricao": null,
+    "preco": 1.2,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-043",
+    "nome": "SCANNER",
+    "categoria": "Consulta Online",
+    "descricao": null,
+    "preco": 0.7,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-049",
+    "nome": "CADASTRO E B.O.",
+    "categoria": "Consulta Online",
+    "descricao": null,
+    "preco": 7,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-002",
+    "nome": "CONSULTA CPF (SCPC, SERASA, CARTÓRIOS, CHEQUES)",
+    "categoria": "Consulta Online",
+    "descricao": "Consulta de CPF em bases de dados como SCPC, Serasa, cartórios e cheques, conforme solicitação do cliente.",
+    "preco": 25,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": true,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix"
+    ],
+    "opcoes_variaveis": "Sob consulta",
+    "dados_necessarios": {
+      "campos": [
+        "cpf"
+      ]
+    }
+  },
+  {
+    "id": "prod-050",
+    "nome": "CADASTRO / MATRÍCULA ESCOLAR",
+    "categoria": "Consulta Online",
+    "descricao": null,
+    "preco": 10,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-108",
+    "nome": "CONSULTA SCPC ",
+    "categoria": "Consulta Online",
+    "descricao": null,
+    "preco": 10,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-042",
+    "nome": "AGENDAMENTO / CURRÍCULO / ANTECEDENTES / DIGITAÇÃO",
+    "categoria": "Consulta Online",
+    "descricao": null,
+    "preco": 5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-003",
+    "nome": "CONSULTA SERASA",
+    "categoria": "Consulta Online",
+    "descricao": "Consulta de CPF ou CNPJ diretamente na base do Serasa, conforme solicitação do cliente.",
+    "preco": 18,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": true,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix"
+    ],
+    "opcoes_variaveis": "Sob consulta",
+    "dados_necessarios": {
+      "campos": [
+        "cpf"
+      ]
+    }
+  },
+  {
+    "id": "prod-074",
+    "nome": "Recebimento de empréstimo ",
+    "categoria": "Empréstimo ",
+    "descricao": null,
+    "preco": 1,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-037",
+    "nome": "ENCADERNAÇÃO ATÉ 30 FOLHAS",
+    "categoria": "Encadernacao",
+    "descricao": "Encadernação com espiral para documentos de até 30 folhas.",
+    "preco": 4.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "10 a 200 folhas",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-041",
+    "nome": "ENCADERNAÇÃO DE 51 À 100 FOLHAS",
+    "categoria": "Encadernacao",
+    "descricao": "Encadernação com espiral para documentos de 51 a 100 folhas.",
+    "preco": 6.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "10 a 200 folhas",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-040",
+    "nome": "ENCADERNAÇÃO DE 31 À 50 FOLHAS",
+    "categoria": "Encadernacao",
+    "descricao": "Encadernação com espiral para documentos de 31 a 50 folhas.",
+    "preco": 5.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "10 a 200 folhas",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-039",
+    "nome": "ENCADERNAÇÃO DE 201 À 300 FOLHAS",
+    "categoria": "Encadernacao",
+    "descricao": "Encadernação com espiral para documentos de 201 a 300 folhas.",
+    "preco": 8.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "10 a 200 folhas",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-038",
+    "nome": "ENCADERNAÇÃO DE 101 À 200 FOLHAS",
+    "categoria": "Encadernacao",
+    "descricao": "Encadernação com espiral para documentos de 101 a 200 folhas.",
+    "preco": 7.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "10 a 200 folhas",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-069",
+    "nome": "CANETA CIS 0,7mm",
+    "categoria": "Escritório",
+    "descricao": null,
+    "preco": 5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-072",
+    "nome": "PAPEL PAUTADO",
+    "categoria": "Escritório",
+    "descricao": null,
+    "preco": 0.3,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-070",
+    "nome": "CARTEIRA PARA RG",
+    "categoria": "Escritório",
+    "descricao": null,
+    "preco": 2,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-073",
+    "nome": "PAPEL OFÍCIO FOLHA",
+    "categoria": "Escritório",
+    "descricao": null,
+    "preco": 0.15,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-065",
+    "nome": "CANETA COMUM",
+    "categoria": "Escritório",
+    "descricao": null,
+    "preco": 2,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-028",
+    "nome": "LÁPIS COM BORRACHA",
+    "categoria": "Escritório",
+    "descricao": "Impressão de arquivos em adesivo leitoso conforme metragem solicitada.",
+    "preco": 1,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Sob consulta",
+    "requer_consulta": true,
+    "requer_orcamento": true,
+    "formas_pagamento": [
+      "pix"
+    ],
+    "opcoes_variaveis": "Tamanhos personalizados",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-071",
+    "nome": "PASTA P/DOCUMENTOS TRANSPARENTE",
+    "categoria": "Escritório",
+    "descricao": null,
+    "preco": 5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-044",
+    "nome": "ENVELOPE A4",
+    "categoria": "Escritório",
+    "descricao": null,
+    "preco": 1,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-075",
+    "nome": "Vendas não registradas",
+    "categoria": "Fechamento caixa",
+    "descricao": null,
+    "preco": null,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-011",
+    "nome": "IMPRESSÃO PAPEL ADESIVO A4 192G (sem recorte)",
+    "categoria": "Impressão papel adesivo",
+    "descricao": "Impressão de arquivos no formato A4 em papel adesivo.",
+    "preco": 6.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-056",
+    "nome": "IMPRESSÃO PAPEL ADESIVO A4 192G (com recorte)",
+    "categoria": "Impressão papel adesivo",
+    "descricao": null,
+    "preco": 9,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-057",
+    "nome": "IMPRESSÃO PAPEL ADESIVO A3 192G (com recorte)",
+    "categoria": "Impressão papel adesivo",
+    "descricao": null,
+    "preco": 11.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-010",
+    "nome": "IMPRESSÃO PAPEL ADESIVO A3 192G (sem recorte)",
+    "categoria": "Impressão papel adesivo",
+    "descricao": "Impressão de arquivos no formato A3 em papel adesivo.",
+    "preco": 9,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-013",
+    "nome": "IMPRESSÃO PAPEL CARTÃO A4 180G (só frente)",
+    "categoria": "Impressão papel cartao",
+    "descricao": "Impressão de arquivos no formato A4 em papel cartão.",
+    "preco": 5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-012",
+    "nome": "IMPRESSÃO PAPEL CARTÃO A3 180G (só frente)",
+    "categoria": "Impressão papel cartao",
+    "descricao": "Impressão de arquivos no formato A3 em papel cartão.",
+    "preco": 7,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-055",
+    "nome": "IMPRESSÃO PAPEL CARTÃO A4 180G (frente e verso)",
+    "categoria": "Impressão papel cartao",
+    "descricao": null,
+    "preco": 6.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-053",
+    "nome": "IMPRESSÃO PAPEL CARTÃO A3 180G (frente e verso)",
+    "categoria": "Impressão papel cartao",
+    "descricao": null,
+    "preco": 8.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-104",
+    "nome": "PANFLETO 10X14 100 un (frente e verso)",
+    "categoria": "Impressão papel couche",
+    "descricao": null,
+    "preco": 60,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-015",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A4 300G (frene e verso)",
+    "categoria": "Impressão papel couche",
+    "descricao": "Impressão de arquivos no formato A3 em papel couchê 300g.",
+    "preco": 9,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-019",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A4 90G (só frente)",
+    "categoria": "Impressão papel couche",
+    "descricao": "Impressão de arquivos no formato A4 em papel couchê 90g.",
+    "preco": 3.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-017",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A4 250G (só frente)",
+    "categoria": "Impressão papel couche",
+    "descricao": "Impressão de arquivos no formato A4 em papel couchê 250g.",
+    "preco": 7,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": true,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-058",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A4 90G (frente e verso)",
+    "categoria": "Impressão papel couche",
+    "descricao": null,
+    "preco": 5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-102",
+    "nome": "CARTÃO DE VISITA 100 UN (só frente)",
+    "categoria": "Impressão papel couche",
+    "descricao": null,
+    "preco": 45,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-101",
+    "nome": "PANFLETO 10X14 100 un (só frente)",
+    "categoria": "Impressão papel couche",
+    "descricao": null,
+    "preco": 50,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-103",
+    "nome": "CARTÃO DE VISITA 100 UN (frente e verso)",
+    "categoria": "Impressão papel couche",
+    "descricao": null,
+    "preco": 55,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-063",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A3 250G (frente e verso)",
+    "categoria": "Impressão papel couche",
+    "descricao": null,
+    "preco": 11,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-016",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A3 90G (só frente)",
+    "categoria": "Impressão papel couche",
+    "descricao": "Impressão de arquivos no formato A3 em papel couchê 90g.",
+    "preco": 5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-059",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A3 300G (só fretne)",
+    "categoria": "Impressão papel couche",
+    "descricao": null,
+    "preco": 10,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-062",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A3 250G (só frente)",
+    "categoria": "Impressão papel couche",
+    "descricao": null,
+    "preco": 9.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-014",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A3 90G (frente e verso)",
+    "categoria": "Impressão papel couche",
+    "descricao": "Impressão de arquivos no formato A3 em papel couchê.",
+    "preco": 6.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Sob consulta",
+    "requer_consulta": true,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Cor / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-060",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A3 300G (fretne e verso)",
+    "categoria": "Impressão papel couche",
+    "descricao": null,
+    "preco": 11.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-018",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A4 300G (só fretne)",
+    "categoria": "Impressão papel couche",
+    "descricao": "Impressão de arquivos no formato A4 em papel couchê 300g.",
+    "preco": 7.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-061",
+    "nome": "IMPRESSÃO PAPEL COUCHÊ A4 250G (frente e verso)",
+    "categoria": "Impressão papel couche",
+    "descricao": null,
+    "preco": 8.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-023",
+    "nome": "FOTO 15X20",
+    "categoria": "Impressão papel foto",
+    "descricao": "Impressão de fotografia no tamanho 15x20 cm em papel fotográfico.",
+    "preco": 4.5,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": true,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Sob consulta",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-021",
+    "nome": "FOTO 10X15",
+    "categoria": "Impressão papel foto",
+    "descricao": "Impressão de fotografia no tamanho 10x15 cm em papel fotográfico.",
+    "preco": 2.5,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": true,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Sob consulta",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-064",
+    "nome": "IMPRESSÃO PAPEL FOTO A3 230g ",
+    "categoria": "Impressão papel foto",
+    "descricao": null,
+    "preco": 9,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-025",
+    "nome": "FOTO 3X4 (6 FOTOS)",
+    "categoria": "Impressão papel foto",
+    "descricao": "Produção e impressão de fotos 3x4 padronizadas para documentos oficiais.",
+    "preco": 7,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "10 minutos",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Rosto neutro / Fundo branco",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-020",
+    "nome": "IMPRESSÃO PAPEL FOTO A4 230g ",
+    "categoria": "Impressão papel foto",
+    "descricao": "Impressão de imagens no formato A4 em papel fotográfico.",
+    "preco": 6.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-022",
+    "nome": "FOTO POLAROID 7X10",
+    "categoria": "Impressão papel foto",
+    "descricao": "Impressão de fotografia no tamanho 7x10 cm em estilo polaroid.",
+    "preco": 2,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": true,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Sob consulta",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-024",
+    "nome": "FOTO 20X29",
+    "categoria": "Impressão papel foto",
+    "descricao": "Impressão de fotografia no tamanho 20x29 cm em papel fotográfico.",
+    "preco": 9,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": true,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Sob consulta",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-051",
+    "nome": "DIGITAÇÃO DE PROVAS",
+    "categoria": "Impressão papel oficio",
+    "descricao": null,
+    "preco": 5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-007",
+    "nome": "IMPRESSÃO COLORIDA OFÍCIO A4 (jato tinta)",
+    "categoria": "Impressão papel oficio",
+    "descricao": "Impressão colorida de documentos no formato A4 em papel ofício.",
+    "preco": 2.2,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-006",
+    "nome": "IMPRESSÃO COLORIDA OFÍCIO A3",
+    "categoria": "Impressão papel oficio",
+    "descricao": "Impressão colorida de arquivos digitais no formato A3 em papel ofício.",
+    "preco": 3.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Até 1 hora",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Cor / Tipo papel",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-110",
+    "nome": "IMPRESSÃO PRETO E BRANCO FRENTE E VERSO",
+    "categoria": "Impressão papel oficio",
+    "descricao": null,
+    "preco": 2,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-001",
+    "nome": "IMPRESSÃO 2ª VIA CONTA",
+    "categoria": "Impressão papel oficio",
+    "descricao": "Consulta online de segunda via de contas de água, luz, internet e telefone.",
+    "preco": 2.2,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Na hora",
+    "requer_consulta": true,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix"
+    ],
+    "opcoes_variaveis": "Tipo de conta / CPF",
+    "dados_necessarios": {
+      "campos": [
+        "tipo_conta",
+        "cpf",
+        "nome_titular"
+      ]
+    }
+  },
+  {
+    "id": "prod-111",
+    "nome": "IMPRESSÃO COLORIDA FRENTE E VERSO",
+    "categoria": "Impressão papel oficio",
+    "descricao": null,
+    "preco": 3,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-009",
+    "nome": "IMPRESSÃO P&B A4",
+    "categoria": "Impressão papel oficio",
+    "descricao": "Impressão ou cópia em preto e branco no formato A4 em papel comum.",
+    "preco": 1.2,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Entrega imediata",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Qtd páginas / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-008",
+    "nome": "IMPRESSÃO COLORIDA OFÍCIO A4 (laser)",
+    "categoria": "Impressão papel oficio",
+    "descricao": "Impressão de documentos no formato A3 em papel ofício.",
+    "preco": 3,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-112",
+    "nome": "CRIAR ARTE",
+    "categoria": "Personalizados",
+    "descricao": null,
+    "preco": 15,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-046",
+    "nome": "TOPO DE BOLO (sem recorte)",
+    "categoria": "Personalizados",
+    "descricao": null,
+    "preco": 10,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-047",
+    "nome": "IMA COM CALENDÁRIO",
+    "categoria": "Personalizados",
+    "descricao": null,
+    "preco": 1,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-045",
+    "nome": "RIFA",
+    "categoria": "Personalizados",
+    "descricao": null,
+    "preco": 1,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-054",
+    "nome": "TOPO DE BOLO (com recorte)",
+    "categoria": "Personalizados",
+    "descricao": null,
+    "preco": 12,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-030",
+    "nome": "PLASTIFICAÇÃO A3",
+    "categoria": "Plastificação",
+    "descricao": "Plastificação de documentos no formato A3 para proteção e durabilidade.",
+    "preco": 11,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Tamanhos A4 / A5 / Ofício",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-033",
+    "nome": "PLASTIFICAÇÃO PEQUENA",
+    "categoria": "Plastificação",
+    "descricao": "Plastificação de documentos em tamanho pequeno conforme padrão da gráfica.",
+    "preco": 4,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Tamanhos A4 / A5 / Ofício",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-032",
+    "nome": "PLASTIFICAÇÃO MÉDIA",
+    "categoria": "Plastificação",
+    "descricao": "Plastificação de documentos em tamanho médio conforme padrão da gráfica.",
+    "preco": 5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Tamanhos A4 / A5 / Ofício",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-031",
+    "nome": "PLASTIFICAÇÃO A4",
+    "categoria": "Plastificação",
+    "descricao": "Plastificação de documentos no formato A4 para proteção e durabilidade.",
+    "preco": 7,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "Tamanhos A4 / A5 / Ofício",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-079",
+    "nome": "RECARGA CELULAR 40,00",
+    "categoria": "Recarga celular",
+    "descricao": null,
+    "preco": 40,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-004",
+    "nome": "RECARGA CELULAR 20,00",
+    "categoria": "Recarga celular",
+    "descricao": "Realização de recarga de crédito para telefone celular conforme operadora e valor informados.",
+    "preco": 20,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": true,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix"
+    ],
+    "opcoes_variaveis": "Sob consulta",
+    "dados_necessarios": {
+      "campos": [
+        "operadora",
+        "numero_celular",
+        "valor_recarga"
+      ]
+    }
+  },
+  {
+    "id": "prod-080",
+    "nome": "RECARGA CELULAR 50,00",
+    "categoria": "Recarga celular",
+    "descricao": null,
+    "preco": 50,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-081",
+    "nome": "RECARGA CELULAR 60,00",
+    "categoria": "Recarga celular",
+    "descricao": null,
+    "preco": 60,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-076",
+    "nome": "RECARGA CELULAR 25,00",
+    "categoria": "Recarga celular",
+    "descricao": null,
+    "preco": 25,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-077",
+    "nome": "RECARGA CELULAR 30,00",
+    "categoria": "Recarga celular",
+    "descricao": null,
+    "preco": 30,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-082",
+    "nome": "RECARGA CELULAR 100,00",
+    "categoria": "Recarga celular",
+    "descricao": null,
+    "preco": 100,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-078",
+    "nome": "RECARGA CELULAR 35,00",
+    "categoria": "Recarga celular",
+    "descricao": null,
+    "preco": 35,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-097",
+    "nome": "RECARGA VEM 47,50",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 47.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-091",
+    "nome": "RECARGA VEM 32,50",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 32.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-105",
+    "nome": "RECARGA VEM ",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 70,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-094",
+    "nome": "RECARGA VEM 40,00",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 40,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-088",
+    "nome": "RECARGA VEM 25,00",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 25,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-098",
+    "nome": "RECARGA VEM 50,00",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 50,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-092",
+    "nome": "RECARGA VEM 35,00",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 35,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-087",
+    "nome": "RECARGA VEM 22,50",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 22.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-085",
+    "nome": "RECARGA VEM 17,50",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 17.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-099",
+    "nome": "RECARGA VEM 102,50",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 102.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-095",
+    "nome": "RECARGA VEM 42,50",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 42.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-086",
+    "nome": "RECARGA VEM 20,0",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 20,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-100",
+    "nome": "RECARGA VEM 52,50",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 52.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-005",
+    "nome": "RECARGA VEM 10,00",
+    "categoria": "Recarga vem",
+    "descricao": "Recarga de cartão VEM conforme valor solicitado pelo cliente.",
+    "preco": 10,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": true,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix"
+    ],
+    "opcoes_variaveis": "Sob consulta",
+    "dados_necessarios": {
+      "campos": [
+        "numero_cartao_vem",
+        "valor_recarga"
+      ]
+    }
+  },
+  {
+    "id": "prod-084",
+    "nome": "RECARGA VEM 15,00",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 15,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-090",
+    "nome": "RECARGA VEM 30,00",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 30,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-109",
+    "nome": "RECARGA DE VEM",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 100,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-096",
+    "nome": "RECARGA VEM 45,00",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 45,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-083",
+    "nome": "RECARGA VEM 12,50",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 12.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-089",
+    "nome": "RECARGA VEM 27,50",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 27.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-106",
+    "nome": "RECARGA VEM",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 12,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-093",
+    "nome": "RECARGA VEM 37,50",
+    "categoria": "Recarga vem",
+    "descricao": null,
+    "preco": 37.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-026",
+    "nome": "BANNER OU LONA ATÉ 50X1,00 ",
+    "categoria": "Serviço terceirizado",
+    "descricao": "Impressão de banner em lona conforme metragem solicitada.",
+    "preco": 35,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Sob consulta",
+    "requer_consulta": true,
+    "requer_orcamento": true,
+    "formas_pagamento": [
+      "pix"
+    ],
+    "opcoes_variaveis": "Tamanhos personalizados, Lona fosca / Brilhante",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-027",
+    "nome": "ADESIVO LEITOSO / TRANSPARENTE C/RECORTE ATE 50X1,0 M²",
+    "categoria": "Serviço terceirizado",
+    "descricao": "Impressão de adesivos conforme metragem solicitada.",
+    "preco": 45,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Sob consulta",
+    "requer_consulta": true,
+    "requer_orcamento": true,
+    "formas_pagamento": [
+      "pix"
+    ],
+    "opcoes_variaveis": "Tamanhos personalizados",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-066",
+    "nome": "ADESIVO LEITOSO / TRANSPARENTE S/RECORTE ACIMA 50X1,0 M²",
+    "categoria": "Serviço terceirizado",
+    "descricao": null,
+    "preco": 70,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-048",
+    "nome": "CANECA / CAMISA",
+    "categoria": "Serviço terceirizado",
+    "descricao": null,
+    "preco": 40,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-067",
+    "nome": "ADESIVO LEITOSO / TRANSPARENTE C/RECORTE ACIMA 50X1,0 M²",
+    "categoria": "Serviço terceirizado",
+    "descricao": null,
+    "preco": 85,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-029",
+    "nome": "ADESIVO LEITOSO / TRANSPARENTE S/RECORTE ATÉ 50X1,0 M²",
+    "categoria": "Serviço terceirizado",
+    "descricao": "Impressão de arquivos em adesivo transparente conforme metragem solicitada.",
+    "preco": 40,
+    "ativo": true,
+    "exibir_menu": false,
+    "prazo_entrega": "Sob consulta",
+    "requer_consulta": true,
+    "requer_orcamento": true,
+    "formas_pagamento": [
+      "pix"
+    ],
+    "opcoes_variaveis": "Tamanhos personalizados",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-068",
+    "nome": "BANNER OU LONA ACIMA 50X1,00 ",
+    "categoria": "Serviço terceirizado",
+    "descricao": null,
+    "preco": 65,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": null,
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": null,
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-034",
+    "nome": "XEROX A3",
+    "categoria": "xerox",
+    "descricao": "Cópia de documentos no formato A3.",
+    "preco": 2.5,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-036",
+    "nome": "XEROX PRETO E BRANCO A4",
+    "categoria": "xerox",
+    "descricao": "Cópia em preto e branco de documentos no formato A4.",
+    "preco": 0.45,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  },
+  {
+    "id": "prod-035",
+    "nome": "XEROX COLORIDA A4",
+    "categoria": "xerox",
+    "descricao": "Cópia colorida de documentos no formato A4.",
+    "preco": 1.2,
+    "ativo": true,
+    "exibir_menu": true,
+    "prazo_entrega": "Definido pela equipe após pagamento",
+    "requer_consulta": false,
+    "requer_orcamento": false,
+    "formas_pagamento": [
+      "pix",
+      "dinheiro",
+      "cartao",
+      "na_retirada"
+    ],
+    "opcoes_variaveis": "P&B / Colorida, A4 / A3, Frente / Frente e verso",
+    "dados_necessarios": null
+  }
+]

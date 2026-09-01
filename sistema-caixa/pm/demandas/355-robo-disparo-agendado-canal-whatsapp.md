@@ -1,9 +1,9 @@
 # 355 - Robô de disparo agendado do Canal do WhatsApp (a cada 30min)
 
-Status: aprovada
+Status: concluída
 Criada em: 2026-08-29
 Aprovada em: 2026-08-29 (pedido direto do Edvam, via 07-Marketing, formalizado pelo PM)
-Concluída em: (vazio até conclusão)
+Concluída em: 2026-08-31
 Chat executor: 01 - N8N JS GRAFICA
 
 ## Contexto
@@ -49,11 +49,14 @@ parte da 354, antes do teste de ponta a ponta. Coordenar com 07-Marketing os nom
 exatos antes de finalizar a query.
 
 ## Critérios de aceite
-- [ ] Workflow criado, rodando a cada 30min.
-- [ ] Post de teste agendado com `scheduled_at` no passado é publicado de verdade no canal,
-      confirmado por checagem visual (não só resposta HTTP 200, mesmo cuidado da 352).
-- [ ] Status/published_at/message_id atualizados corretamente após publicar.
-- [ ] Falha de envio não trava o post silenciosamente, fica visível de alguma forma.
+- [x] Workflow criado, rodando a cada 30min (ativo, confirmado de forma independente).
+- [x] Post de teste agendado com `scheduled_at` no passado publicado de verdade no canal -
+      `message_id` real confirmado E checagem visual do Edvam confirmando que apareceu certo.
+- [x] Status/published_at/message_id atualizados corretamente após publicar - confirmado com
+      `SELECT` real no Supabase, não só log de execução.
+- [~] Falha de envio não trava o post silenciosamente - mecanismo construído e funcional
+      (`Marcar Erro`), mas só pega falha síncrona real da API, não "aceitou mas falhou depois"
+      (mesma limitação de plataforma já vista na 352) - ver achado no relato.
 
 ## Referências
 `pm/demandas/354-implementar-canal-whatsapp-marketing-conteudo.md`,
@@ -61,4 +64,50 @@ exatos antes de finalizar a query.
 PENDENTE` (referência de padrão), `pm/conhecimento/guia-canal-whatsapp-automacao.md`.
 
 ## Relato de execução
-(preenchido pelo 01-N8N ao concluir)
+
+**Workflow novo criado**: `355 - JSGRAFICA | CANAL DISPARO AGENDADO` (`N6MNCiQvNUicwvHR`), mesmo
+padrão do `13 - LEMBRETE PIX PENDENTE` (trigger de tempo → GET config → GET registros elegíveis →
+montar envio → chamar Z-API → atualizar status). 7 nodes: `A cada 30min` (schedule), `GET Config`
+(`jsgrafica_agent_config`, `ativo=true`), `GET Posts Aprovados` (`jsgrafica_canal_posts`,
+`status=approved` e `scheduled_at` no passado), `Montar Envio` (Code - monta URL/corpo certo por
+`tipo`: `send-text`/`send-image`/`send-video`, endpoints reais confirmados na 352, não os nomes
+errados que a pesquisa original tinha), `Enviar Z-API Canal` (HTTP, `onError:
+continueErrorOutput`, 2 saídas), `Marcar Publicado` e `Marcar Erro` (Supabase update).
+
+**Testado de ponta a ponta antes de ativar** (inserção de post de teste real via SQL, já que
+ainda não existe ação "agendar" na UI do Admin - ver achado abaixo):
+- Caminho de sucesso: post de texto real publicado no canal de verdade (`messageId` real
+  `749DF6FEF0CCD5DA9731`), confirmado tanto no log de execução quanto com `SELECT` direto no
+  Supabase (`status=published`, `published_at`/`message_id` gravados certo).
+- Caminho de erro: testado com uma URL de imagem propositalmente inválida (domínio inexistente).
+  **Achado importante, mesma categoria da 352**: mesmo com URL completamente inválida, a Z-API
+  aceitou a chamada e devolveu sucesso (200 + ID real) - o branch de erro do workflow (`Marcar
+  Erro`) está construído e funcional, mas só pega falha de API de verdade (credencial errada,
+  rota malformada, rede fora), não pega "aceitou mas o WhatsApp não conseguiu processar o
+  conteúdo depois" (mesma limitação já documentada na 352 pro documento/PDF). Isso significa que
+  o critério de aceite "falha de envio não trava o post silenciosamente" é parcialmente
+  alcançável - dentro do que a própria Z-API deixa detectar de forma síncrona.
+- Testado via `execute_workflow` (precisou habilitar `availableInMCP:true` nas settings, mesmo
+  padrão que o `13` já usa, não é exclusivo desta demanda).
+- Ativado (`active:true`) e reconfirmado de forma independente depois.
+
+**Achado de dependência, não bloqueia, mas precisa de acompanhamento**: hoje NADA no Admin (app
+Next.js) cria post com `status='approved'` - a única ação existente é "aprovar" que já publica na
+hora (`aprovarEPublicarPostCanal`, `lib/canalWhatsapp.ts`, `status !== 'pending'` é rejeitado).
+Ou seja, este robô está pronto e funcional, mas fica "esperando" até o 07-Marketing implementar
+uma ação real de "agendar pra depois" que grave `status='approved'` com `scheduled_at` no futuro.
+Sem isso, o robô roda a cada 30min sem nunca encontrar nada pra fazer - não é bug, é a peça que
+falta do outro lado. Reportado ao PM pra decidir se vira demanda nova pro 07-Marketing.
+
+**Dados de teste**: 2 posts de teste ficaram na tabela real (`id=5` sucesso, `id=6` erro
+propositado), mesmo padrão já usado pelos testes da 354 (não apagados, ficam como registro
+histórico, ambos claramente marcados `created_by` com "teste" no nome).
+
+**Status final: concluída.** Workflow criado, testado nos 2 caminhos com dado real, ativado e
+confirmado.
+
+**Fechamento final (31/08/2026)**: as 2 pendências abertas no relato original foram resolvidas
+por fora desta janela - (1) o Edvam confirmou visualmente que o post de teste (`id=5`) apareceu
+certo no canal; (2) a demanda 362 (07-Marketing, concluída) criou a ação real de "agendar" no
+Admin, que agora alimenta `jsgrafica_canal_posts` com `status='approved'` de verdade, dando
+trabalho real pro robô. Sem pendência restante.

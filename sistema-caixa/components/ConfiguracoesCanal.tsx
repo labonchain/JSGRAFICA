@@ -13,7 +13,16 @@ import { supabase } from "@/lib/supabase";
 interface MetadataCanal {
   name?: string;
   description?: string;
-  picture?: string;
+  picture?: string | null;
+  // Achado real (354, investigação de 30/08 depois do 01-N8N reportar
+  // `picture` null mesmo com foto aplicada de verdade): a Z-API/WhatsApp
+  // nunca preenche `picture` na resposta de metadata (testado, confirmado
+  // com foto real aplicada e visível no canal) — quem tem a URL real do
+  // avatar é `preview` (thumbnail, mas é a única fonte que funciona).
+  // Confirmado baixando a URL de `preview` direto: imagem real, é o selo
+  // certo. Não é bug da nossa chamada de update, é só um campo que a Z-API
+  // não popula nesta conta — usar sempre `picture ?? preview` pra exibir.
+  preview?: string | null;
   state?: string;
   role?: string;
 }
@@ -135,8 +144,8 @@ export function ConfiguracoesCanal() {
         <p className="text-[11px] font-bold uppercase tracking-wide text-gray-400 mb-3">Meu canal</p>
         <div className="flex gap-4">
           <div className="flex-shrink-0 text-center">
-            {metadata?.picture ? (
-              <img src={metadata.picture} alt="Foto do canal" className="w-18 h-18 rounded-full object-cover" />
+            {(metadata?.picture ?? metadata?.preview) ? (
+              <img src={metadata?.picture ?? metadata?.preview ?? undefined} alt="Foto do canal" className="w-18 h-18 rounded-full object-cover" />
             ) : (
               <div className="w-18 h-18 rounded-full bg-gray-100 flex items-center justify-center text-gray-300 text-2xl">📢</div>
             )}

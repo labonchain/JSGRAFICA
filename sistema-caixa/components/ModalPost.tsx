@@ -244,9 +244,12 @@ export function ModalPost({ post, canalPost, dataInicial, onFechar, onSalvo }: {
   }
 
   // Demanda 354: "aprovar" do Canal publica DE VERDADE na hora (chama a
-  // Z-API real, sem robô de agendamento ainda) — mesmo confirm de cuidado
-  // que cancelar, porque não tem volta depois de publicado.
-  async function executarAcaoCanal(acao: "editar" | "aprovar" | "cancelar") {
+  // Z-API real) — mesmo confirm de cuidado que cancelar, porque não tem
+  // volta depois de publicado. Demanda 362: "agendar" só marca o post pra
+  // publicação futura (o robô da 355 publica quando a hora chegar), sem
+  // chamar a Z-API agora — não precisa do mesmo confirm por ser reversível
+  // (dá pra editar ou cancelar antes da hora chegar).
+  async function executarAcaoCanal(acao: "editar" | "aprovar" | "agendar" | "cancelar") {
     if (!canalPost) return;
     if (acao === "cancelar" && !confirm("Cancelar este post? Ele sai da fila de publicação.")) return;
     if (acao === "aprovar" && !confirm("Publicar agora de verdade no Canal do WhatsApp? Não tem como desfazer depois.")) return;
@@ -430,7 +433,7 @@ export function ModalPost({ post, canalPost, dataInicial, onFechar, onSalvo }: {
               className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm disabled:bg-gray-50" />
           </div>
           {emModoCriacao && (
-            <p className="text-[11px] text-gray-400 mt-2">Sem robô de agendamento automático ainda: aprovar publica na hora, o horário aqui é só planejamento.</p>
+            <p className="text-[11px] text-gray-400 mt-2">Salve como rascunho primeiro. Depois, na tela do post, escolha "Aprovar e publicar agora" (chama o WhatsApp na hora) ou "Agendar" (só marca pra esse horário, o robô publica sozinho quando chegar a hora).</p>
           )}
         </div>
         )}
@@ -498,13 +501,19 @@ export function ModalPost({ post, canalPost, dataInicial, onFechar, onSalvo }: {
                 className="flex-1 border-2 border-blue-500 text-blue-700 rounded-lg py-2.5 text-sm font-bold hover:bg-blue-50 disabled:opacity-50">
                 {salvando === "editar" ? "Salvando..." : "Salvar edição"}
               </button>
-              {canalPost.status === "pending" && (
+            </div>
+            {canalPost.status === "pending" && (
+              <div className="flex gap-2.5">
+                <button onClick={() => executarAcaoCanal("agendar")} disabled={!!salvando}
+                  className="flex-1 border-2 border-indigo-500 text-indigo-700 rounded-lg py-2.5 text-sm font-bold hover:bg-indigo-50 disabled:opacity-50">
+                  {salvando === "agendar" ? "Agendando..." : "📅 Agendar pra esse horário"}
+                </button>
                 <button onClick={() => executarAcaoCanal("aprovar")} disabled={!!salvando}
                   className="flex-1 bg-blue-700 text-white rounded-lg py-2.5 text-sm font-bold hover:bg-blue-800 disabled:opacity-50">
-                  {salvando === "aprovar" ? "Publicando..." : "✓ Aprovar e publicar"}
+                  {salvando === "aprovar" ? "Publicando..." : "✓ Aprovar e publicar agora"}
                 </button>
-              )}
-            </div>
+              </div>
+            )}
             <button onClick={() => executarAcaoCanal("cancelar")} disabled={!!salvando} className="w-full text-xs text-gray-400 hover:text-red-500">
               🚫 Cancelar este post
             </button>
