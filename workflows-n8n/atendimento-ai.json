@@ -1,0 +1,1119 @@
+{
+  "updatedAt": "2026-08-17T19:39:40.845Z",
+  "createdAt": "2026-03-04T22:58:42.582Z",
+  "id": "TCbbF5z5dvAOhWsS",
+  "name": "JSGRAFICA_ATENDIMENTO_AI",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "jsgraficaatendimentoai",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "6ae746f0-a682-46a1-9231-c208d29e96a4",
+      "name": "01 – Webhook Entrada",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        -4416,
+        -1248
+      ],
+      "webhookId": "6b229735-34b7-43eb-b041-fc8d82c41329"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Processado' }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "5856c317-a25d-448a-b305-42afeb5e93f6",
+      "name": "10 – Responder Webhook1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -3184,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst dadosOriginais = items[0] ? items[0].json : null;\nconst respostaAgent = items[1] ? items[1].json : null;\n\nif (!dadosOriginais || !respostaAgent) {\n  return [];\n}\n\nconst phone = dadosOriginais.phone;\nconst message = respostaAgent.message || respostaAgent.output;\nconst config = dadosOriginais._config || {};\n\nif (!phone || !message) {\n  throw new Error('Faltam dados: phone=' + phone + ', message=' + (message ? 'OK' : 'VAZIO'));\n}\n\nif (!config.zapi_url || !config.client_token) {\n  throw new Error('Configuracao incompleta no _config');\n}\n\nlet zapi_url = config.zapi_url;\nif (!zapi_url.endsWith('/send-text')) {\n  zapi_url = zapi_url.replace(/\\/(send-text|send-button-list|send-image).*$/, '') + '/send-text';\n}\n\nconst fingerprint = 'agent_' + Math.random().toString(36).slice(2) + Date.now().toString(36);\n\nreturn [{\n  json: {\n    ...dadosOriginais,\n    phone: phone,\n    message: message,\n    output: respostaAgent.output,\n    _zapi_url: zapi_url,\n    _zapi_token: config.client_token,\n    _agent_fingerprint: fingerprint\n  }\n}];"
+      },
+      "id": "66a213f0-8749-4d83-9fd3-a3971755aec3",
+      "name": "08 –Preparar envio cliente",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4176,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "jsgrafica_send_queue",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "phone",
+              "fieldValue": "={{ $json.phone }}"
+            },
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $json.message }}"
+            },
+            {
+              "fieldId": "zapi_url",
+              "fieldValue": "={{ $json._zapi_url }}"
+            },
+            {
+              "fieldId": "client_token",
+              "fieldValue": "={{ $json._zapi_token }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "pending"
+            }
+          ]
+        }
+      },
+      "id": "2758e172-9e56-4a16-98d5-da32c4d7be9b",
+      "name": "09 - INSERT FILA JSGRAFICA",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -3888,
+        192
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// 07 – EXTRAIR RESPOSTA DO AGENT (PRODUÇÃO)\n// Função: padronizar saída do LLM\n// NÃO decide estado\n// NÃO remove bloco [ESTADO_NOVO]\n// ============================================\n\nconst data = $json;\n\n// Resposta bruta do LLM (sempre manter íntegra)\nconst respostaBruta =\n  data.output ||\n  data.message ||\n  \"\";\n\n// Fallback seguro\nconst resposta =\n  respostaBruta.trim() ||\n  \"Desculpe, não consegui processar sua mensagem agora.\";\n\n// Output padronizado\nreturn [{\n  json: {\n    ...data,\n\n    // 🔹 resposta ainda COMPLETA (com estado)\n    output: resposta,\n    message: resposta,\n\n    // 🔹 flag técnica\n    _resposta_extraida: true\n  }\n}];\n"
+      },
+      "name": "07 – EXTRAIR RESPOSTA DO AGENT",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3840,
+        -704
+      ],
+      "id": "f5d4942b-28e9-4925-8169-cbdcbf81c13d"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// PROCESSAR EVENTO — Z-API (NORMALIZADO FINAL)\n// Critérios:\n// - Não duplicar dados\n// - Promover o que é importante\n// - Corrigir semântica\n// - Separar mídia vs foto de perfil\n// ============================================\n\n/* ========= HELPERS ========= */\n\nfunction normalizePhone(raw) {\n  if (!raw) return \"\";\n  const p = String(raw).replace(/\\D/g, \"\");\n  if (p.length === 11 && !p.startsWith(\"55\")) return \"55\" + p;\n  return p;\n}\n\nfunction toIso(ms) {\n  const n = Number(ms);\n  return n ? new Date(n).toISOString() : new Date().toISOString();\n}\n\n/* ========= INPUT ========= */\n\nconst body = typeof $json.body === \"object\" ? $json.body : {};\nconst headers = typeof $json.headers === \"object\" ? $json.headers : {};\n\n/* ========= IDENTIDADE ========= */\n\nconst messageId = body.message_id || body.messageId || \"\";\nif (!messageId) return [];\n\nconst phone = normalizePhone(body.phone || body.connected_phone || body.connectedPhone || \"\");\nconst instanceId = body.instance_id || body.instanceId || \"\";\n\n/* ========= PROMOÇÃO SEM DUPLICAÇÃO ========= */\n\n// Nome correto do usuário (promovido, não duplicado)\nconst pushName =\n  body.lead_name ||\n  body.chatName ||\n  body.senderName ||\n  body.pushName ||\n  \"Usuário\";\n\n// Conversa (promovida do raw_body)\nconst conversation_id =\n  body.conversation_id ||\n  body.chat_lid ||\n  null;\n\n/* ========= FLAGS ========= */\n\nconst fromMe = Boolean(body.from_me ?? body.fromMe);\nconst forwarded = Boolean(body.forwarded);\nconst isGroup = Boolean(body.is_group ?? body.isGroup);\n\n/* ========= BLOQUEIOS ========= */\n\nif (isGroup) {\n  return [{ json: { _ignore: true, _reason: \"grupo\" } }];\n}\n\n/* ========= TEXTO ========= */\n\nconst texto =\n  body.message_text ||\n  (body.text && body.text.message) ||\n  body.caption ||\n  \"\";\n\n// Mídia detectada antes do bloqueio por texto vazio\nconst temMidia = !!(body.image || body.video || body.audio || body.voice || body.document);\n\nif (!texto.trim() && !temMidia) {\n  return [{ json: { _ignore: true, _reason: \"vazio\" } }];\n}\n\n// Gerar texto descritivo para mídia sem legenda\nconst textoFinal = texto.trim() || (\n  body.image    ? \"[Cliente enviou imagem]\"    :\n  body.video    ? \"[Cliente enviou vídeo]\"     :\n  body.audio || body.voice ? \"[Cliente enviou áudio]\"    :\n  body.document ? \"[Cliente enviou documento]\" : \"\"\n);\n\n/* ========= MÍDIA (SEM CONFUNDIR PERFIL) ========= */\n\n// Regra:\n// - photo / senderPhoto → FOTO DE PERFIL (NÃO É MÍDIA)\n// - image / video / audio / document → MÍDIA REAL\n\nlet has_media = false;\nlet media_type = null;\nlet media_url = \"\";\nlet media_source = \"none\"; // none | user_message\n\nif (body.image) {\n  has_media = true;\n  media_type = \"image\";\n  media_url = body.image.url || body.image.imageUrl || \"\";\n  media_source = \"user_message\";\n} else if (body.video) {\n  has_media = true;\n  media_type = \"video\";\n  media_url = body.video.url || body.video.videoUrl || \"\";\n  media_source = \"user_message\";\n} else if (body.audio || body.voice) {\n  has_media = true;\n  media_type = \"audio\";\n  media_url = body.audio?.url || body.voice || \"\";\n  media_source = \"user_message\";\n} else if (body.document) {\n  has_media = true;\n  media_type = \"document\";\n  media_url = body.document.url || \"\";\n  media_source = \"user_message\";\n}\n\n/* ========= TEMPO ========= */\n\nconst timestamp = toIso(body.data_timestamp || body.momment);\nconst timestamp_type = \"received_at\";\n\n/* ========= ORIGEM ========= */\n\nconst origin_ip =\n  headers[\"x-forwarded-for\"] ||\n  headers[\"x-real-ip\"] ||\n  \"\";\n\n/* ========= SEMÂNTICA ========= */\n\n// Correção sem duplicação\nconst tipo_interacao = fromMe ? \"MENSAGEM_AGENTE\" : \"MENSAGEM_CLIENTE\";\n\n/* ========= OUTPUT FINAL ========= */\n\nreturn [{\n  json: {\n    // ===== EXISTENTE (INTACTO / CORRIGIDO) =====\n    messageId,\n    phone,\n    pushName,\n    texto: textoFinal,\n    \n    has_media,\n    media_type,\n    media_url,\n    media_source,\n\n    fromMe,\n    forwarded,\n\n    timestamp,\n    timestamp_type,\n\n    instanceId,\n    origin_ip,\n\n    tipo_interacao,\n\n    conversation_id,\n\n    // ===== FONTE ÚNICA DE VERDADE =====\n    raw_body: body\n  }\n}];\n"
+      },
+      "id": "beb82f2b-2410-45fd-8515-e404c8e7e888",
+      "name": "PROCESSAR EVENTO",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4096,
+        -1248
+      ]
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "id": "44d11abd-4f81-4bc4-a764-372ef090832e",
+      "name": "MERGE GERAK",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -4432,
+        -992
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -4448,
+        192
+      ],
+      "id": "184e326b-9c19-46f4-894e-fe88a6918e4a",
+      "name": "MERGE CONFIG MSG AGENTE"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -4448,
+        -96
+      ],
+      "id": "c221e0fd-4613-4dca-a8e0-e0412444ce09",
+      "name": "MERGE LOG "
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// PROCESSAR MEMÓRIA (BLINDADO PARA PRODUÇÃO)\n// Garante último ESTADO VÁLIDO, não última linha\n// ============================================\n\nconst items = $input.all();\n\n// -----------------------------\n// 1. Normalizar e filtrar memória válida\n// -----------------------------\nconst memoria = items\n  .map(i => i.json)\n  .map(m => ({\n    timestamp: new Date(m.timestamp).getTime(),\n    mensagem_cliente: String(m.mensagem_cliente || \"\").trim(),\n    resposta_agente: String(m.resposta_agente || \"\").trim(),\n    nome_contato: String(m.nome_contato || \"\").trim(),\n\n    // estado\n    fase_jornada: String(m.fase_jornada || \"\").trim(),\n    dados_pendentes: String(m.dados_pendentes || \"\").trim(),\n    estado_consolidado: String(m.estado_consolidado || \"\").trim()\n  }))\n  .filter(m =>\n    !isNaN(m.timestamp) &&\n    (m.mensagem_cliente || m.resposta_agente)\n  );\n\n// -----------------------------\n// 2. Ordenar por timestamp (antigo → recente)\n// -----------------------------\nmemoria.sort((a, b) => a.timestamp - b.timestamp);\n\n// -----------------------------\n// 3. Últimas 5 mensagens (histórico)\n// -----------------------------\nconst ultimas5 = memoria.slice(-5);\n\n// -----------------------------\n// 4. Histórico textual\n// -----------------------------\nconst historico = ultimas5\n  .map(m => {\n    let bloco = \"\";\n    if (m.mensagem_cliente) bloco += `Cliente: ${m.mensagem_cliente}\\n`;\n    if (m.resposta_agente) bloco += `Agente: ${m.resposta_agente}\\n`;\n    return bloco.trim();\n  })\n  .join(\"\\n\\n\");\n\n// -----------------------------\n// 5. 🔴 BUSCAR ÚLTIMO ESTADO VÁLIDO\n// -----------------------------\nconst ultimoEstadoValido =\n  [...ultimas5]\n    .reverse()\n    .find(m =>\n      m.fase_jornada ||\n      m.estado_consolidado ||\n      m.dados_pendentes\n    ) || {};\n\n// -----------------------------\n// 6. Output BLINDADO\n// -----------------------------\nreturn [{\n  json: {\n    historico,\n    total_memorias_lidas: items.length,\n    total_memorias_usadas: ultimas5.length,\n\n    // ✅ estado SEMPRE coerente\n    fase_jornada_anterior: ultimoEstadoValido.fase_jornada || \"abertura\",\n    dados_pendentes_anterior: ultimoEstadoValido.dados_pendentes || \"\",\n    estado_consolidado_anterior: ultimoEstadoValido.estado_consolidado || \"\"\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3328,
+        -1232
+      ],
+      "id": "e302c46e-4f36-4cb2-9953-9de58f1aefcc",
+      "name": "PROCESSAR MEMORIA"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// NODE 2 – CALCULAR ESTADO DA CONVERSA (CORRETO)\n// Função: consolidar CONTEXTO + ESTADO ANTERIOR\n// NÃO decide estado novo (isso é do LLM)\n// ============================================\n\nconst items = $input.all();\n\n// Ordem garantida pelo MERGE\nconst evento  = $input.first().json || {};\nconst config  = $('Get config').first().json || {};\nconst memoria = $('PROCESSAR MEMORIA').first().json || {};\n\n// -----------------------------\n// 1. Evento atual (imutável)\n// -----------------------------\nif (!evento || !evento.texto) return [];\n\n// -----------------------------\n// 2. Flag de atendimento encerrado\n// -----------------------------\nconst conversa_encerrada =\n  memoria.conversa_encerrada === true ||\n  memoria.conversa_encerrada === \"true\";\n\n// -----------------------------\n// 3. Estado anterior (SÓ SE NÃO ENCERRADO)\n// -----------------------------\nconst fase_jornada =\n  conversa_encerrada ? \"\" : (memoria.fase_jornada_anterior || \"abertura\");\n\nconst dados_pendentes =\n  conversa_encerrada ? \"\" : (memoria.dados_pendentes_anterior || \"\");\n\nconst estado_consolidado =\n  conversa_encerrada ? \"\" : (memoria.estado_consolidado_anterior || \"\");\n\n// -----------------------------\n// 4. Output CONSOLIDADO\n// -----------------------------\nreturn [{\n  json: {\n    // 🔒 Evento original\n    ...evento,\n\n    // 🔒 Config\n    _config: {\n      agent_name: config.agent_name || \"\",\n      empresa_nome: config.empresa_nome || \"\",\n      instance_id: config.instance_id || \"\",\n      zapi_url: config.zapi_url || \"\",\n      client_token: config.client_token || \"\",\n      system_prompt: config.system_prompt || \"\"\n    },\n\n    // 🧠 Memória (histórico só se não encerrado)\n    historico: conversa_encerrada ? \"\" : (memoria.historico || \"\"),\n    total_memorias_lidas: memoria.total_memorias_lidas || 0,\n    total_memorias_usadas: memoria.total_memorias_usadas || 0,\n\n    // 🧭 Estado anterior (bloqueado se encerrado)\n    fase_jornada,\n    dados_pendentes,\n    estado_consolidado,\n\n    // 🚩 Flag explícita para o LLM\n    conversa_encerrada,\n\n    // 🕒 Controle\n    _estado_timestamp: new Date().toISOString()\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3856,
+        -976
+      ],
+      "id": "72ff6070-d82f-4e7c-b0d3-18c2042c5002",
+      "name": "CALCULAR ESTADO DA CONVERSA"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// NODE 3 – PREPARAR INPUT GERAL (CORRETO)\n// Função: montar INPUT DO LLM\n// NÃO altera estado, NÃO decide nada\n// ============================================\n\nconst item = $json;\nif (!item) return [];\n\n// -----------------------------\n// 1. Evento atual\n// -----------------------------\nif (item.fromMe) return [];\n\nconst textoAtual = String(item.texto || \"\").trim();\nif (!textoAtual) return [];\n\n// -----------------------------\n// 2. Identidade\n// -----------------------------\nconst nomeCliente =\n  item.nome_contato ||\n  item.pushName ||\n  \"Cliente\";\n\n// -----------------------------\n// 3. Flag de encerramento (boolean real)\n// -----------------------------\nconst conversa_encerrada =\n  item.conversa_encerrada === true ||\n  item.conversa_encerrada === \"true\";\n\n// -----------------------------\n// 4. Contexto condicionado ao estado\n// -----------------------------\nconst historico = conversa_encerrada\n  ? \"Atendimento anterior encerrado.\"\n  : (item.historico || \"Sem histórico recente.\");\n\nconst fase_jornada = conversa_encerrada ? \"\" : (item.fase_jornada || \"\");\nconst dados_pendentes = conversa_encerrada ? \"\" : (item.dados_pendentes || \"\");\nconst estado_consolidado = conversa_encerrada ? \"\" : (item.estado_consolidado || \"\");\n\n// -----------------------------\n// 5. INPUT FINAL DO LLM\n// -----------------------------\nconst chatInput = `\nCliente: ${nomeCliente}\n\nATENDIMENTO ENCERRADO:\n${conversa_encerrada ? \"sim\" : \"não\"}\n\nESTADO CONSOLIDADO:\n${estado_consolidado}\n\nDADOS PENDENTES:\n${dados_pendentes}\n\nFASE DA JORNADA:\n${fase_jornada}\n\nHISTÓRICO RECENTE:\n${historico}\n\nMENSAGEM ATUAL:\n${textoAtual}\n`.trim();\n\n// -----------------------------\n// 6. OUTPUT\n// -----------------------------\nreturn [{\n  json: {\n    ...item,\n\n    // 🔴 ÚNICO CAMPO LIDO PELO LLM\n    chatInput,\n\n    // 🔵 CONTROLE\n    sessionId: item.phone,\n\n    _controle: {\n      total_memoria_usada: item.total_memorias_usadas || 0\n    }\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3584,
+        -976
+      ],
+      "id": "d21eeff6-abc7-4872-b175-70b4e928f26e",
+      "name": "PREPARAR INPUT GERAL"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// NODE – DEFINIR PROMPT (CORRETO / PRODUÇÃO)\n// Função: preparar payload final para o AI Agent\n// NÃO decide estado\n// NÃO altera lógica\n// ============================================\n\nconst data = $json;\nif (!data || !data.chatInput) return [];\n\n// -----------------------------\n// Texto limpo da mensagem atual\n// -----------------------------\nconst texto =\n  typeof data.texto === \"string\"\n    ? data.texto\n    : \"\";\n\n// -----------------------------\n// OUTPUT FINAL\n// -----------------------------\n// ─── ESTADO_NOVO fixo (M-044: protegido, nunca editavel pelo tutor) ───\nconst ESTADO_NOVO_ATENDIMENTO = `[ESTADO_NOVO]\nfase_jornada: abertura | descoberta\ndados_ainda_necessarios: [serviço desejado] ou \"nenhum\"\nestado_resumido: [serviço identificado em 1 frase, ex: \"Cliente quer impressão colorida A4\"]\n[/ESTADO_NOVO]`;\n\n// ─── Fallback do texto estatico se config.system_prompt estiver vazio (M-044) ───\n// Texto identico ao que sempre esteve hardcoded no AI Agent1, so com o\n// trecho de data/hora trocado por marcador (ver injecao abaixo).\nconst FALLBACK_ATENDIMENTO = `Você é Dizu, assistente virtual da JS Gráfica Rápida, uma gráfica do bairro do Ibura, em Recife (PE). A gráfica foi fundada pelo Sr. Edvam (Didi) junto com Dona Zu e Gabi, e atende a comunidade há mais de uma década com carinho, paciência e eficiência.\n\nSeu papel é receber o cliente, entender o que ele precisa e identificar o serviço. Você é a porta de entrada — quando identificar o serviço, passa para o sistema de pedidos cuidar do restante.\n\n═══════════════════════════════════════\nPERSONALIDADE E TOM\n═══════════════════════════════════════\n\n- Linguagem simples e acolhedora\n- Paciente com idosos, iniciantes e clientes que não sabem o nome do serviço\n- Nunca robótica nem fria\n- Uma pergunta por vez\n\n═══════════════════════════════════════\nDATA E HORA\n═══════════════════════════════════════\n\nData e hora atual em Recife (GMT-3): [[DATA_HORA_ATUAL]]\n\n═══════════════════════════════════════\nAPRESENTAÇÃO (SÓ NA PRIMEIRA VEZ)\n═══════════════════════════════════════\n\nSe histórico vazio OU fase_jornada = \"abertura\":\n\n\"Olá! 😊 Eu sou a Dizu, assistente da JS Gráfica Rápida.\n\nPosso te ajudar com impressões, cópias, fotos, plastificação, encadernação, banners, recargas e muito mais!\n\nMe conta o que você precisa hoje?\"\n\n═══════════════════════════════════════\nSERVIÇOS DISPONÍVEIS\n═══════════════════════════════════════\n\n- IMPRESSÃO: colorida ou P&B, A4 e A3\n- CÓPIA (XEROX): P&B A4, colorida A4, A3\n- FOTOS: 3x4, 10x15, 7x10, 15x20, 20x29\n- PLASTIFICAÇÃO: pequena, média, A4, A3\n- ENCADERNAÇÃO: espiral de 10 a 300 folhas\n- BANNERS E ADESIVOS: por metro\n- SERVIÇOS ONLINE: 2ª via de contas, recarga celular, recarga VEM, consulta CPF/Serasa\n\n═══════════════════════════════════════\nFLUXO\n═══════════════════════════════════════\n\nFASE 1 — ABERTURA\nRecepcione o cliente.\n\nFASE 2 — DESCOBERTA\nIdentifique qual serviço o cliente precisa. Se não souber o nome exato, ajude:\n- \"É para imprimir um arquivo ou tirar cópia de um documento físico?\"\n- \"Vai ser colorido ou preto e branco?\"\n\nQuando identificar o serviço → defina fase_jornada = descoberta e preencha estado_resumido com o serviço identificado. O sistema de pedidos assume a partir daí.\n\n═══════════════════════════════════════\nREGRAS ABSOLUTAS\n═══════════════════════════════════════\n\n❌ NUNCA colete specs detalhadas (quantidade, tamanho, frente/verso, etc.) — isso é papel do sistema de pedidos\n❌ NUNCA invente preços\n❌ NUNCA faça mais de uma pergunta por mensagem\n✅ SEMPRE identifique o serviço antes de qualquer coisa\n✅ SEMPRE use linguagem simples e próxima\n\n═══════════════════════════════════════\nOUTPUT ESTRUTURADO (OBRIGATÓRIO)\n═══════════════════════════════════════\n\nToda resposta deve terminar com:`;\n\nconst systemPromptEditavel =\n  ((data._config && data._config.system_prompt) || \"\").trim() || FALLBACK_ATENDIMENTO;\n\n// ─── Data/hora injetada por codigo (M-044, mesmo padrao do connect_event) ───\n// Antes essa expressao era avaliada ao vivo pelo n8n dentro do texto fixo\n// do AI Agent1. Agora o texto vem do banco (editavel pelo tutor), entao a\n// data/hora e injetada aqui por codigo, no mesmo ponto onde antes ficava a\n// expressao {{$now...}} original -- mesmo metodo, mesmo fuso, mesmo formato.\nconst dataHoraAtual = $now.setZone('America/Recife').toFormat('dd/MM/yyyy HH:mm');\n\nconst systemPrompt = systemPromptEditavel\n  .replace('[[DATA_HORA_ATUAL]]', dataHoraAtual)\n  + '\\n\\n' + ESTADO_NOVO_ATENDIMENTO;\n\nreturn [{\n  json: {\n    // identificacao / envio (inalterado)\n    chatInput: data.chatInput,\n    sessionId: data.sessionId,\n    phone: data.phone,\n    messageId: data.messageId,\n    timestamp: data.timestamp,\n    nome_contato: data.nome_contato,\n    texto,\n\n    // estado (apenas para log, inalterado)\n    fase_jornada: data.fase_jornada || \"\",\n    dados_pendentes: data.dados_pendentes || \"\",\n    estado_consolidado: data.estado_consolidado || \"\",\n    conversa_encerrada: data.conversa_encerrada === true,\n\n    // config\n    _config: data._config,\n\n    // prompt final para o AI Agent1 (M-044)\n    systemPrompt\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3344,
+        -976
+      ],
+      "id": "4e0c3259-0521-4274-ae17-2f3b04acf552",
+      "name": "DEFINIR PROMPT"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json;\nif (!data) return [];\n\nconst respostaCompleta = data.output || data.message || '';\nconst regexEstado = /\\[ESTADO_NOVO\\]([\\s\\S]*?)\\[\\/ESTADO_NOVO\\]/;\nconst match = respostaCompleta.match(regexEstado);\n\nlet fase_jornada = data.fase_jornada || '';\nlet dados_pendentes = data.dados_pendentes || '';\nlet estado_consolidado = data.estado_consolidado || '';\n\nif (match) {\n  const linhas = match[1].split('\\n').map(l => l.trim()).filter(Boolean);\n  for (const linha of linhas) {\n    if (linha.startsWith('fase_jornada:')) fase_jornada = linha.split(':')[1].trim();\n    if (linha.startsWith('dados_ainda_necessarios:')) dados_pendentes = linha.split(':')[1].trim();\n    if (linha.startsWith('estado_resumido:')) estado_consolidado = linha.split(':')[1].trim();\n    if (linha.startsWith('servico_identificado:')) {\n      // campo opcional que o LLM pode incluir\n    }\n  }\n}\n\nconst mensagemLimpa = respostaCompleta.replace(regexEstado, '').trim();\n\n// Detecta servico a partir do estado_consolidado\nlet servico_detectado = null;\nconst estadoLower = estado_consolidado.toLowerCase();\nif (estadoLower.includes('impressao') || estadoLower.includes('impressão')) servico_detectado = 'impressao';\nelse if (estadoLower.includes('xerox') || estadoLower.includes('copia') || estadoLower.includes('cópia')) servico_detectado = 'xerox';\nelse if (estadoLower.includes('foto')) servico_detectado = 'foto';\nelse if (estadoLower.includes('plastif')) servico_detectado = 'plastificacao';\nelse if (estadoLower.includes('encader')) servico_detectado = 'encadernacao';\nelse if (estadoLower.includes('banner') || estadoLower.includes('adesivo')) servico_detectado = 'banner';\nelse if (estadoLower.includes('recarga') || estadoLower.includes('vem')) servico_detectado = 'recarga';\nelse if (estadoLower.includes('consulta') || estadoLower.includes('2ª via') || estadoLower.includes('cpf') || estadoLower.includes('serasa')) servico_detectado = 'consulta';\n\n// Passa para 06-PEDIDOS assim que identifica o servico (fase descoberta ou coleta_dados)\n// Nao espera o encerramento — o 06-PEDIDOS faz toda a coleta\nconst faseQuePassaAoPedido = ['descoberta', 'coleta_dados', 'encerramento'];\nconst devePassarPedido = servico_detectado !== null && faseQuePassaAoPedido.indexOf(fase_jornada) !== -1;\n\nreturn [{\n  json: {\n    ...data,\n    message: mensagemLimpa,\n    output: mensagemLimpa,\n    fase_jornada,\n    dados_pendentes,\n    estado_consolidado,\n    servico_detectado,\n    _deve_passar_pedido: devePassarPedido,\n    _estado_extraido: true\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3584,
+        -704
+      ],
+      "id": "7356423c-c75c-43a8-8b31-06c3137189c6",
+      "name": "EXTRAIR E LIMPAR ESTADO"
+    },
+    {
+      "parameters": {
+        "tableName": "jsgrafica_n8n_chat_histories_"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -4288,
+        -464
+      ],
+      "id": "bda079cf-18cb-44a1-9306-0b5380c65216",
+      "name": "Postgres Chat Memory / supabase /rag",
+      "credentials": {
+        "postgres": {
+          "id": "8whn1vmJzdJ5nqSf",
+          "name": "Postgres LABON (pooler)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableName": {
+          "__rl": true,
+          "value": "jsgrafica_agent_rag",
+          "mode": "list",
+          "cachedResultName": "jsgrafica_agent_rag"
+        },
+        "options": {
+          "queryName": "match_documents_jsgrafica"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -4096,
+        -416
+      ],
+      "id": "b4db2c42-8d02-4c01-85f2-565895b48573",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "BASE DE CONHECIMENTO — JS GRÁFICA RÁPIDA\n\nContém informações sobre:\n- Serviços: impressão colorida/P&B, cópia (xerox), fotos, plastificação, encadernação, banners, adesivos, serviços online\n- Preços e condições de cada serviço\n- Formas de pagamento aceitas\n- Informações da loja: localização Ibura/Recife, horários, contato\n\nUSE quando o cliente perguntar sobre serviços disponíveis, preços, horários de funcionamento ou qualquer informação institucional da JS Gráfica.",
+        "topK": 8
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        -4144,
+        -608
+      ],
+      "id": "e9b8240e-eaea-488a-bfb6-1c5ec603875a",
+      "name": "Answer questions with a vector store"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3744,
+        -496
+      ],
+      "id": "536164be-85cd-4988-9d5b-edbe5e7076f0",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HuMb1WcX1o0FTeLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-embedding-001"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3824,
+        -320
+      ],
+      "id": "862aa189-4af2-48bd-b8fb-2d49a6728129",
+      "name": "Embeddings Google Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HuMb1WcX1o0FTeLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -4448,
+        -496
+      ],
+      "id": "6bd9a1e2-b8dc-490e-b568-a09b2e90cf12",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HuMb1WcX1o0FTeLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_agent_config",
+        "limit": 1,
+        "filterType": "none"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -3840,
+        -1248
+      ],
+      "id": "10cda4c3-a067-4b91-849a-ee5546ee8d3d",
+      "name": "Get config",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "jsgrafica_memoria_conversas",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "timestamp",
+              "fieldValue": "={{ $json.timestamp }}"
+            },
+            {
+              "fieldId": "nome_contato",
+              "fieldValue": "={{ $json.nome_contato }}"
+            },
+            {
+              "fieldId": "mensagem_cliente",
+              "fieldValue": "={{ $json.mensagem_cliente }}"
+            },
+            {
+              "fieldId": "resposta_agente",
+              "fieldValue": "={{ $json.resposta_agente }}"
+            },
+            {
+              "fieldId": "tipo_mensagem",
+              "fieldValue": "={{ $json.tipo_mensagem }}"
+            },
+            {
+              "fieldId": "intencao",
+              "fieldValue": "={{ $json.intencao }}"
+            },
+            {
+              "fieldId": "sentimento",
+              "fieldValue": "={{ $json.sentimento }}"
+            },
+            {
+              "fieldId": "score_confiança",
+              "fieldValue": "={{ $json['score_confiança'] }}"
+            },
+            {
+              "fieldId": "fase_jornada",
+              "fieldValue": "={{ $json.fase_jornada }}"
+            },
+            {
+              "fieldId": "canal",
+              "fieldValue": "={{ $json.canal }}"
+            },
+            {
+              "fieldId": "origem",
+              "fieldValue": "={{ $json.origem }}"
+            },
+            {
+              "fieldId": "tokenizado",
+              "fieldValue": "={{ $json.tokenizado }}"
+            },
+            {
+              "fieldId": "contexto_resumido",
+              "fieldValue": "={{ $json.contexto_resumido }}"
+            },
+            {
+              "fieldId": "zaapid",
+              "fieldValue": "={{ $json.zaapId }}"
+            },
+            {
+              "fieldId": "messageid",
+              "fieldValue": "={{ $json.messageId }}"
+            },
+            {
+              "fieldId": "_log_salvo",
+              "fieldValue": "={{ $json._log_salvo }}"
+            },
+            {
+              "fieldId": "_tutor_notificado",
+              "fieldValue": "={{ $json._tutor_notificado }}"
+            },
+            {
+              "fieldId": "pedido_relacionado",
+              "fieldValue": "={{ $json.pedido_relacionado }}"
+            },
+            {
+              "fieldId": "fase_do_pedido",
+              "fieldValue": "={{ $json.fase_do_pedido }}"
+            },
+            {
+              "fieldId": "tipo_negocio",
+              "fieldValue": "={{ $json.tipo_negocio }}"
+            },
+            {
+              "fieldId": "segmento",
+              "fieldValue": "={{ $json.segmento }}"
+            },
+            {
+              "fieldId": "nome_empresa",
+              "fieldValue": "={{ $json.nome_empresa }}"
+            },
+            {
+              "fieldId": "objetivo_principal",
+              "fieldValue": "={{ $json.objetivo_principal }}"
+            },
+            {
+              "fieldId": "publico_alvo",
+              "fieldValue": "={{ $json.publico_alvo }}"
+            },
+            {
+              "fieldId": "funcoes_agente",
+              "fieldValue": "={{ $json.funcoes_agente }}"
+            },
+            {
+              "fieldId": "dados_pendentes",
+              "fieldValue": "={{ $json.dados_pendentes }}"
+            },
+            {
+              "fieldId": "estado_consolidado",
+              "fieldValue": "={{ $json.estado_consolidado }}"
+            },
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $json.telefone }}"
+            },
+            {
+              "fieldId": "agent_msg_fingerprint",
+              "fieldValue": "={{ $json.agent_msg_fingerprint }}"
+            },
+            {
+              "fieldId": "emissor_real",
+              "fieldValue": "={{ $json.emissor_real }}"
+            },
+            {
+              "fieldId": "status_atendimento",
+              "fieldValue": "={{ $json.status_atendimento }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -3888,
+        -96
+      ],
+      "id": "46c43dca-a9fe-4bc3-9765-4d5a7de43da3",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// PREPARAR LOG MEMÓRIA — SUPABASE (FINAL)\n// Espelha 100% a planilha\n// Compatível com sunny_memoria_converas\n// ============================================\n\nconst data = $json;\nconst agora = new Date();\n\n// -----------------------------\n// Timestamp\n// -----------------------------\nconst timestamp =\n  data.timestamp\n    ? new Date(data.timestamp).toISOString()\n    : agora.toISOString();\n\n// -----------------------------\n// Identidade (NUNCA NULL)\n// -----------------------------\nconst telefone =\n  data.telefone ??\n  data.phone ??\n  \"\";\n\nif (!telefone) {\n  throw new Error(\"telefone é obrigatório para salvar memória\");\n}\n\nconst nome_contato =\n  data.nome_contato ??\n  data.pushName ??\n  \"Desconhecido\";\n\n// -----------------------------\n// Mensagens\n// -----------------------------\nconst mensagem_cliente = data.mensagem_cliente ?? data.texto ?? null;\nconst resposta_agente = data.resposta_agente ?? data.output ?? null;\n\n// -----------------------------\n// Classificações\n// -----------------------------\nconst tipo_mensagem = data.tipo_mensagem ?? \"atendimento\";\nconst intencao = data.intencao ?? \"consulta_geral\";\nconst sentimento = data.sentimento ?? \"neutro\";\nconst score_confiança =\n  typeof data.score_confiança === \"number\"\n    ? data.score_confiança\n    : null;\n\n// -----------------------------\n// Jornada / Estado\n// -----------------------------\nconst fase_jornada = data.fase_jornada ?? null;\nconst dados_pendentes = data.dados_pendentes ?? null;\nconst estado_consolidado = data.estado_consolidado ?? null;\n\n// -----------------------------\n// Canal / Origem\n// -----------------------------\nconst canal = data.canal ?? \"whatsapp\";\nconst origem = data.origem ?? \"ai_agent\";\n\n// -----------------------------\n// Contexto\n// -----------------------------\nconst contexto_resumido =\n  data.contexto_resumido ??\n  \"Registro automático de conversa\";\n\n// -----------------------------\n// Pedido / Comercial\n// -----------------------------\nconst pedido_relacionado = data.pedido_relacionado ?? null;\nconst fase_do_pedido = data.fase_do_pedido ?? null;\n\n// -----------------------------\n// Negócio\n// -----------------------------\nconst tipo_negocio = data.tipo_negocio ?? null;\nconst segmento = data.segmento ?? null;\nconst nome_empresa = data.nome_empresa ?? null;\nconst objetivo_principal = data.objetivo_principal ?? null;\nconst publico_alvo = data.publico_alvo ?? null;\nconst funcoes_agente = data.funcoes_agente ?? null;\n\n// -----------------------------\n// IDs externos\n// -----------------------------\nconst zaapId = data.zaapId ?? null;\nconst messageId = data.messageId ?? null;\n\n// -----------------------------\n// FLAGS BOOLEAN (SEM STRING VAZIA)\n// -----------------------------\nconst tokenizado = data.tokenizado === true;\nconst _log_salvo = false;\nconst _tutor_notificado = false;\n\n// -----------------------------\n// OUTPUT FINAL (TODAS AS COLUNAS)\n// -----------------------------\nreturn [{\n  json: {\n    timestamp,\n    telefone,\n    nome_contato,\n\n    mensagem_cliente,\n    resposta_agente,\n\n    tipo_mensagem,\n    agendamento_relacionado: null,\n\n    intencao,\n    sentimento,\n    score_confiança,\n\n    fase_jornada,\n    canal,\n    origem,\n\n    tokenizado,\n    contexto_resumido,\n\n    zaapId,\n    messageId,\n\n    _log_salvo,\n    _tutor_notificado,\n\n    pedido_relacionado,\n    fase_do_pedido,\n\n    tipo_negocio,\n    segmento,\n    nome_empresa,\n    objetivo_principal,\n    publico_alvo,\n    funcoes_agente,\n\n    dados_pendentes,\n    estado_consolidado,\n\n    agent_msg_fingerprint: data._agent_fingerprint ?? null,\n    emissor_real: data.fromMe ? \"agente\" : \"cliente\",\n    status_atendimento: (data.fase_jornada === \"encerramento\") ? \"aguardando_equipe\" : \"agent_ativo\"\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4176,
+        -96
+      ],
+      "id": "b91cd6a9-3ac0-47b3-b027-cfb6946b7b38",
+      "name": "10 – PREPARAR LOG MEMORIA_CONVERSA_SUPABASE"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_memoria_conversas",
+        "limit": 5,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.phone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -3600,
+        -1232
+      ],
+      "id": "926ff650-dd51-47e6-8203-5c9e9b85a8e3",
+      "name": "Get memoria_conversas",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "={{ $json.systemPrompt }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -4448,
+        -704
+      ],
+      "id": "7bf6a62d-d3e7-4d3b-abfe-ea26a488e2fb",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._deve_passar_pedido }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "node-if-encerramento",
+      "name": "If Pedido Identificado",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -3328,
+        -704
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/jsgraficapedidos",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  fase: 'inicio',\n  telefone: $('PREPARAR INPUT GERAL').first().json.phone,\n  push_name: $('PREPARAR INPUT GERAL').first().json.pushName || 'Cliente',\n  servico_detectado: $json.servico_detectado,\n  mensagem_original: $('PREPARAR INPUT GERAL').first().json.texto,\n  message_id: $('PREPARAR INPUT GERAL').first().json.messageId,\n  arquivo_url: $json.media_url || null,\n  arquivo_tipo: $json.media_type || null\n}) }}",
+        "options": {}
+      },
+      "id": "node-http-pedidos-ai",
+      "name": "HTTP Chamar 06-PEDIDOS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -3040,
+        -720
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.zapi_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "client-token",
+              "value": "={{ $json.client_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone: $json.phone, message: $json.message }) }}",
+        "options": {}
+      },
+      "id": "enviar-zapi-real-014",
+      "name": "09b - ENVIAR Z-API REAL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3664,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "jsgrafica_send_queue",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('09 - INSERT FILA JSGRAFICA').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "sent"
+            },
+            {
+              "fieldId": "sent_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "update-fila-enviada-014",
+      "name": "09c - UPDATE FILA ENVIADA",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -3440,
+        192
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_telefones_autorizados",
+        "limit": 1,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.phone }}"
+            },
+            {
+              "keyName": "ativo",
+              "condition": "eq",
+              "keyValue": true
+            }
+          ]
+        }
+      },
+      "id": "get-telefone-autorizado-015",
+      "name": "GET Telefone Autorizado",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -4160,
+        -976
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const original = $('MERGE GERAK').first().json;\nconst rows = $('GET Telefone Autorizado').all();\nconst autorizado = rows.length > 0 && !!(rows[0].json && rows[0].json.id);\n\nif (!autorizado) {\n  return [];\n}\n\nreturn [{ json: { ...original, _telefone_autorizado: true } }];"
+      },
+      "id": "filtrar-por-resultado-015",
+      "name": "FILTRAR TELEFONES AUTORIZADOS",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3984,
+        -976
+      ]
+    }
+  ],
+  "connections": {
+    "01 – Webhook Entrada": {
+      "main": [
+        [
+          {
+            "node": "PROCESSAR EVENTO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10 – Responder Webhook1": {
+      "main": [
+        []
+      ]
+    },
+    "08 –Preparar envio cliente": {
+      "main": [
+        [
+          {
+            "node": "09 - INSERT FILA JSGRAFICA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "07 – EXTRAIR RESPOSTA DO AGENT": {
+      "main": [
+        [
+          {
+            "node": "EXTRAIR E LIMPAR ESTADO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PROCESSAR EVENTO": {
+      "main": [
+        [
+          {
+            "node": "MERGE LOG ",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get config",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get memoria_conversas",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MERGE GERAK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MERGE GERAK": {
+      "main": [
+        [
+          {
+            "node": "GET Telefone Autorizado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MERGE CONFIG MSG AGENTE": {
+      "main": [
+        [
+          {
+            "node": "08 –Preparar envio cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MERGE LOG ": {
+      "main": [
+        [
+          {
+            "node": "10 – PREPARAR LOG MEMORIA_CONVERSA_SUPABASE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PROCESSAR MEMORIA": {
+      "main": [
+        [
+          {
+            "node": "MERGE GERAK",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "CALCULAR ESTADO DA CONVERSA": {
+      "main": [
+        [
+          {
+            "node": "PREPARAR INPUT GERAL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PREPARAR INPUT GERAL": {
+      "main": [
+        [
+          {
+            "node": "MERGE CONFIG MSG AGENTE",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "DEFINIR PROMPT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DEFINIR PROMPT": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EXTRAIR E LIMPAR ESTADO": {
+      "main": [
+        [
+          {
+            "node": "If Pedido Identificado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory / supabase /rag": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store1": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer questions with a vector store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get config": {
+      "main": [
+        [
+          {
+            "node": "MERGE GERAK",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "10 – PREPARAR LOG MEMORIA_CONVERSA_SUPABASE": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get memoria_conversas": {
+      "main": [
+        [
+          {
+            "node": "PROCESSAR MEMORIA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "07 – EXTRAIR RESPOSTA DO AGENT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FILTRAR TELEFONES AUTORIZADOS": {
+      "main": [
+        [
+          {
+            "node": "CALCULAR ESTADO DA CONVERSA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Pedido Identificado": {
+      "main": [
+        [
+          {
+            "node": "HTTP Chamar 06-PEDIDOS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MERGE LOG ",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "MERGE CONFIG MSG AGENTE",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "09 - INSERT FILA JSGRAFICA": {
+      "main": [
+        [
+          {
+            "node": "09b - ENVIAR Z-API REAL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "09b - ENVIAR Z-API REAL": {
+      "main": [
+        [
+          {
+            "node": "09c - UPDATE FILA ENVIADA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "09c - UPDATE FILA ENVIADA": {
+      "main": [
+        [
+          {
+            "node": "10 – Responder Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Telefone Autorizado": {
+      "main": [
+        [
+          {
+            "node": "FILTRAR TELEFONES AUTORIZADOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "tags": []
+}

@@ -1,0 +1,324 @@
+{
+  "updatedAt": "2026-08-31T13:02:03.031Z",
+  "createdAt": "2026-08-31T12:59:58.603Z",
+  "id": "N6MNCiQvNUicwvHR",
+  "name": "355 - JSGRAFICA | CANAL DISPARO AGENDADO",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "n355-trigger",
+      "name": "A cada 30min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -640,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "n355-getconfig",
+      "name": "GET Config",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -420,
+        0
+      ],
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_agent_config",
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ativo",
+              "condition": "eq",
+              "keyValue": true
+            }
+          ]
+        }
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "n355-getposts",
+      "name": "GET Posts Aprovados",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        0
+      ],
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_canal_posts",
+        "returnAll": true,
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "approved"
+            },
+            {
+              "keyName": "scheduled_at",
+              "condition": "lt",
+              "keyValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "n355-montar",
+      "name": "Montar Envio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        20,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const config = $('GET Config').first().json;\nconst baseUrl = config.zapi_url.replace(/\\/send-text$/, '');\nconst clientToken = config.client_token;\nconst canalId = config.canal_whatsapp_id;\n\nconst items = $input.all();\nconst resultado = [];\n\nitems.forEach((item, idx) => {\n  const post = item.json;\n  let endpoint = null;\n  let body = null;\n\n  if (post.tipo === 'text') {\n    endpoint = 'send-text';\n    body = { phone: canalId, message: post.texto || '' };\n  } else if (post.tipo === 'image') {\n    endpoint = 'send-image';\n    body = { phone: canalId, image: post.image_url || '', caption: post.caption_image || undefined };\n  } else if (post.tipo === 'video') {\n    endpoint = 'send-video';\n    body = { phone: canalId, video: post.video_url || '', caption: post.caption_video || undefined };\n  } else {\n    return;\n  }\n\n  resultado.push({\n    json: {\n      post_id: post.id,\n      url: baseUrl + '/' + endpoint,\n      body: body,\n      _client_token: clientToken\n    },\n    pairedItem: { item: idx }\n  });\n});\n\nreturn resultado;"
+      }
+    },
+    {
+      "id": "n355-http",
+      "name": "Enviar Z-API Canal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "client-token",
+              "value": "={{ $json._client_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "n355-marcarok",
+      "name": "Marcar Publicado",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        480,
+        -100
+      ],
+      "parameters": {
+        "operation": "update",
+        "tableId": "jsgrafica_canal_posts",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Montar Envio').item.json.post_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "published"
+            },
+            {
+              "fieldId": "published_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.messageId || $json.zaapId || $json.id || null }}"
+            },
+            {
+              "fieldId": "erro_detalhe",
+              "fieldValue": null
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "id": "n355-marcarerro",
+      "name": "Marcar Erro",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        480,
+        120
+      ],
+      "parameters": {
+        "operation": "update",
+        "tableId": "jsgrafica_canal_posts",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Montar Envio').item.json.post_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "error"
+            },
+            {
+              "fieldId": "erro_detalhe",
+              "fieldValue": "={{ ($json.error && ($json.error.message || JSON.stringify($json.error))) || 'Erro desconhecido ao publicar no Canal' }}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "A cada 30min": {
+      "main": [
+        [
+          {
+            "node": "GET Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Config": {
+      "main": [
+        [
+          {
+            "node": "GET Posts Aprovados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Posts Aprovados": {
+      "main": [
+        [
+          {
+            "node": "Montar Envio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Envio": {
+      "main": [
+        [
+          {
+            "node": "Enviar Z-API Canal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Z-API Canal": {
+      "main": [
+        [
+          {
+            "node": "Marcar Publicado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Marcar Erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:A cada 30min": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": []
+}

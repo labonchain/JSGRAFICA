@@ -1,0 +1,3361 @@
+{
+  "updatedAt": "2026-08-27T17:51:47.896Z",
+  "createdAt": "2026-03-04T22:38:04.421Z",
+  "id": "lcFEt1kbyqNfTS89",
+  "name": "01 - JSGRAFICA | LOG MSG RECEBIDAS",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "jsgraficamsgrecebidas",
+        "options": {}
+      },
+      "id": "c9d9104b-cc0d-4e3c-90d4-659c730b02db",
+      "name": "Webhook Log MSGrecebidas",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2592,
+        -128
+      ],
+      "webhookId": "60957401-c859-445f-a82c-4a0b27b51494"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/jsgraficaatendimentoai",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1616,
+        688
+      ],
+      "id": "30ec8a19-ca22-405e-85d4-cb7788190d62",
+      "name": "HTTP Request",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =======================================\n// ENVIAR PARA LLM - PAYLOAD COMPLETO\n// Repassa TODO o webhook sem perder nada\n// =======================================\n\nconst data = $json;\n\n// Payload completo para o webhook de atendimento LLM\nreturn [{\n  json: {\n    // =============================\n    // IDENTIFICADORES\n    // =============================\n    message_id: data.message_id,\n    conversation_id: data.conversation_id,\n    contact_lid: data.contact_lid,\n    chat_lid: data.chat_lid,\n    participant_lid: data.participant_lid,\n    phone: data.phone,\n    connected_phone: data.connected_phone,\n    \n    // =============================\n    // CLASSIFICAÇÃO\n    // =============================\n    tipo_evento: data.tipo_evento,\n    event_type: data.event_type,\n    operation: data.operation,\n    \n    // =============================\n    // DIREÇÃO E ORIGEM\n    // =============================\n    direction: data.direction,\n    origin: data.origin,\n    from_me: data.from_me,\n    from_api: data.from_api,\n    \n    // =============================\n    // CONTEXTO BOOLEAN\n    // =============================\n    is_group: data.is_group,\n    is_status_reply: data.is_status_reply,\n    is_edit: data.is_edit,\n    is_newsletter: data.is_newsletter,\n    waiting_message: data.waiting_message,\n    is_forwarded: data.is_forwarded,\n    broadcast: data.broadcast,\n    \n    // =============================\n    // CONTEÚDO\n    // =============================\n    message_text: data.message_text,\n    caption: data.caption,\n    media_type: data.media_type,\n    media_url: data.media_url,\n    mime_type: data.mime_type,\n    file_name: data.file_name,\n    \n    // =============================\n    // DADOS DO CONTATO\n    // =============================\n    chat_name: data.chat_name,\n    sender_name: data.sender_name,\n    sender_photo: data.sender_photo,\n    push_name: data.push_name,\n    notify_name: data.notify_name,\n    \n    // =============================\n    // STATUS\n    // =============================\n    status: data.status,\n    sent_at: data.sent_at,\n    delivered_at: data.delivered_at,\n    read_at: data.read_at,\n    \n    // =============================\n    // TIMESTAMPS\n    // =============================\n    first_event_at: data.first_event_at,\n    last_update_at: data.last_update_at,\n    data_timestamp: data.data_timestamp,\n    \n    // =============================\n    // REPLY/QUOTE\n    // =============================\n    quoted_msg_id: data.quoted_msg_id,\n    quoted_msg_body: data.quoted_msg_body,\n    quoted_msg: data.quoted_msg,\n    \n    // =============================\n    // REAÇÃO\n    // =============================\n    reaction_text: data.reaction_text,\n    reaction_message_id: data.reaction_message_id,\n    \n    // =============================\n    // INTERACTIVE\n    // =============================\n    selected_button_id: data.selected_button_id,\n    selected_row_id: data.selected_row_id,\n    buttons_response: data.buttons_response,\n    list_response: data.list_response,\n    \n    // =============================\n    // POLL\n    // =============================\n    poll_name: data.poll_name,\n    poll_options: data.poll_options,\n    \n    // =============================\n    // INFRA\n    // =============================\n    instance_id: data.instance_id,\n    phone_device: data.phone_device,\n    ids_array: data.ids_array,\n    \n    // =============================\n    // DEBUG\n    // =============================\n    trace_id: data.trace_id,\n    span_id: data.span_id,\n    \n    // =============================\n    // AUDITORIA\n    // =============================\n    raw_payload: data.raw_payload,\n    raw_zapi: data.raw_zapi\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1616,
+        208
+      ],
+      "id": "a5c4fce7-aa15-4f6b-aa60-8f7b87d4a11c",
+      "name": "ENVIAR PARA LLM"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2e19e537-4472-45df-a5f0-07cd6ae74f0f",
+              "leftValue": "={{ $json.message_id }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -496,
+        480
+      ],
+      "id": "f6f1c6cb-8063-4b0d-a1fe-997e39f62e43",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2e19e537-4472-45df-a5f0-07cd6ae74f0f",
+              "leftValue": "={{ $json.message_id }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -496,
+        688
+      ],
+      "id": "b8c36405-c239-4bc3-a2af-fd8957d45b8f",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "jsgrafica_log_msgs_privadas",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "message_id",
+              "keyValue": "={{ $json.message_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        480
+      ],
+      "id": "e4503c6f-d16d-448a-ae20-e6d412c55319",
+      "name": "Get row(s) MSG PRIVADA",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "jsgrafica_log_msgs_grupos",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "message_id",
+              "keyValue": "={{ $json.message_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        688
+      ],
+      "id": "51503e85-323d-4c0f-8799-4d2ab13a2d2e",
+      "name": "Get row(s) MSG GRUPO",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "jsgrafica_log_msgs_privadas",
+        "dataToSend": "autoMapInputData"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        16,
+        496
+      ],
+      "id": "971912e0-47aa-4a2d-955f-4df1e1a545cd",
+      "name": "MSG PRIVADA",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "jsgrafica_log_msgs_grupos",
+        "dataToSend": "autoMapInputData"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        16,
+        704
+      ],
+      "id": "016fc60a-1e6b-45b7-8af6-90e2fe5c4d9a",
+      "name": "MSG GRUPOS",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "jsgrafica_contatos",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "contact_lid",
+              "condition": "eq",
+              "keyValue": "={{ $json._matchContactLid }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "contact_lid",
+              "fieldValue": "={{ $json.contact_lid }}"
+            },
+            {
+              "fieldId": "phone",
+              "fieldValue": "={{ $json.phone }}"
+            },
+            {
+              "fieldId": "conversation_id",
+              "fieldValue": "={{ $json.conversation_id }}"
+            },
+            {
+              "fieldId": "lead_name",
+              "fieldValue": "={{ $json.lead_name }}"
+            },
+            {
+              "fieldId": "lead_chat_name",
+              "fieldValue": "={{ $json.lead_chat_name }}"
+            },
+            {
+              "fieldId": "lead_sender_name",
+              "fieldValue": "={{ $json.lead_sender_name }}"
+            },
+            {
+              "fieldId": "lead_push_name",
+              "fieldValue": "={{ $json.lead_push_name }}"
+            },
+            {
+              "fieldId": "lead_notify_name",
+              "fieldValue": "={{ $json.lead_notify_name }}"
+            },
+            {
+              "fieldId": "lead_photo",
+              "fieldValue": "={{ $json.lead_photo }}"
+            },
+            {
+              "fieldId": "lead_phone",
+              "fieldValue": "={{ $json.lead_phone }}"
+            },
+            {
+              "fieldId": "lead_phone_ddd",
+              "fieldValue": "={{ $json.lead_phone_ddd }}"
+            },
+            {
+              "fieldId": "lead_phone_number",
+              "fieldValue": "={{ $json.lead_phone_number }}"
+            },
+            {
+              "fieldId": "idioma",
+              "fieldValue": "={{ $json.idioma }}"
+            },
+            {
+              "fieldId": "timezone",
+              "fieldValue": "={{ $json.timezone }}"
+            },
+            {
+              "fieldId": "data_primeiro_contato",
+              "fieldValue": "={{ $json.data_primeiro_contato }}"
+            },
+            {
+              "fieldId": "data_ultimo_contato",
+              "fieldValue": "={{ $json.data_ultimo_contato }}"
+            },
+            {
+              "fieldId": "is_group",
+              "fieldValue": "={{ $json.is_group }}"
+            },
+            {
+              "fieldId": "instance_id",
+              "fieldValue": "={{ $json.instance_id }}"
+            },
+            {
+              "fieldId": "total_mensagens_recebidas",
+              "fieldValue": "={{ $json.total_mensagens_recebidas }}"
+            },
+            {
+              "fieldId": "total_mensagens_enviadas",
+              "fieldValue": "={{ $json.total_mensagens_enviadas }}"
+            },
+            {
+              "fieldId": "total_interacoes",
+              "fieldValue": "={{ $json.total_interacoes }}"
+            },
+            {
+              "fieldId": "classificacao",
+              "fieldValue": "={{ $json.classificacao }}"
+            },
+            {
+              "fieldId": "criado_em",
+              "fieldValue": "={{ $json.criado_em }}"
+            },
+            {
+              "fieldId": "atualizado_em",
+              "fieldValue": "={{ $json.atualizado_em }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        320,
+        896
+      ],
+      "id": "02e5c1b2-1acd-45fb-ad42-e3788f0112e7",
+      "name": "CONTATOS",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "jsgrafica_contatos",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "contact_lid",
+              "keyValue": "={{ $json.contact_lid }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        992
+      ],
+      "id": "a0cd8f94-fa60-405f-b3fa-55c2d1daca22",
+      "name": "Get row(s) CONTATOS",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "jsgrafica_log_msgs_privadas",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "message_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.message_id }}"
+            }
+          ]
+        },
+        "dataToSend": "autoMapInputData"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        336,
+        464
+      ],
+      "id": "596f6a8e-b72f-4597-9d09-a59de3b639ac",
+      "name": "MSG PRIVADA1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "jsgrafica_log_msgs_grupos",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "message_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.message_id }}"
+            }
+          ]
+        },
+        "dataToSend": "autoMapInputData"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        336,
+        672
+      ],
+      "id": "7eadd3e8-827e-47f9-b90a-e6a1a934c4e8",
+      "name": "MSG GRUPOS1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "jsgrafica_contatos",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "contact_lid",
+              "fieldValue": "={{ $json.contact_lid }}"
+            },
+            {
+              "fieldId": "phone",
+              "fieldValue": "={{ $json.phone }}"
+            },
+            {
+              "fieldId": "conversation_id",
+              "fieldValue": "={{ $json.conversation_id }}"
+            },
+            {
+              "fieldId": "lead_name",
+              "fieldValue": "={{ $json.lead_name }}"
+            },
+            {
+              "fieldId": "lead_chat_name",
+              "fieldValue": "={{ $json.lead_chat_name }}"
+            },
+            {
+              "fieldId": "lead_sender_name",
+              "fieldValue": "={{ $json.lead_sender_name }}"
+            },
+            {
+              "fieldId": "lead_push_name",
+              "fieldValue": "={{ $json.lead_push_name }}"
+            },
+            {
+              "fieldId": "lead_notify_name",
+              "fieldValue": "={{ $json.lead_notify_name }}"
+            },
+            {
+              "fieldId": "lead_photo",
+              "fieldValue": "={{ $json.lead_photo }}"
+            },
+            {
+              "fieldId": "lead_phone",
+              "fieldValue": "={{ $json.lead_phone }}"
+            },
+            {
+              "fieldId": "lead_phone_ddd",
+              "fieldValue": "={{ $json.lead_phone_ddd }}"
+            },
+            {
+              "fieldId": "lead_phone_number",
+              "fieldValue": "={{ $json.lead_phone_number }}"
+            },
+            {
+              "fieldId": "lead_email",
+              "fieldValue": "={{ $json.lead_email }}"
+            },
+            {
+              "fieldId": "lead_intent",
+              "fieldValue": "={{ $json.lead_intent }}"
+            },
+            {
+              "fieldId": "idioma",
+              "fieldValue": "={{ $json.idioma }}"
+            },
+            {
+              "fieldId": "timezone",
+              "fieldValue": "={{ $json.timezone }}"
+            },
+            {
+              "fieldId": "data_primeiro_contato",
+              "fieldValue": "={{ $json.data_primeiro_contato }}"
+            },
+            {
+              "fieldId": "data_ultimo_contato",
+              "fieldValue": "={{ $json.data_ultimo_contato }}"
+            },
+            {
+              "fieldId": "tipo_registro",
+              "fieldValue": "={{ $json.tipo_registro }}"
+            },
+            {
+              "fieldId": "is_group",
+              "fieldValue": "={{ $json.is_group }}"
+            },
+            {
+              "fieldId": "instance_id",
+              "fieldValue": "={{ $json.instance_id }}"
+            },
+            {
+              "fieldId": "total_mensagens_recebidas",
+              "fieldValue": "={{ $json.total_mensagens_recebidas }}"
+            },
+            {
+              "fieldId": "total_mensagens_enviadas",
+              "fieldValue": "={{ $json.total_mensagens_enviadas }}"
+            },
+            {
+              "fieldId": "total_interacoes",
+              "fieldValue": "={{ $json.total_interacoes }}"
+            },
+            {
+              "fieldId": "classificacao",
+              "fieldValue": "={{ $json.classificacao }}"
+            },
+            {
+              "fieldId": "criado_em",
+              "fieldValue": "={{ $json.criado_em }}"
+            },
+            {
+              "fieldId": "atualizado_em",
+              "fieldValue": "={{ $json.atualizado_em }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        320,
+        1056
+      ],
+      "id": "1e3a4d85-5967-4ced-ba7c-aaf1f6442add",
+      "name": "CONTATOS1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2e19e537-4472-45df-a5f0-07cd6ae74f0f",
+              "leftValue": "={{ $json._action }}",
+              "rightValue": "update",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        32,
+        976
+      ],
+      "id": "18a8226a-e2b2-4bb1-8639-b1de3d068b32",
+      "name": "If CRIA OU ATUALIZA CONTATOS",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -496,
+        976
+      ],
+      "id": "f9570ed9-c5f4-416d-bb26-ff200ae84b66",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =======================================\n// PROCESSAR EVENTO — v2 PADRÃO LABONCHAIN\n// =======================================\n\nconst httpInput = $json ?? {};\nconst rawZapi = httpInput.body ?? {};\n\n/* ================= TIMEZONE ================= */\n\nfunction toSP(ms) {\n  if (!ms) return null;\n\n  try {\n    return new Date(\n      new Date(ms).toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })\n    ).toISOString().replace('Z', '-03:00');\n  } catch {\n    return null;\n  }\n}\n\nconst nowSP = toSP(Date.now());\nconst eventAt = rawZapi.momment ? toSP(rawZapi.momment) : nowSP;\n\n/* ================= MESSAGE ID ================= */\n\nconst messageId =\n  rawZapi.messageId ??\n  rawZapi.message_id ??\n  rawZapi.ids?.[0] ??\n  null;\n\nif (!messageId) {\n  return [];\n}\n\nconst traceId = rawZapi._traceContext?.traceId ?? null;\nconst spanId  = rawZapi._traceContext?.spanId  ?? null;\n\n/* ================= IDENTIFICAÇÃO ================= */\n\nconst chatLid = rawZapi.chatLid ?? rawZapi.chat_lid ?? null;\nconst senderLid = rawZapi.senderLid ?? null;\nconst participantLid = rawZapi.participantLid ?? rawZapi.participant_lid ?? null;\nconst participantPhone = rawZapi.participantPhone ?? null;\nconst phone = rawZapi.phone ?? null;\nconst connectedPhone = rawZapi.connectedPhone ?? rawZapi.connected_phone ?? null;\nconst eventType = rawZapi.type ?? rawZapi.event_type ?? null;\nif (eventType === 'MessageStatusCallback' || eventType === 'DeliveryCallback') {\n  return [{\n    json: {\n      _redirect: 'status',\n      message_id: rawZapi.ids?.[0] ?? rawZapi.messageId ?? rawZapi.id ?? null,\n      phone: rawZapi.phone ?? null,\n      instance_id: rawZapi.instanceId ?? null,\n      is_group: rawZapi.isGroup ?? false,\n      status: rawZapi.status ?? null,\n      momment: rawZapi.momment ?? null,\n      raw_payload: JSON.stringify($json),\n    }\n  }];\n}\nconst fromMe = rawZapi.fromMe ?? rawZapi.from_me ?? false;\nconst isGroup = rawZapi.isGroup ?? rawZapi.is_group ?? false;\nconst direction = fromMe ? 'OUTBOUND' : 'INBOUND';\nconst isIncoming = eventType === 'ReceivedCallback';\nconst notification = rawZapi.notification ?? null;\nconst isGroupNotification = isGroup && notification !== null;\nconst notificationParams = rawZapi.notificationParameters\n  ? JSON.stringify(rawZapi.notificationParameters)\n  : null;\n\nconst notificationContactLid = rawZapi.notificationParameters?.[0] ?? null;\n\n/* ================= IDs CORRIGIDOS POR CONTEXTO ================= */\n\nconst conversationId = isGroup\n  ? (phone ?? null)                             // grupo: phone é o ID do grupo ex: 120363...@g.us\n  : (chatLid ?? phone ?? null);                 // privada: chatLid ou phone\n\nconst contactLid = isGroup\n  ? (participantLid ?? participantPhone ?? null) // grupo: quem enviou a msg\n  : (chatLid ?? phone ?? null);                 // privada: chatLid ou phone\n\n/* ================= OPERATION ================= */\n\nlet operation = 'CREATE';\n\nif (rawZapi.status && rawZapi.status !== 'RECEIVED') {\n  operation = 'UPDATE';\n}\n\n/* ================= TEXTO ================= */\n\nconst messageText =\n  rawZapi.text?.message ??\n  rawZapi.message_text ??\n  rawZapi.hydratedTemplate?.message ??\n  rawZapi.listMessage?.description ??\n  rawZapi.buttonsMessage?.message ??\n  rawZapi.interactiveMessage?.body ??\n  null;\n\n/* ================= MÍDIA ================= */\n\nlet mediaType     = null;\nlet mediaUrl      = null;\nlet mimeType      = null;\nlet fileName      = null;\nlet caption       = null;\nlet ptt           = null;\nlet audioDuration = null;\nlet pageCount     = null;\nlet thumbnailUrl  = null;\n\nif (rawZapi.image) {\n  mediaType    = 'image';\n  mediaUrl     = rawZapi.image?.imageUrl     ?? null;\n  mimeType     = rawZapi.image?.mimeType     ?? null;\n  caption      = rawZapi.image?.caption      ?? null;\n  thumbnailUrl = rawZapi.image?.thumbnailUrl ?? null;\n}\n\nelse if (rawZapi.video) {\n  mediaType     = 'video';\n  mediaUrl      = rawZapi.video?.videoUrl ?? null;\n  mimeType      = rawZapi.video?.mimeType ?? null;\n  caption       = rawZapi.video?.caption  ?? null;\n  audioDuration = rawZapi.video?.seconds  ?? null;\n}\n\nelse if (rawZapi.audio) {\n  mediaType     = 'audio';\n  mediaUrl      = rawZapi.audio?.audioUrl ?? null;\n  mimeType      = rawZapi.audio?.mimeType ?? null;\n  ptt           = rawZapi.audio?.ptt      ?? false;\n  audioDuration = rawZapi.audio?.seconds  ?? null;\n}\n\nelse if (rawZapi.document) {\n  mediaType = 'document';\n  mediaUrl  = rawZapi.document?.documentUrl ?? null;\n  mimeType  = rawZapi.document?.mimeType    ?? null;\n  fileName  = rawZapi.document?.fileName    ?? null;\n  caption   = rawZapi.document?.caption      ?? null;\n  pageCount = rawZapi.document?.pageCount   ?? null;\n}\n  \nelse if (rawZapi.sticker) {\n  mediaType = 'sticker';\n  mediaUrl  = rawZapi.sticker?.stickerUrl ?? null;\n  mimeType  = rawZapi.sticker?.mimeType   ?? null;\n}\nelse if (rawZapi.gif) {\n  mediaType = 'gif';\n  mediaUrl  = rawZapi.gif?.gifUrl   ?? null;\n  mimeType  = rawZapi.gif?.mimeType ?? null;\n}\nelse if (rawZapi.ptv) {\n  mediaType = 'ptv';\n  mediaUrl  = rawZapi.ptv?.ptvUrl   ?? null;\n  mimeType  = rawZapi.ptv?.mimeType ?? null;\n}\nelse if (rawZapi.contact) {\n  mediaType = 'contact';\n}\nelse if (rawZapi.location) {\n  mediaType = 'location';\n}\nelse if (rawZapi.hydratedTemplate?.header?.document) {\n  mediaType = 'document';\n  mediaUrl  = rawZapi.hydratedTemplate.header.document.documentUrl ?? null;\n  mimeType  = rawZapi.hydratedTemplate.header.document.mimeType    ?? null;\n  fileName  = rawZapi.hydratedTemplate.header.document.fileName    ?? null;\n  caption   = rawZapi.hydratedTemplate.header.document.caption     ?? null;\n}\nelse if (rawZapi.hydratedTemplate?.header?.image) {\n  mediaType = 'image';\n  mediaUrl  = rawZapi.hydratedTemplate.header.image.imageUrl ?? null;\n  mimeType  = rawZapi.hydratedTemplate.header.image.mimeType ?? null;\n  caption   = rawZapi.hydratedTemplate.header.image.caption  ?? null;\n}\nelse if (rawZapi.hydratedTemplate?.header?.video) {\n  mediaType = 'video';\n  mediaUrl  = rawZapi.hydratedTemplate.header.video.videoUrl ?? null;\n  mimeType  = rawZapi.hydratedTemplate.header.video.mimeType ?? null;\n}\n\n/* ================= LEAD FIELDS ================= */\n\n// Grupo: dados do participante que enviou\n// Privada: dados do contato\nconst leadPhone = isGroup ? participantPhone : phone;\nconst leadPhoneDdd = leadPhone ? String(leadPhone).substring(2, 4) : null;\nconst leadPhoneNumber = leadPhone ? String(leadPhone).substring(4) : null;\n\nfunction nomeValido(nome, ...identificadores) {\n  if (!nome) return false;\n  const n = String(nome).trim();\n  if (!n) return false;\n  return !identificadores.some(id => id && n === String(id).trim());\n}\n\n// fromMe:true em chat privado -> senderName é sempre o nome da própria conta conectada\n// (ex.: \"J S Gráfica\"), nunca o nome do cliente. Nao usar como candidato nesse caso -\n// causa raiz da demanda 169 (contatos LID-only gravados com o nome da empresa).\nconst leadName = isGroup\n  ? ([rawZapi.senderName, rawZapi.pushName].find(n => nomeValido(n, participantPhone, participantLid)) ?? null)\n  : (fromMe\n      ? ([rawZapi.chatName].find(n => nomeValido(n, phone, chatLid)) ?? null)\n      : ([rawZapi.chatName, rawZapi.senderName].find(n => nomeValido(n, phone, chatLid)) ?? null));\n\nconst leadPhoto = isGroup\n  ? (rawZapi.senderPhoto ?? null)\n  : (rawZapi.senderPhoto ?? rawZapi.photo ?? null);\n\n/* ================= STATUS ================= */\n\nconst status = rawZapi.status ?? null;\n\nlet sentAt = null;\nlet deliveredAt = null;\nlet readAt = null;\n\nif (status === 'SENT') sentAt = eventAt;\nif (status === 'DELIVERED') deliveredAt = eventAt;\nif (status === 'READ') readAt = eventAt;\n\n/* ================= ROTEAMENTO ================= */\n\nlet roteamento = null;\n\nif (\n  isIncoming &&\n  operation === 'CREATE' &&\n  !fromMe &&\n  !isGroup\n) {\n  if ((messageText && messageText.trim()) || mediaType) {\n    roteamento = 'llm';\n  } else if (rawZapi.reaction?.value) {\n    roteamento = 'reaction';\n  }\n}\n\n/* ================= OUTPUT ================= */\n\nreturn [{\n  json: {\n\n    // ================= IDs =================\n\n    message_id: messageId,\n    conversation_id: conversationId,\n    contact_lid: contactLid,\n    chat_lid: chatLid,\n    sender_lid: senderLid,\n    participant_lid: participantLid,\n    participant_phone: participantPhone,\n    phone: phone,\n    connected_phone: connectedPhone,\n\n    // ================= LEAD =================\n\n    lead_name: leadName,\n    lead_chat_name: rawZapi.chatName ?? null,\n    lead_sender_name: rawZapi.senderName ?? null,\n    lead_push_name: rawZapi.pushName ?? null,\n    lead_notify_name: rawZapi.notifyName ?? null,\n    lead_photo: leadPhoto,\n    lead_phone: leadPhone,\n    lead_phone_ddd: leadPhoneDdd,\n    lead_phone_number: leadPhoneNumber,\n    lead_email: null,\n    lead_intent: null,\n\n    // ================= EVENTO =================\n\n    tipo_evento: isIncoming ? 'RECEBIDA' : 'STATUS',\n    event_type: eventType,\n    operation: operation,\n    direction: direction,\n    origin: 'Z-API',\n    roteamento: roteamento,\n    notification:             notification,\n    notification_params:      notificationParams,\n    notification_contact_lid: notificationContactLid,\n    is_group_notification:    isGroupNotification,\n\n    from_me: fromMe,\n    from_api: rawZapi.fromApi ?? false,\n\n    // ================= FLAGS =================\n\n    is_group: isGroup,\n    is_first_interaction: null,\n    is_status_reply: rawZapi.isStatusReply ?? false,\n    is_edit: rawZapi.isEdit ?? false,\n    is_newsletter: rawZapi.isNewsletter ?? false,\n    waiting_message: rawZapi.waitingMessage ?? false,\n    is_forwarded: rawZapi.forwarded ?? false,\n    broadcast: rawZapi.broadcast ?? false,\n\n    // ================= CONTEÚDO =================\n\n    message_text: messageText,\n    caption: caption,\n    media_type: mediaType,\n    media_url: mediaUrl,\n    mime_type:      mimeType,\n    file_name:      fileName,\n    page_count:     pageCount,\n    thumbnail_url:  thumbnailUrl,\n    ptt:            ptt,\n    audio_duration: audioDuration,\n\n    // ================= STATUS =================\n\n    status: status,\n    sent_at: sentAt,\n    delivered_at: deliveredAt,\n    read_at: readAt,\n\n    // ================= CONFIGURAÇÕES =================\n\n    message_expiration_seconds: rawZapi.messageExpirationSeconds ?? null,\n    request_method:             rawZapi.requestMethod            ?? null,\n    \n    // ================= TIMESTAMPS =================\n\n    first_event_at: eventAt,\n    last_update_at: nowSP,\n    data_timestamp: rawZapi.momment ?? null,\n    expires_at:     rawZapi.expiresAt ?? null,\n    \n    // ================= QUOTED =================\n\n    quoted_msg_id: rawZapi.referenceMessageId ?? rawZapi.quotedMsg?.messageId ?? null,\n    quoted_msg_body: rawZapi.quotedMsg?.body ?? null,\n    quoted_msg: rawZapi.quotedMsg\n      ? JSON.stringify(rawZapi.quotedMsg)\n      : null,\n\n    // ================= REAÇÃO =================\n\n    reaction_text:       rawZapi.reaction?.value      ?? rawZapi.reactionMessage?.text      ?? null,\n    reaction_message_id: rawZapi.reaction?.referencedMessage?.messageId ?? rawZapi.reactionMessage?.messageId ?? null,\n    reaction_by:         rawZapi.reaction?.reactionBy  ?? null,    \n    // ================= INTERATIVO =================\n\n    selected_button_id: rawZapi.buttonsResponseMessage?.buttonId\n      ?? rawZapi.buttonsResponse?.buttonId\n      ?? null,\n\n    selected_row_id: rawZapi.listResponseMessage?.selectedRowId\n      ?? rawZapi.listResponse?.singleSelectReply?.selectedRowId\n      ?? null,\n\n    buttons_response: rawZapi.buttonsResponseMessage\n    ? JSON.stringify(rawZapi.buttonsResponseMessage)\n    : rawZapi.buttonsResponse\n      ? JSON.stringify(rawZapi.buttonsResponse)\n      : null,\n\n    list_response: rawZapi.listResponseMessage\n    ? JSON.stringify(rawZapi.listResponseMessage)\n    : rawZapi.listResponse\n      ? JSON.stringify(rawZapi.listResponse)\n      : null,\n\n    // ================= CONTATO COMPARTILHADO =================\n\n    contact_display_name: rawZapi.contact?.displayName ?? null,\n    contact_vcard:        rawZapi.contact?.vCard        ?? null,\n    contact_phones:       rawZapi.contact?.phones\n      ? JSON.stringify(rawZapi.contact.phones)\n      : null,\n\n    // ================= LOCALIZAÇÃO =================\n    \n    location_latitude:  rawZapi.location?.latitude      ?? null,\n    location_longitude: rawZapi.location?.longitude     ?? null,\n    location_name:      rawZapi.location?.name          ?? null,\n    location_address:   rawZapi.location?.address       ?? null,\n    location_url:       rawZapi.location?.url           ?? null,\n\n    // ================= POLL =================\n\n    poll_name: rawZapi.pollMessage?.name ?? null,\n    poll_options: rawZapi.pollMessage\n      ? JSON.stringify(rawZapi.pollMessage.options)\n      : null,\n\n    // ================= ANÚNCIO =================\n\n    external_ad_reply: rawZapi.externalAdReply\n      ? JSON.stringify(rawZapi.externalAdReply)\n      : null,\n    ad_source_url:  rawZapi.externalAdReply?.sourceUrl  ?? null,\n    ad_title:       rawZapi.externalAdReply?.title       ?? null,\n    ad_body:        rawZapi.externalAdReply?.body        ?? null,\n    // ================= INFRA =================\n\n    instance_id: rawZapi.instanceId ?? null,\n    phone_device: rawZapi.phoneDevice ?? null,\n\n    ids_array: rawZapi.ids\n      ? JSON.stringify(rawZapi.ids)\n      : null,\n\n    trace_id: traceId,\n    span_id:  spanId,\n\n    // ================= AUDITORIA =================\n\n    raw_zapi:    JSON.stringify(rawZapi),\n    raw_payload: JSON.stringify(httpInput),\n  }\n}];"
+      },
+      "id": "2480def3-d32c-449e-9627-a455a4d394ba",
+      "name": "Processar Evento",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2352,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.tipo_evento }}",
+                    "rightValue": "RECEBIDA",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "826ad38e-334d-4b96-a5fa-2c9b7b600c32"
+                  },
+                  {
+                    "leftValue": "={{ $json.is_group }}",
+                    "rightValue": false,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "equals"
+                    },
+                    "id": "1d113327-c71a-4027-a564-5d33be07e293"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "PRIVADA"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.is_group }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "equals"
+                    },
+                    "id": "ca00e453-f589-4a84-944f-121f75d7781c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "GRUPO"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -1136,
+        672
+      ],
+      "name": "Switch Log Geral",
+      "id": "2af20047-183d-4bd4-96ce-d7682aebd52a"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =======================================\n// PREPARAR LOG MSG PRIVADA — COMPLETO\n// Passa TODOS os campos do Processar Evento\n// =======================================\nconst data = $('Switch Log Geral').first().json;\n\n// Demanda 318: resolve o texto da mensagem citada (quoted_msg_id), quando existir.\n// 'Buscar Mensagem Citada' roda sempre (alwaysOutputData + onError continueRegularOutput,\n// mesma licao da demanda 317 - nunca derruba este ramo), fica vazio/nao encontrado na\n// maioria dos casos (so ~3% das mensagens sao resposta a algo, e desses ~16% nao acham a\n// mensagem original). Nesses casos quoted_msg_body fica null, igual hoje.\nlet quoted_msg_body = null;\ntry {\n  const found = $('Buscar Mensagem Citada').all();\n  const row = (found && found[0] && found[0].json) ? found[0].json : null;\n  if (data.quoted_msg_id && row && row.message_id) {\n    quoted_msg_body = row.message_text || row.caption || '[midia sem legenda]';\n  }\n} catch (e) { quoted_msg_body = null; }\n\n// Remove campos internos que não existem na tabela\nconst { is_autorizado, is_comando_autorizado, ...logData } = data;\nlogData.quoted_msg_body = quoted_msg_body;\n\nreturn [{ json: logData }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        496
+      ],
+      "id": "b7fe65dd-b235-40df-91ca-6a16948c9ffa",
+      "name": "PREPARAR LOG MSG PRIVADA"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =======================================\n// PREPARAR LOG CONTATOS\n// Input 0 = evento (do Merge principal)\n// Input 1 = contato existente (do Get row(s) CONTATOS)\n// =======================================\n\nconst allItems = $input.all();\n\nconst data = allItems.find(i => i.json.tipo_evento)?.json ?? {};\n\n// candidatos a contato existente: tudo que NAO e o evento em si e tem dado real de linha.\n// alwaysOutputData faz cada Get devolver um item VAZIO ({}) quando nao acha nada (nao e copia\n// do evento) - {} e \"truthy\" em JS, entao alem de excluir tipo_evento e preciso exigir 'phone'\n// pra nao pegar esse placeholder vazio por engano (achado ao testar a demanda 266).\nconst candidatos = allItems\n  .filter(i => !i.json.tipo_evento && i.json.phone)\n  .map(i => i.json);\n\n// prioriza o candidato cujo contact_lid bate com o atual (achado pelo lookup por contact_lid);\n// se nao tiver (contact_lid mudou/rotacionou), cai pro achado pelo lookup por phone\n// (demanda 266 - contact_lid do WhatsApp e instavel, phone e a identidade real)\nconst contatoExistente =\n  candidatos.find(c => c.contact_lid === data.contact_lid) ??\n  candidatos.find(Boolean) ??\n  null;\n\nconst existe = !!contatoExistente;\nconst agora = data.last_update_at;\n\n// ================= NOME (nao sobrescrever nome bom por vazio/@lid) =================\n\nfunction nomeValido(nome, ...identificadores) {\n  if (!nome) return false;\n  const n = String(nome).trim();\n  if (!n) return false;\n  return !identificadores.some(id => id && n === String(id).trim());\n}\n\nconst leadNameFinal = nomeValido(data.lead_name, data.phone, data.contact_lid)\n  ? data.lead_name\n  : (contatoExistente?.lead_name ?? null);\n\n// ================= TELEFONE (nao sobrescrever numero bom por LID) =================\n\nfunction phoneValido(phone) {\n  if (!phone) return false;\n  return !String(phone).includes('@lid');\n}\n\nconst phoneFinal = phoneValido(data.phone)\n  ? data.phone\n  : (contatoExistente?.phone ?? data.phone);\n\nconst leadPhoneFinal = phoneFinal;\nconst leadPhoneDddFinal = leadPhoneFinal ? String(leadPhoneFinal).substring(2, 4) : null;\nconst leadPhoneNumberFinal = leadPhoneFinal ? String(leadPhoneFinal).substring(4) : null;\n\n// ================= IDIOMA =================\n\nfunction getIdioma(phone) {\n  if (!phone) return null;\n  if (String(phone).startsWith('55')) return 'pt-BR';\n  if (String(phone).startsWith('1')) return 'en-US';\n  if (String(phone).startsWith('34')) return 'es-ES';\n  return null;\n}\n\n// ================= TIMEZONE =================\n\nfunction getTimezone(phone) {\n  if (!phone) return null;\n  if (String(phone).startsWith('55')) return 'America/Sao_Paulo';\n  if (String(phone).startsWith('1')) return 'America/New_York';\n  return null;\n}\n\n// ================= PRIMEIRO CONTATO =================\n\nconst dataPrimeiroContato =\n  contatoExistente?.data_primeiro_contato ?? data.first_event_at;\n\n// ================= CONTADORES =================\n\nlet totalRecebidas = data.from_me ? 0 : 1;\nlet totalEnviadas = data.from_me ? 1 : 0;\nlet totalInteracoes = 1;\nlet classificacao = \"NOVO\";\n\nif (existe) {\n\n  totalRecebidas =\n    Number(contatoExistente.total_mensagens_recebidas || 0) +\n    (data.from_me ? 0 : 1);\n\n  totalEnviadas =\n    Number(contatoExistente.total_mensagens_enviadas || 0) +\n    (data.from_me ? 1 : 0);\n\n  totalInteracoes =\n    Number(contatoExistente.total_interacoes || 0) + 1;\n\n  classificacao = totalInteracoes > 1 ? \"RECORRENTE\" : \"NOVO\";\n}\n\n// ================= TIMESTAMPS =================\n\nconst criadoEm = contatoExistente?.criado_em ?? agora;\nconst atualizadoEm = agora;\n\nconst _action = existe ? \"update\" : \"create\";\n\n// chave pra localizar a linha no UPDATE: o contact_lid JA GRAVADO nela (pode ser o antigo,\n// se essa linha foi achada pelo fallback de phone da demanda 266) - nunca o novo contact_lid\n// recebido agora, que ainda nao existe em nenhuma linha. Bug achado testando esta demanda:\n// filtrar o UPDATE por phone (em vez de por essa chave) colide com constraint unique de\n// contact_lid quando o mesmo phone ja tem mais de 1 linha (duplicata historica).\nconst _matchContactLid = contatoExistente?.contact_lid ?? data.contact_lid;\n\n// ================= OUTPUT =================\n\nreturn [{\n  json: {\n    _action,\n    _matchContactLid,\n    contact_lid: data.contact_lid,\n    phone: phoneFinal,\n    conversation_id: data.conversation_id,\n\n    lead_name: leadNameFinal,\n    lead_chat_name: data.lead_chat_name,\n    lead_sender_name: data.lead_sender_name,\n    lead_push_name: data.lead_push_name,\n    lead_notify_name: data.lead_notify_name,\n    lead_photo: data.lead_photo,\n\n    lead_phone: leadPhoneFinal,\n    lead_phone_ddd: leadPhoneDddFinal,\n    lead_phone_number: leadPhoneNumberFinal,\n\n    lead_email: data.lead_email,\n    lead_intent: data.lead_intent,\n\n    idioma: getIdioma(data.participant_phone ?? data.phone),\n    timezone: getTimezone(data.participant_phone ?? data.phone),\n\n    data_primeiro_contato: dataPrimeiroContato,\n    data_ultimo_contato: agora,\n\n    total_mensagens_recebidas: totalRecebidas,\n    total_mensagens_enviadas: totalEnviadas,\n    total_interacoes: totalInteracoes,\n    classificacao: classificacao,\n\n    criado_em: criadoEm,\n    atualizado_em: atualizadoEm,\n\n    tipo_registro: data.is_group ? 'GRUPO' : 'INDIVIDUAL',\n    is_group: data.is_group,\n    instance_id: data.instance_id\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -272,
+        976
+      ],
+      "id": "2c535af3-c262-4834-aa40-798740b465bd",
+      "name": "PREPARAR LOG CONTATOS"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =======================================\n// PREPARAR LOG MSG GRUPOS - COMPLETO\n// Passa TODOS os dados sem filtrar\n// =======================================\nconst data = $('Switch Log Geral').first().json;\n\n// Remove campos internos que não existem na tabela\nconst { is_autorizado, is_comando_autorizado, ...logData } = data;\n\nreturn [{ json: logData }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        704
+      ],
+      "id": "cf9bf541-b408-41ab-a214-9b6584323330",
+      "name": "PREPARAR LOG MSG GRUPOS"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "config-sessao-jsgrafica-001",
+                    "leftValue": "={{ String($json._has_session) }}",
+                    "rightValue": "true",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CONFIG"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "05cf4e5c-801c-4345-89a2-e4eda8251690",
+                    "leftValue": "={{ $json.is_comando_autorizado }}",
+                    "rightValue": "true",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "COMANDO"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.selected_button_id }}",
+                    "rightValue": "GERAR_NOVO_CODIGO|",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "09e1f8bc-26b0-4e13-bd3f-aa0dbcae5511"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CONECTIVIDADE"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json._redirect }}",
+                    "rightValue": "status",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "status-case"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "STATUS"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "grupo-pedido-case",
+                    "leftValue": "={{ $json.is_grupo_pedido }}",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "GRUPO_PEDIDOS"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a6e8093d-7499-4c92-8474-ccccb489d4d3",
+                    "leftValue": "={{ $json.buttons_response }}",
+                    "rightValue": "Cancelar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "PEDIDO_CANCELADO"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "name": "Switch Redirect",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1632,
+        -208
+      ],
+      "id": "331fe498-c003-4d86-8cec-1c07366db2ef"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/jsgraficastatusmsg",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "name": "REDIRECIONAR PARA STATUS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -944,
+        -128
+      ],
+      "id": "9886a37a-1d3d-42b1-8284-2b3bf394801d"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/jsgrafica_instancia_reconexao",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "name": "REDIRECIONAR PARA CONECTIVIDADE",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1184,
+        -160
+      ],
+      "id": "a723423b-12ca-4f24-b5e8-f61c6a8b3ff9"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{$json.tipo_evento}}",
+              "rightValue": "RECEBIDA",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "id": "7cc0b71c-2069-4dc9-9d49-69c45062b863"
+            },
+            {
+              "leftValue": "={{$json.operation}}",
+              "rightValue": "CREATE",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "id": "62290e81-96b7-4763-92bf-bd4cb092a7de"
+            },
+            {
+              "leftValue": "={{$json.event_type}}",
+              "rightValue": "ReceivedCallback",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "id": "4c524cfb-2bb5-485b-9b9b-acc03a829d1a"
+            },
+            {
+              "leftValue": "={{$json.is_group_notification}}",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              },
+              "id": "c24d8ec3-8d68-406f-bc7c-82bdc65e3265"
+            },
+            {
+              "leftValue": "={{$json.from_me}}",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              },
+              "id": "0db1048b-832a-4aee-83eb-48a430d6d603"
+            },
+            {
+              "leftValue": "={{ $json.roteamento }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "id": "b7938d3f-a5c6-49ce-a6ef-efc6cdc1e925"
+            },
+            {
+              "leftValue": "={{$json.broadcast}}",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              },
+              "id": "f7320e80-6d22-48bf-8beb-422cd43c424f"
+            },
+            {
+              "leftValue": "={{$json.is_newsletter}}",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              },
+              "id": "55c7f227-80a0-427b-a6d1-7796d2c6244d"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "name": "If enviar llm",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2608,
+        208
+      ],
+      "id": "fbb5247c-2eb2-4240-a685-7396910869e2"
+    },
+    {
+      "parameters": {},
+      "name": "Merge Log Geral",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1376,
+        672
+      ],
+      "id": "d8040b5d-78d0-4066-b614-bb0a3c5b1545"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.media_type }}",
+              "rightValue": "audio",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "If É Audio?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2352,
+        192
+      ],
+      "id": "1287ec51-3ef2-4ad3-b3d7-daf50ff007f6"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.media_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "name": "HTTP baixar audio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2144,
+        176
+      ],
+      "id": "0a7d2fa0-fc4f-4fe3-a900-4074ddfba1d2"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/tmp/audio_{{ $json.message_id }}.ogg",
+        "options": {}
+      },
+      "name": "Read/Write Files from Disk",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -2608,
+        416
+      ],
+      "id": "0264ea4c-a152-45c3-a446-491eeff52f87"
+    },
+    {
+      "parameters": {
+        "command": "=ffmpeg -i /tmp/audio_{{ $json.message_id }}.ogg /tmp/audio_{{ $json.message_id }}.mp3 -y 2>&1; echo \"EXIT:$?\""
+      },
+      "name": "Execute Command",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -2368,
+        416
+      ],
+      "id": "002086be-4c3d-4806-8a91-ea536b077502"
+    },
+    {
+      "parameters": {
+        "fileSelector": "=/tmp/audio_{{ $('Processar Evento').first().json.message_id }}.mp3",
+        "options": {
+          "mimeType": "audio/mpeg",
+          "dataPropertyName": "data"
+        }
+      },
+      "name": "Read/Write Files from Disk1",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -2144,
+        416
+      ],
+      "id": "3e990735-770e-4291-a22f-c5238cfcdec9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first();\nconst binaryKey = Object.keys(item.binary)[0];\nconst binaryBuffer = await this.helpers.getBinaryDataBuffer(0, binaryKey);\nconst audioBase64 = binaryBuffer.toString('base64').replace(/\\s/g, '');\nconst mimeType = (item.binary[binaryKey].mimeType || 'audio/mpeg').split(';')[0];\nreturn [{ json: { ...item.json, _audio_base64: audioBase64, _audio_mime: mimeType } }];"
+      },
+      "name": "Converter para base64",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2592,
+        688
+      ],
+      "id": "04f1634c-d3eb-41d4-82e2-7fe8cbcc60a8"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googlePalmApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"inline_data\": {\n            \"mime_type\": \"{{ $json._audio_mime.split(';')[0] }}\",\n            \"data\": \"{{ $json._audio_base64 }}\"\n          }\n        },\n        {\n          \"text\": \"Transcreva exatamente o que foi dito neste áudio em português.\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "name": "HTTP Transcrição audio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2352,
+        688
+      ],
+      "alwaysOutputData": true,
+      "id": "80743061-bd89-4177-af67-bed91193de0a",
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HuMb1WcX1o0FTeLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const leadData = $('Processar Evento').first().json;\nlet transcricao = '';\ntry {\n  const geminiOutput = $('HTTP Transcrição audio').first().json;\n  transcricao = geminiOutput.candidates?.[0]?.content?.parts?.[0]?.text ?? '';\n} catch (e) { transcricao = ''; }\nreturn [{ json: { ...leadData, message_text: transcricao || '[áudio sem transcrição]', media_type: leadData.media_type, transcription_text: transcricao || '' } }];"
+      },
+      "name": "processar audio p llm",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2128,
+        672
+      ],
+      "id": "2cf96f13-66ff-454d-af70-224ae545c79b"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json;\nconst AUTORIZADOS = ['5521965185667'];\n// Em grupos: phone = ID do grupo; contact_lid = participantPhone (sender real)\nconst senderPhone = data.contact_lid ?? data.phone ?? '';\nconst is_grupo_equipe = data.is_group === true;\nconst is_autorizado = AUTORIZADOS.includes(senderPhone);\nconst texto = data.message_text ?? '';\nconst is_comando = texto.trim().startsWith('/');\nconst is_option_list = !!(data.selected_row_id);\n// Privada: autorização normal | Grupo: verifica contact_lid\nconst is_comando_autorizado =\n  !is_grupo_equipe && is_autorizado && (is_comando || is_option_list);\n// Flag para roteamento: grupo da equipe + sender autorizado + comando\nconst is_grupo_pedido = is_grupo_equipe && is_autorizado && is_comando;\nreturn [{ json: { ...data, is_autorizado, is_grupo_equipe, is_comando_autorizado, is_grupo_pedido } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2160,
+        -128
+      ],
+      "id": "e7a38e5f-8b89-4ca8-b438-da5cae2d95b5",
+      "name": "IDENTIFICAR AUTORIZAÇÃO"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message_text }}",
+                    "rightValue": "/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "a61b7fea-e8d2-4b6a-8379-6f7d53acad2e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "PRODUTOS "
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6f4990f5-c5ef-40ef-ac73-75a82478876e",
+                    "leftValue": "={{ $json.selected_row_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "PRODUTOS "
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "aab9941b-1b38-45fc-89a5-d3eb81a6aaf0",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "PEDIDOS "
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d74bb580-f6fa-4ccd-afdc-1a5ecd845657",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CONFIG"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -512,
+        -240
+      ],
+      "id": "17a31dc4-8e13-4dad-bee1-804b87754c38",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/jsgraficagestaoprodutos",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -176,
+        -240
+      ],
+      "id": "3b76e9a0-3610-422a-868b-a25ce2631aa8",
+      "name": "HTTP Request1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5c89f277-b794-49f3-9cb5-da9158ab64a6",
+              "leftValue": "={{ $json.is_autorizado }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -736,
+        -192
+      ],
+      "id": "d86dcbe5-f722-4327-9a6c-2196c74cce8d",
+      "name": "If É TUTOR?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const dados = $('ENVIAR PARA LLM').first().json;\nconst memoriaItems = $('GET Memoria Ativa').all();\nconst memoria = (memoriaItems && memoriaItems[0]) ? memoriaItems[0].json : null;\n\n// Fases que indicam sessao de pedido aberta (salvas pelo 06-PEDIDOS)\nconst fasesAtivas = [\n  'coleta_specs_pedido',\n  'perguntar_pagamento',\n  'aguardando_confirmacao_pedido',\n  'aguardando_pix'\n];\n\nconst faseAtual = memoria && memoria.fase_jornada ? memoria.fase_jornada : null;\nconst statusAtendimento = memoria && memoria.status_atendimento ? memoria.status_atendimento : null;\nconst origemMemoria = memoria && memoria.origem ? memoria.origem : null;\n\nlet estadoConsolidado = null;\nif (memoria && memoria.estado_consolidado) {\n  try {\n    estadoConsolidado = typeof memoria.estado_consolidado === 'string'\n      ? JSON.parse(memoria.estado_consolidado)\n      : memoria.estado_consolidado;\n  } catch(e) {}\n}\n\n// Equipe assumiu -> ignora\nif (statusAtendimento === 'assumido_humano' || statusAtendimento === 'aguardando_equipe') {\n  return [{ json: Object.assign({}, dados, { _destino: 'ignorar', _fase_ativa: faseAtual }) }];\n}\n\n// Sessao de pedido aberta (origem=06-pedidos OU fase de pedido)\nconst temSessaoPedido = fasesAtivas.indexOf(faseAtual) !== -1 || origemMemoria === '06-pedidos';\nif (temSessaoPedido) {\n  const payload = {\n    telefone: dados.phone,\n    push_name: dados.lead_push_name || dados.lead_name || 'Cliente',\n    fase: faseAtual || 'coleta_specs_pedido',\n    mensagem_original: dados.message_text || '',\n    message_id: dados.message_id,\n    selected_button_id: dados.selected_button_id || null,\n    arquivo_url: dados.media_url || null,\n    arquivo_tipo: dados.media_type || null,\n    arquivo_nome: dados.file_name || null,\n    estado_pedido: estadoConsolidado\n  };\n  return [{ json: Object.assign({}, dados, { _destino: 'pedidos', _fase_ativa: faseAtual, _payload_pedido: payload }) }];\n}\n\n// ============================================\n// DEMANDA 021 - reconhecimento de palavra-chave\n// Sem sessao ativa, mas texto indica intencao de pedido -> entra direto no\n// 06-PEDIDOS (fase 'inicio', igual ao payload que a IA ja usa quando\n// identifica servico) sem passar pelo JSGRAFICA_ATENDIMENTO_AI.\n// Nao reintroduz conversa livre: so aciona o fluxo estruturado de pedidos.\n// ============================================\nconst KEYWORDS_SERVICO = {\n  impressao: ['imprimir', 'impressao', 'impressão'],\n  xerox: ['xerox', 'copia', 'cópia'],\n  foto: ['imprimir foto', 'imprimir fotos', 'revelar foto', 'revelar fotos', 'revelar', 'revelacao', 'revelação', '3x4', '10x15', '7x10', '15x20', '20x29'],\n  plastificacao: ['plastificar', 'plastificacao', 'plastificação'],\n  encadernacao: ['encadernar', 'encadernacao', 'encadernação', 'espiral'],\n  banner: ['banner', 'faixa', 'adesivo'],\n  recarga: ['recarga'],\n  consulta: ['consulta cpf', 'consulta de cpf', 'consulta serasa', 'consulta de serasa', 'segunda via', '2ª via', '2 via']\n};\n\nconst textoCliente = String(dados.message_text || '').toLowerCase();\nlet servicoDetectadoPalavraChave = null;\nif (textoCliente.trim()) {\n  for (const [servico, palavras] of Object.entries(KEYWORDS_SERVICO)) {\n    if (palavras.some(p => textoCliente.includes(p))) {\n      servicoDetectadoPalavraChave = servico;\n      break;\n    }\n  }\n}\n\nif (servicoDetectadoPalavraChave) {\n  const payload = {\n    fase: 'inicio',\n    telefone: dados.phone,\n    push_name: dados.push_name || dados.chat_name || 'Cliente',\n    servico_detectado: servicoDetectadoPalavraChave,\n    mensagem_original: dados.message_text || '',\n    message_id: dados.message_id,\n    arquivo_url: dados.media_url || null,\n    arquivo_tipo: dados.media_type || null\n  };\n  return [{ json: Object.assign({}, dados, { _destino: 'pedidos', _fase_ativa: 'inicio', _origem_pedido: 'palavra_chave_021', _payload_pedido: payload }) }];\n}\n\n// Sem sessao ativa e sem palavra-chave -> ATENDIMENTO_AI (whitelist decide)\nreturn [{ json: Object.assign({}, dados, { _destino: 'atendimento', _fase_ativa: null }) }];"
+      },
+      "id": "node-check-sessao",
+      "name": "CHECK SESSAO PEDIDO",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1168,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json._destino }}",
+                    "rightValue": "ignorar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "IGNORAR"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json._destino }}",
+                    "rightValue": "pedidos",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "PEDIDOS"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json._destino }}",
+                    "rightValue": "agente_fase_b",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "AGENTE FASE B"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "node-switch-destino",
+      "name": "Switch Destino",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -928,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/jsgraficapedidos",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json._payload_pedido) }}",
+        "options": {}
+      },
+      "id": "node-http-pedidos",
+      "name": "HTTP 06-PEDIDOS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -720,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/jsgraficagrupopedidos",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "http-07-grupo-pedidos-fix2",
+      "name": "HTTP 07-GRUPO-PEDIDOS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -1616,
+        432
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/labon_config",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ ...$json, prefix: 'jsgrafica' }) }}",
+        "options": {}
+      },
+      "id": "http-redirect-config-jsgrafica-001",
+      "name": "HTTP ReDIRECT CONFIG",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1392,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "labon_onboarding_sessao",
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "phone",
+              "condition": "eq",
+              "keyValue": "={{ $('IDENTIFICAR AUTORIZAÇÃO').item.json.phone }}"
+            }
+          ]
+        }
+      },
+      "id": "get-onboarding-sessao-005",
+      "name": "GET Onboarding Sessao",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1984,
+        -128
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const original = $('IDENTIFICAR AUTORIZAÇÃO').item.json;\n// _has_session sempre false: a tabela 'jsgrafica_config_sessions' nao existe no banco\n// (achado ao migrar do JWT hardcoded - o codigo antigo so engolia esse erro em silencio).\n// Ver achado registrado na demanda 005 para decisao futura do Edvam/PM.\nconst _has_session = false;\nconst _em_onboarding = $('GET Onboarding Sessao').all().length > 0;\nreturn [{ json: { ...original, _has_session, _em_onboarding } }];"
+      },
+      "id": "consolidar-flag-sessao-005",
+      "name": "Consolidar Flag Sessao",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1808,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.from_me }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "id": "037-cond-frommetrue"
+            },
+            {
+              "leftValue": "={{ $json.event_type }}",
+              "rightValue": "ReceivedCallback",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "id": "037-cond-eventtype"
+            },
+            {
+              "leftValue": "={{ $json.operation }}",
+              "rightValue": "CREATE",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "id": "037-cond-operation"
+            },
+            {
+              "leftValue": "={{ $json.is_group_notification }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              },
+              "id": "037-cond-notgroupnotif"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "if-msg-enviada-por-nos-037",
+      "name": "If Mensagem Enviada Por Nos",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2144,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "jsgrafica_log_msgs_privadas",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "message_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.message_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "transcription_text",
+              "fieldValue": "={{ $json.transcription_text }}"
+            },
+            {
+              "fieldId": "message_text",
+              "fieldValue": "={{ $json.message_text }}"
+            }
+          ]
+        }
+      },
+      "id": "update-transcricao-audio-058",
+      "name": "UPDATE Transcricao Audio Log",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1952,
+        848
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "jsgrafica_contatos",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "phone",
+              "keyValue": "={{ $json.phone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        1152
+      ],
+      "id": "d266f001-2a3b-4c5d-9e6f-266ab00c0phone",
+      "name": "Get row(s) CONTATOS por phone",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_telefones_autorizados",
+        "limit": 1,
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.phone }}"
+            },
+            {
+              "keyName": "ativo",
+              "condition": "eq",
+              "keyValue": true
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1068,
+        368
+      ],
+      "id": "d274b001-get-telefone-autorizado-faseb",
+      "name": "GET Telefone Autorizado (Fase B)",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const original = $('CHECK SESSAO PEDIDO').first().json;\nconst rows = $('GET Telefone Autorizado (Fase B)').all();\nconst autorizado = rows.length > 0 && !!(rows[0].json && rows[0].json.id);\n\n// Demanda 279: a heuristica de palavra-chave da 021 roda ANTES desta checagem dentro do\n// CHECK SESSAO PEDIDO e manda _destino='pedidos' pro 06-PEDIDOS (envio desabilitado ha\n// semanas, acha 245) sempre que bate uma palavra tipo 'xerox'/'imprimir'/'recarga' etc,\n// mesmo sem sessao de pedido real ativa - isso engolia a mensagem em silencio, inclusive\n// pra numero autorizado no agente Fase B, que resolve esse caso melhor hoje. So a marca\n// _origem_pedido==='palavra_chave_021' identifica esse caminho (sessao de pedido de\n// verdade, calculada antes no mesmo node, NUNCA seta essa marca) - reconsiderar so esse\n// caso e o fallback padrao ('atendimento'), nunca uma sessao de pedido real.\nconst eraKeywordAntiga = original._destino === 'pedidos' && original._origem_pedido === 'palavra_chave_021';\nconst eraAtendimentoFallback = original._destino === 'atendimento';\n\nif (eraKeywordAntiga || eraAtendimentoFallback) {\n  const semTexto = !(original.message_text && String(original.message_text).trim());\n  const semLegenda = !(original.caption && String(original.caption).trim());\n  const midiaSemLegenda = !!original.media_type && semTexto && semLegenda;\n  const textoPuro = !original.media_type && !semTexto;\n  const elegivelFaseB = midiaSemLegenda || textoPuro;\n\n  if (autorizado && elegivelFaseB) {\n    return [{ json: { ...original, _destino: 'agente_fase_b' } }];\n  }\n  if (eraKeywordAntiga) {\n    // Nao autorizado (ou nao elegivel) e so chegou em 'pedidos' por causa da palavra-chave\n    // antiga, nao de uma sessao real -> nao deixa cair no 06-PEDIDOS morto, segue pro\n    // mesmo caminho de qualquer mensagem sem sessao (ATENDIMENTO_AI, sujeito a whitelist\n    // propria dele).\n    return [{ json: { ...original, _destino: 'atendimento', _origem_pedido: null } }];\n  }\n}\nreturn [{ json: original }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -908,
+        368
+      ],
+      "id": "d274b002-ajustar-destino-fase-b",
+      "name": "AJUSTAR DESTINO AGENTE FASE B"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/jsgrafica-agente-fase-b",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -728,
+        592
+      ],
+      "id": "d274b003-http-206",
+      "name": "HTTP 206",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://arqkdnexpederquztegn.supabase.co/rest/v1/jsgrafica_memoria_conversas?telefone=eq.{{ $json.phone }}&order=timestamp.desc&limit=1",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1472,
+        148
+      ],
+      "id": "d281a001-get-memoria-ativa-raw",
+      "name": "GET Memoria Ativa (raw)",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json;\nconst rows = Array.isArray(body) ? body : (body ? [body] : []);\nreturn rows.map(r => ({ json: r }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1312,
+        268
+      ],
+      "id": "node-get-memoria-ativa",
+      "name": "GET Memoria Ativa"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demanda 299: piloto do agente novo (Caminho C, workflow 297) no mesmo ponto de\n// roteamento onde o 206 era chamado (274). So mapeia os nomes de campo que o\n// pipeline do 01 usa (phone/message_text) pros nomes que o webhook do agente novo\n// espera (telefone/mensagem_texto) - nenhuma logica de elegibilidade nova, a mesma\n// checagem de whitelist + Switch Destino de sempre decide quem chega aqui.\n// Demanda 317: anexo sem legenda (caption vazio/null) fazia mensagem_texto virar\n// string vazia, o agente Caminho C rejeitava com 400 (parametros_invalidos), e o erro\n// nao tratado no HTTP Agente Caminho C derrubava a execucao inteira, incluindo o ramo\n// de log (Switch Log Geral -> PREPARAR LOG MSG PRIVADA -> MSG PRIVADA), que fica\n// irmao deste no mesmo Processar Evento. Fallback final garante nao-vazio, mesma\n// convencao ja usada em 'Contexto: Montar Retorno' do workflow 296 (message_text ||\n// caption || '[midia sem legenda]').\n// Demanda 318: quando a mensagem e resposta a outra (quoted_msg_id), prepende o texto\n// da mensagem citada ao contexto que chega pro agente. Resolvido aqui de novo (mesmo\n// lookup 'Buscar Mensagem Citada', mesma tabela) porque este ramo (Switch Destino ->\n// aqui) e um galho PARALELO ao ramo de log (Switch Log Geral -> PREPARAR LOG MSG\n// PRIVADA) - os 2 saem de Processar Evento mas nao compartilham dado computado depois\n// dele, cada um precisa da sua propria resolucao.\nconst d = $json;\n\nlet quotedBody = null;\ntry {\n  const found = $('Buscar Mensagem Citada').all();\n  const row = (found && found[0] && found[0].json) ? found[0].json : null;\n  if (d.quoted_msg_id && row && row.message_id) {\n    quotedBody = row.message_text || row.caption || '[midia sem legenda]';\n  }\n} catch (e) { quotedBody = null; }\n\nconst textoBase = d.message_text || d.caption || '[midia sem legenda]';\nconst mensagem_texto = quotedBody\n  ? '[respondendo a: \"' + quotedBody + '\"] ' + textoBase\n  : textoBase;\n\nreturn [{ json: {\n  telefone: d.phone,\n  mensagem_texto,\n  message_id: d.message_id,\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -728,
+        792
+      ],
+      "id": "2ac8608c-8dec-4f72-ac49-8472a96d6d28",
+      "name": "Preparar Payload Agente Caminho C"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/caminho-c-agente",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -468,
+        792
+      ],
+      "id": "c7f94784-dffe-4055-9a0b-c4352fe0c98b",
+      "name": "HTTP Agente Caminho C",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._destino }}",
+              "rightValue": "pedidos",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -700,
+        320
+      ],
+      "id": "if-destino-e-pedidos-306",
+      "name": "E Destino Pedidos?"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://n8n.labonchain.xyz/api/v1/workflows/WDOixH8LKyh0DDGq",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -500,
+        260
+      ],
+      "id": "http-verificar-06-pedidos-vivo-306",
+      "name": "Verificar 06-PEDIDOS Vivo",
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "I7gdWwO3gM3oJBXL",
+          "name": "N8N API - X-N8N-API-KEY (self, liveness check)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demanda 306: CHECK SESSAO PEDIDO manda qualquer telefone com sessao de pedido\n// \"ativa\" (fase_jornada numa lista de fases ou origem='06-pedidos') direto pro\n// 06-PEDIDOS sem checar se esse workflow ainda esta vivo - se estiver morto (caso real\n// desde a demanda 303), a execucao falha e o cliente fica sem resposta nenhuma, em\n// silencio. Este node so roda quando _destino==='pedidos' (branch true do IF anterior).\n// Confirma via API do proprio n8n se o workflow de destino esta ativo ANTES de deixar a\n// mensagem seguir pra ele; se nao estiver (ou a propria checagem falhar), trata a\n// mensagem exatamente como se nao houvesse sessao de pedido nenhuma - mesma regra de\n// elegibilidade que qualquer mensagem sem sessao usa (espelha o bloco\n// eraAtendimentoFallback do AJUSTAR DESTINO AGENTE FASE B, que nao roda pra sessao real).\nconst original = $('AJUSTAR DESTINO AGENTE FASE B').first().json;\nconst liveness = $json;\nconst destinoAtivo = !!(liveness && liveness.active === true);\n\nif (destinoAtivo) {\n  return [{ json: original }];\n}\n\nconst rows = $('GET Telefone Autorizado (Fase B)').all();\nconst autorizado = rows.length > 0 && !!(rows[0].json && rows[0].json.id);\nconst semTexto = !(original.message_text && String(original.message_text).trim());\nconst semLegenda = !(original.caption && String(original.caption).trim());\nconst midiaSemLegenda = !!original.media_type && semTexto && semLegenda;\nconst textoPuro = !original.media_type && !semTexto;\nconst elegivelFaseB = midiaSemLegenda || textoPuro;\n\nif (autorizado && elegivelFaseB) {\n  return [{ json: { ...original, _destino: 'agente_fase_b', _payload_pedido: null, _destino_morto_fallback: 'WDOixH8LKyh0DDGq' } }];\n}\nreturn [{ json: { ...original, _destino: 'atendimento', _origem_pedido: null, _payload_pedido: null, _destino_morto_fallback: 'WDOixH8LKyh0DDGq' } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        260
+      ],
+      "id": "code-aplicar-fallback-destino-morto-306",
+      "name": "Aplicar Fallback Se Destino Morto"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://arqkdnexpederquztegn.supabase.co/rest/v1/jsgrafica_log_msgs_privadas?phone=eq.{{ $json.phone }}&from_me=eq.true&enviado_por=in.(ia,sistema)&data_timestamp=gte.{{ Date.now() - 600000 }}&select=enviado_por,data_timestamp&order=data_timestamp.desc",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -100,
+        260
+      ],
+      "id": "http-contar-envios-automaticos-307",
+      "name": "Contar Envios Automaticos Recentes",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demanda 307: protecao contra loop de resposta automatica com away-message/bot do\n// cliente (Solfacil, Renegocie Bradesco, Telesefaz e outros achados reais no log). So virou\n// risco real depois da demanda 299 (agente novo respondendo de verdade no roteamento real) -\n// antes disso nunca existiu volume real de resposta automatica pra formar loop.\nlet entrada = null;\ntry { entrada = $('Aplicar Fallback Se Destino Morto').first().json; } catch(e) {}\nif (!entrada) {\n  try { entrada = $('AJUSTAR DESTINO AGENTE FASE B').first().json; } catch(e) {}\n}\nconst texto = String(entrada.message_text || entrada.caption || '').toLowerCase();\n\n// Camada 1: padroes reais de away-message/resposta automatica, tirados do log real (nao\n// inventados) - Solfacil (\"mensagem automatica\"), Renegocie Bradesco / generic bots\n// (\"fora do horario de atendimento\", \"nao estamos disponiveis\", \"retornaremos\"), Telesefaz\n// (\"sua sessao foi finalizada\"). Cuidado de calibracao pedido na demanda: away-message real e\n// declarativo, pergunta legitima de cliente tem \"?\" (ex. \"qual o horario de atendimento?\",\n// achado real 558188603659/558193748247) - por isso qualquer \"?\" no texto desarma a Camada 1.\nconst padroesAway = [\n  /fora do hor[aá]rio de atendimento/,\n  /n[aã]o estamos dispon[ií]ve(l|is)/,\n  /mensagem autom[aá]tica/,\n  /resposta autom[aá]tica/,\n  /retornaremos sua mensagem/,\n  /agradecemos sua mensagem[\\s\\S]{0,80}(hor[aá]rio|segunda|domingo|atendimento)/,\n  /sua sess[aã]o foi finalizada/,\n];\nconst temInterrogacao = texto.includes('?');\nconst bateuPadraoAway = !temInterrogacao && texto.trim().length > 0 && padroesAway.some(re => re.test(texto));\n\nlet loopDetectado = bateuPadraoAway;\nlet motivo = bateuPadraoAway ? 'padrao_away_message_conhecido' : null;\n\n// Camada 2: contador de seguranca - mesmo sem bater nenhum padrao conhecido, se o sistema ja\n// mandou 2+ respostas automaticas (ia/sistema) pro mesmo telefone nos ultimos 10 minutos, a\n// proxima seria a 3a seguida - para e escala em vez de continuar (simplificacao deliberada de\n// \"sem sinal de intencao humana real\": o numero concreto que a propria demanda 307 propos como\n// exemplo, 3 em 10min, e o criterio testavel adotado).\nif (!loopDetectado) {\n  // Este node httpRequest faz auto-split de um array JSON em multiplos itens n8n (1 item\n  // por linha real), diferente do padrao de outro node PostgREST desta mesma conta (demanda\n  // 281, que NAO faz esse split) - confirmado ao vivo, nao presumido igual por semelhanca.\n  // Quando 0 linhas batem, alwaysOutputData forca 1 item com json vazio {} (nao um array\n  // vazio) - precisa distinguir isso de \"1 linha real\".\n  const contarItems = $('Contar Envios Automaticos Recentes').all();\n  const placeholderVazio = contarItems.length === 1 && contarItems[0].json && Object.keys(contarItems[0].json).length === 0;\n  const qtd = placeholderVazio ? 0 : contarItems.length;\n\n  // Demanda 309, achado real no 1o dia do piloto: a contagem bruta sozinha bloqueou uma\n  // conversa real (cliente mandou \"Benca\"/\"Tudo bem sim\"/\"Nao da pra editar ne?\", 3 mensagens\n  // DIFERENTES, cada uma com resposta real distinta - nao e loop nenhum, e o limiar de 2 vindo\n  // da demanda 307 bloqueou a 3a mensagem so por contagem). So considera loop se, ALEM da\n  // contagem, as ultimas mensagens DO CLIENTE forem repetidas/identicas entre si - essa e a\n  // assinatura real de bot/away-message batendo (texto igual toda vez), nao de conversa humana\n  // variada. Limiar de contagem tambem subiu de 2 pra 3 (backstop de frequencia bruta pra caso\n  // extremo, mas a decisao real agora depende da repeticao de conteudo, nao so da contagem).\n  if (qtd >= 3) {\n    const inboundItens = $('Buscar Mensagens Cliente Recentes').all();\n    const inboundPlaceholderVazio = inboundItens.length === 1 && inboundItens[0].json && Object.keys(inboundItens[0].json).length === 0;\n    const textosInbound = inboundPlaceholderVazio ? [] : inboundItens.map(i => String((i.json && i.json.message_text) || '').trim().toLowerCase());\n    const semVariedade = textosInbound.length >= 2 && new Set(textosInbound).size === 1;\n    if (semVariedade) {\n      loopDetectado = true;\n      motivo = 'contador_seguranca_estourado';\n    }\n  }\n}\n\nif (loopDetectado) {\n  return [{ json: { ...entrada, _destino: 'ignorar', _loop_automatico_detectado: true, _loop_automatico_motivo: motivo } }];\n}\nreturn [{ json: entrada }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        100,
+        260
+      ],
+      "id": "code-detectar-loop-automatico-307",
+      "name": "Detectar Loop Resposta Automatica"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._loop_automatico_motivo }}",
+              "rightValue": "contador_seguranca_estourado",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        300,
+        260
+      ],
+      "id": "if-loop-estourou-307",
+      "name": "Loop Automatico Estourou?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://arqkdnexpederquztegn.supabase.co/rest/v1/jsgrafica_memoria_conversas",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { telefone: $json.phone, status_atendimento: 'aguardando_equipe', origem: 'protecao_loop_307', fase_jornada: $json._fase_ativa || null, timestamp: $now.toISO() } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        500,
+        180
+      ],
+      "id": "http-marcar-revisao-humana-307",
+      "name": "Marcar Sessao Para Revisao Humana",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demanda 307: \"Marcar Sessao Para Revisao Humana\" e um httpRequest - a resposta da API\n// (nao o payload original) vira o novo $json, o que apagaria o _destino:'ignorar' que\n// \"Detectar Loop Resposta Automatica\" decidiu, deixando a mensagem cair sem querer no\n// fallback de atendimento normal (o oposto do que a Camada 2 pede: \"sem mandar mais\n// nenhuma mensagem sozinho\"). Restaura explicitamente o payload correto por referencia\n// nomeada, mesma classe de bug ja corrigida 2x antes nesta mesma demanda.\nreturn [{ json: $('Detectar Loop Resposta Automatica').first().json }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        180
+      ],
+      "id": "code-restaurar-entrada-307",
+      "name": "Restaurar Entrada Apos Marcar"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://arqkdnexpederquztegn.supabase.co/rest/v1/jsgrafica_log_msgs_privadas?phone=eq.{{ $('AJUSTAR DESTINO AGENTE FASE B').first().json.phone }}&from_me=eq.false&data_timestamp=not.is.null&message_text=not.is.null&order=data_timestamp.desc&limit=3&select=message_text",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        0,
+        340
+      ],
+      "id": "http-buscar-mensagens-cliente-recentes-309",
+      "name": "Buscar Mensagens Cliente Recentes",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_log_msgs_privadas",
+        "limit": 1,
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "message_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.quoted_msg_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1136,
+        940
+      ],
+      "id": "d318a001-buscar-mensagem-citada",
+      "name": "Buscar Mensagem Citada",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ ['image','document'].includes($json.media_type) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            },
+            {
+              "leftValue": "={{ $json.media_url }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "leftValue": "={{ ($json.message_text||'') + ($json.caption||'') }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2144,
+        320
+      ],
+      "id": "d318b001-if-midia-visual-sem-legenda",
+      "name": "É Mídia Visual Sem Legenda?"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.media_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1952,
+        320
+      ],
+      "id": "d318b002-baixar-midia-visual",
+      "name": "Baixar Mídia (Imagem/Doc)",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demanda 318 (Fix B): mesmo padrao de 'Converter para base64' (audio) e de\n// 'Converter Mídia Base64' do 206, mas com try/catch explicito - o 206 NAO tinha\n// tratamento de erro aqui (gap ja identificado antes de copiar, mesma licao da\n// demanda 317: nunca deixar um node novo sem rede de seguranca). Qualquer falha\n// (download sem binario, buffer vazio, etc.) produz _media_base64 null em vez de\n// derrubar a execucao - o node seguinte (Gemini) e o de parse tratam esse caso e\n// caem no fallback '[midia sem legenda]'.\ntry {\n  const item = $input.first();\n  const binaryKey = item.binary ? Object.keys(item.binary)[0] : null;\n  if (!binaryKey) {\n    return [{ json: { ...item.json, _media_base64: null, _media_mime: null } }];\n  }\n  const buffer = await this.helpers.getBinaryDataBuffer(0, binaryKey);\n  const base64 = buffer.toString('base64');\n  const mimeType = (item.binary[binaryKey].mimeType || item.json.mime_type || 'application/octet-stream').split(';')[0];\n  return [{ json: { ...item.json, _media_base64: base64, _media_mime: mimeType } }];\n} catch (e) {\n  const fallbackJson = ($input.first() && $input.first().json) ? $input.first().json : {};\n  return [{ json: { ...fallbackJson, _media_base64: null, _media_mime: null, _erro_conversao_midia: String((e && e.message) || e) } }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1760,
+        320
+      ],
+      "id": "d318b003-converter-midia-visual-base64",
+      "name": "Converter Mídia Base64 (Imagem/Doc)",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googlePalmApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contents: [{ parts: [ { text: 'Você está analisando um arquivo enviado por um cliente numa conversa de WhatsApp com uma gráfica rápida (JS Gráfica, Recife-PE). Responda SOMENTE em JSON válido, sem nenhum texto antes ou depois, no formato exato: {\"tipo_midia\": \"imagem\" ou \"pdf\", \"numero_paginas\": numero inteiro, \"classificacao\": \"documento_obvio\" ou \"ambiguo\", \"produto_ou_valor_detectado\": string ou null}' }, { inline_data: { mime_type: $json._media_mime, data: $json._media_base64 } } ] }], generationConfig: { temperature: 0.1, maxOutputTokens: 500, thinkingConfig: { thinkingBudget: 0 } } }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1568,
+        320
+      ],
+      "id": "d318b004-gemini-analisar-midia-visual",
+      "name": "Gemini Analisar Mídia (Imagem/Doc)",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HuMb1WcX1o0FTeLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demanda 318 (Fix B): mesmo padrao de parse do 206 ('Parsear Resposta Gemini'), mas\n// formatando uma frase legivel (pro agente E pro humano lendo o Inbox depois) em vez de\n// so devolver o JSON cru, e escrevendo o resultado em message_text pra chegar ate\n// 'Preparar Payload Agente Caminho C' pelo mesmo caminho que a transcricao de audio ja\n// usa (ENVIAR PARA LLM -> ... -> Switch Destino). Qualquer falha em qualquer etapa\n// anterior (download, conversao base64, chamada Gemini) cai no MESMO fallback ja usado\n// em toda a base ('[midia sem legenda]') - nunca derruba a execucao (licao da 317).\nconst original = $('Processar Evento').first().json;\n\nlet resultado = '[midia sem legenda]';\ntry {\n  const conv = $('Converter Mídia Base64 (Imagem/Doc)').first().json;\n  const geminiOut = $json;\n  if (conv && conv._media_base64 && geminiOut && geminiOut.candidates) {\n    const texto = (geminiOut.candidates[0]?.content?.parts || []).map(p => p.text || '').join('');\n    const m = texto.match(/\\{[\\s\\S]*\\}/);\n    if (m) {\n      const parsed = JSON.parse(m[0]);\n      const tipo = parsed.tipo_midia === 'pdf' ? 'documento PDF' : 'imagem';\n      const paginas = parsed.numero_paginas ? ` (${parsed.numero_paginas} pagina${parsed.numero_paginas > 1 ? 's' : ''})` : '';\n      const detectado = parsed.produto_ou_valor_detectado ? `, aparenta ser: ${parsed.produto_ou_valor_detectado}` : '';\n      const classif = parsed.classificacao === 'documento_obvio' ? '' : ' (conteudo ambiguo, confirmar com o cliente)';\n      resultado = `[cliente enviou ${tipo}${paginas} sem legenda${detectado}${classif}]`;\n    }\n  }\n} catch (e) { resultado = '[midia sem legenda]'; }\n\nreturn [{ json: { ...original, message_text: resultado, _gemini_analise_midia: resultado } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1376,
+        320
+      ],
+      "id": "d318b005-parsear-formatar-analise-midia",
+      "name": "Gemini: Parsear e Formatar Descrição"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://arqkdnexpederquztegn.supabase.co/rest/v1/jsgrafica_contatos?phone=eq.{{ $json.phone }}&select=phone,atendente,status_atendimento&limit=1",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        900,
+        220
+      ],
+      "id": "http-contatos-status-atendimento-321",
+      "name": "Contatos: Buscar Status Atendimento (raw)",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demanda 321 - novo gate: bloqueia a IA (Caminho C) quando um humano ja esta\n// atendendo esse telefone de verdade, ou quando a propria IA ja escalou esse\n// telefone antes (status 'escalado') e ainda nao foi liberado/resolvido. Contato\n// novissimo (sem linha em jsgrafica_contatos) ou qualquer outro estado (aberto /\n// resolvido / em_atendimento com atendente='Agente Atendimento') NAO bloqueia -\n// segue normal pro Switch Destino, igual hoje.\n//\n// O node anterior (httpRequest + alwaysOutputData, mesmo padrao ja comprovado\n// nesta instancia hoje - demandas 307/309/314) pode devolver o resultado do\n// PostgREST de 2 formas diferentes dependendo do node (achado documentado em\n// 'Detectar Loop Resposta Automatica'/307: as vezes 1 item com o array bruto no\n// json, as vezes auto-split em 1 item por linha, com item unico de json vazio {}\n// quando 0 linhas batem). Tratamos os dois formatos aqui, sem presumir qual esta\n// ativo - nunca deixa a execucao quebrar por falta de dado quando o contato e novo.\nconst items = $input.all();\nlet rows = [];\nfor (const it of items) {\n  const j = it.json;\n  if (Array.isArray(j)) {\n    rows = rows.concat(j);\n  } else if (j && Object.keys(j).length > 0) {\n    rows.push(j);\n  }\n}\nconst contato = rows.length > 0 ? rows[0] : null;\n\n// A entrada original (telefone, _destino ja calculado por AJUSTAR DESTINO AGENTE\n// FASE B + possivel override de Detectar Loop Resposta Automatica) precisa vir de\n// qualquer um dos 2 nodes que alimentam este ponto - so um deles roda por\n// execucao. Mesmo padrao de dupla tentativa ja usado em 'Detectar Loop Resposta\n// Automatica' (demanda 307).\nlet entrada = null;\ntry { entrada = $('Restaurar Entrada Apos Marcar').first().json; } catch (e) {}\nif (!entrada) {\n  try { entrada = $('Loop Automatico Estourou?').first().json; } catch (e) {}\n}\nif (!entrada) entrada = {};\n\nconst statusAtendimento = contato ? contato.status_atendimento : null;\nconst atendente = contato ? contato.atendente : null;\n\nconst humanoAtendendo = statusAtendimento === 'em_atendimento' && !!atendente && atendente !== 'Agente Atendimento';\nconst iaJaEscalou = statusAtendimento === 'escalado';\nconst deveBloquear = (humanoAtendendo || iaJaEscalou) && entrada._destino === 'agente_fase_b';\n\nif (deveBloquear) {\n  return [{ json: { ...entrada, _destino: 'ignorar', _bloqueado_status_atendimento: true, _bloqueado_motivo: humanoAtendendo ? 'humano_atendendo' : 'ia_ja_escalou' } }];\n}\nreturn [{ json: entrada }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        220
+      ],
+      "id": "code-contatos-avaliar-atendimento-321",
+      "name": "Contatos: Avaliar Atendimento (Gate IA)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._bloqueado_motivo }}",
+              "rightValue": "ia_ja_escalou",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-cortesia-motivo-escalado-325",
+      "name": "Cortesia: Motivo Foi Escalado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -928,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://arqkdnexpederquztegn.supabase.co/rest/v1/jsgrafica_agente_teste_sessoes?telefone=eq.{{ $json.phone }}&select=telefone,dados_extra&limit=1",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {}
+      },
+      "id": "http-cortesia-buscar-sessao-325",
+      "name": "Cortesia: Buscar Sessao (raw)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -700,
+        460
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demanda 325: cortesia de uma so vez por janela de cooldown quando a conversa\n// esta parada em 'escalado' (ninguem no Admin resolveu ainda) e o cliente manda\n// mensagem nova, que ate hoje caia no dead-end 'ignorar' sem nenhuma resposta,\n// nem confirmacao de recebimento. Cooldown gravado em\n// jsgrafica_agente_teste_sessoes.dados_extra (mesmo jsonb ja usado pra\n// motivo_escalonamento, sem precisar de coluna nova) - le-antes-de-escrever dentro\n// da mesma execucao, aceitavel pro tamanho da janela (nao e cenario de alta\n// concorrencia, o mesmo telefone escalado nao manda 2 mensagens no mesmo instante).\nconst COOLDOWN_MINUTOS = 45;\n\nconst items = $input.all();\nlet rows = [];\nfor (const it of items) {\n  const j = it.json;\n  if (Array.isArray(j)) {\n    rows = rows.concat(j);\n  } else if (j && Object.keys(j).length > 0) {\n    rows.push(j);\n  }\n}\nconst sessao = rows.length > 0 ? rows[0] : null;\nconst dadosExtraAtual = (sessao && sessao.dados_extra) ? sessao.dados_extra : {};\n\nconst ultimoEnvioIso = dadosExtraAtual.cortesia_dead_end_enviada_em || null;\nlet dentroDoCooldown = false;\nif (ultimoEnvioIso) {\n  const minutosDesde = (Date.now() - new Date(ultimoEnvioIso).getTime()) / 60000;\n  dentroDoCooldown = minutosDesde < COOLDOWN_MINUTOS;\n}\n\nconst entrada = $('Cortesia: Motivo Foi Escalado?').first().json;\n\nreturn [{ json: {\n  ...entrada,\n  _cortesia_pode_enviar: !dentroDoCooldown,\n  _cortesia_dados_extra_novo: { ...dadosExtraAtual, cortesia_dead_end_enviada_em: new Date().toISOString() },\n} }];\n"
+      },
+      "id": "code-cortesia-avaliar-cooldown-325",
+      "name": "Cortesia: Avaliar Cooldown",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._cortesia_pode_enviar }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-cortesia-pode-enviar-325",
+      "name": "Cortesia: Pode Enviar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -220,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://arqkdnexpederquztegn.supabase.co/rest/v1/jsgrafica_agent_config?ativo=eq.true&select=zapi_url,client_token&limit=1",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {}
+      },
+      "id": "http-cortesia-get-config-agente-325",
+      "name": "Cortesia: GET Config Agente (raw)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        20,
+        400
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demanda 325: mesmo padrao de calculo de _zapi_base/_zapi_token ja usado em\n// 'Montar Envio Z-API' do workflow 297 (config.zapi_url sem o ultimo segmento de\n// path vira a base, client_token vai no header client-token) - reaproveitado aqui\n// isolado porque o workflow 01 nunca teve nenhum node de envio Z-API ate hoje (so\n// loga/roteia, nunca manda mensagem sozinho).\nconst items = $input.all();\nlet rows = [];\nfor (const it of items) {\n  const j = it.json;\n  if (Array.isArray(j)) {\n    rows = rows.concat(j);\n  } else if (j && Object.keys(j).length > 0) {\n    rows.push(j);\n  }\n}\nconst config = rows.length > 0 ? rows[0] : {};\n\nconst entrada = $('Cortesia: Pode Enviar?').first().json;\n\nconst TEXTO_CORTESIA = \"Isso já tá com a equipe, só um minutinho que já te respondo por aqui 😊\";\n\nreturn [{ json: {\n  ...entrada,\n  _cortesia_texto: TEXTO_CORTESIA,\n  _zapi_base: config.zapi_url ? config.zapi_url.replace(/\\/[^/]+$/, '') : null,\n  _zapi_token: config.client_token || null,\n} }];\n"
+      },
+      "id": "code-cortesia-montar-envio-zapi-325",
+      "name": "Cortesia: Montar Envio Z-API",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json._zapi_base }}/send-text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "client-token",
+              "value": "={{ $json._zapi_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone: $json.phone, message: $json._cortesia_texto }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "fullResponse": true
+            }
+          },
+          "timeout": 15000
+        }
+      },
+      "id": "http-cortesia-enviar-zapi-325",
+      "name": "Cortesia: Enviar Z-API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        400
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://arqkdnexpederquztegn.supabase.co/rest/v1/jsgrafica_agente_teste_sessoes?telefone=eq.{{ $('Cortesia: Montar Envio Z-API').first().json.phone }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { dados_extra: $('Cortesia: Montar Envio Z-API').first().json._cortesia_dados_extra_novo } }}",
+        "options": {}
+      },
+      "id": "http-cortesia-marcar-enviada-325",
+      "name": "Cortesia: Marcar Enviada (raw)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        740,
+        400
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Webhook Log MSGrecebidas": {
+      "main": [
+        [
+          {
+            "node": "Processar Evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Merge Log Geral",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "ENVIAR PARA LLM": {
+      "main": [
+        [
+          {
+            "node": "GET Memoria Ativa (raw)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "MSG PRIVADA1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PREPARAR LOG MSG PRIVADA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "MSG GRUPOS1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PREPARAR LOG MSG GRUPOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) MSG PRIVADA": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) MSG GRUPO": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) CONTATOS": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "If CRIA OU ATUALIZA CONTATOS": {
+      "main": [
+        [
+          {
+            "node": "CONTATOS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CONTATOS1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "PREPARAR LOG CONTATOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Processar Evento": {
+      "main": [
+        [
+          {
+            "node": "Switch Log Geral",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) CONTATOS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Mensagem Enviada Por Nos",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) CONTATOS por phone",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Buscar Mensagem Citada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Log Geral": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) MSG PRIVADA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s) MSG GRUPO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PREPARAR LOG MSG PRIVADA": {
+      "main": [
+        [
+          {
+            "node": "MSG PRIVADA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PREPARAR LOG MSG GRUPOS": {
+      "main": [
+        [
+          {
+            "node": "MSG GRUPOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PREPARAR LOG CONTATOS": {
+      "main": [
+        [
+          {
+            "node": "If CRIA OU ATUALIZA CONTATOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Redirect": {
+      "main": [
+        [
+          {
+            "node": "HTTP ReDIRECT CONFIG",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If É TUTOR?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "REDIRECIONAR PARA CONECTIVIDADE",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "REDIRECIONAR PARA STATUS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP 07-GRUPO-PEDIDOS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ENVIAR PARA LLM",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If enviar llm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If enviar llm": {
+      "main": [
+        [
+          {
+            "node": "If É Audio?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "If É Audio?": {
+      "main": [
+        [
+          {
+            "node": "HTTP baixar audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge Log Geral",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "É Mídia Visual Sem Legenda?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP baixar audio": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Execute Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Converter para base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter para base64": {
+      "main": [
+        [
+          {
+            "node": "HTTP Transcrição audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Transcrição audio": {
+      "main": [
+        [
+          {
+            "node": "processar audio p llm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "processar audio p llm": {
+      "main": [
+        [
+          {
+            "node": "ENVIAR PARA LLM",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "UPDATE Transcricao Audio Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Log Geral": {
+      "main": [
+        []
+      ]
+    },
+    "IDENTIFICAR AUTORIZAÇÃO": {
+      "main": [
+        [
+          {
+            "node": "GET Onboarding Sessao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        []
+      ]
+    },
+    "If É TUTOR?": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Memoria Ativa": {
+      "main": [
+        [
+          {
+            "node": "CHECK SESSAO PEDIDO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CHECK SESSAO PEDIDO": {
+      "main": [
+        [
+          {
+            "node": "GET Telefone Autorizado (Fase B)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Destino": {
+      "main": [
+        [
+          {
+            "node": "Cortesia: Motivo Foi Escalado?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP 06-PEDIDOS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Preparar Payload Agente Caminho C",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP 07-GRUPO-PEDIDOS": {
+      "main": [
+        []
+      ]
+    },
+    "GET Onboarding Sessao": {
+      "main": [
+        [
+          {
+            "node": "Consolidar Flag Sessao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consolidar Flag Sessao": {
+      "main": [
+        [
+          {
+            "node": "Switch Redirect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Mensagem Enviada Por Nos": {
+      "main": [
+        [],
+        [
+          {
+            "node": "IDENTIFICAR AUTORIZAÇÃO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) CONTATOS por phone": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "GET Telefone Autorizado (Fase B)": {
+      "main": [
+        [
+          {
+            "node": "AJUSTAR DESTINO AGENTE FASE B",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AJUSTAR DESTINO AGENTE FASE B": {
+      "main": [
+        [
+          {
+            "node": "E Destino Pedidos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Memoria Ativa (raw)": {
+      "main": [
+        [
+          {
+            "node": "GET Memoria Ativa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Payload Agente Caminho C": {
+      "main": [
+        [
+          {
+            "node": "HTTP Agente Caminho C",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E Destino Pedidos?": {
+      "main": [
+        [
+          {
+            "node": "Verificar 06-PEDIDOS Vivo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Contar Envios Automaticos Recentes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar 06-PEDIDOS Vivo": {
+      "main": [
+        [
+          {
+            "node": "Aplicar Fallback Se Destino Morto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aplicar Fallback Se Destino Morto": {
+      "main": [
+        [
+          {
+            "node": "Contar Envios Automaticos Recentes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contar Envios Automaticos Recentes": {
+      "main": [
+        [
+          {
+            "node": "Buscar Mensagens Cliente Recentes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detectar Loop Resposta Automatica": {
+      "main": [
+        [
+          {
+            "node": "Loop Automatico Estourou?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Automatico Estourou?": {
+      "main": [
+        [
+          {
+            "node": "Marcar Sessao Para Revisao Humana",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Contatos: Buscar Status Atendimento (raw)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marcar Sessao Para Revisao Humana": {
+      "main": [
+        [
+          {
+            "node": "Restaurar Entrada Apos Marcar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Restaurar Entrada Apos Marcar": {
+      "main": [
+        [
+          {
+            "node": "Contatos: Buscar Status Atendimento (raw)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Mensagens Cliente Recentes": {
+      "main": [
+        [
+          {
+            "node": "Detectar Loop Resposta Automatica",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "É Mídia Visual Sem Legenda?": {
+      "main": [
+        [
+          {
+            "node": "Baixar Mídia (Imagem/Doc)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ENVIAR PARA LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar Mídia (Imagem/Doc)": {
+      "main": [
+        [
+          {
+            "node": "Converter Mídia Base64 (Imagem/Doc)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter Mídia Base64 (Imagem/Doc)": {
+      "main": [
+        [
+          {
+            "node": "Gemini Analisar Mídia (Imagem/Doc)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Analisar Mídia (Imagem/Doc)": {
+      "main": [
+        [
+          {
+            "node": "Gemini: Parsear e Formatar Descrição",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini: Parsear e Formatar Descrição": {
+      "main": [
+        [
+          {
+            "node": "ENVIAR PARA LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contatos: Buscar Status Atendimento (raw)": {
+      "main": [
+        [
+          {
+            "node": "Contatos: Avaliar Atendimento (Gate IA)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contatos: Avaliar Atendimento (Gate IA)": {
+      "main": [
+        [
+          {
+            "node": "Switch Destino",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cortesia: Motivo Foi Escalado?": {
+      "main": [
+        [
+          {
+            "node": "Cortesia: Buscar Sessao (raw)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Cortesia: Buscar Sessao (raw)": {
+      "main": [
+        [
+          {
+            "node": "Cortesia: Avaliar Cooldown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cortesia: Avaliar Cooldown": {
+      "main": [
+        [
+          {
+            "node": "Cortesia: Pode Enviar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cortesia: Pode Enviar?": {
+      "main": [
+        [
+          {
+            "node": "Cortesia: GET Config Agente (raw)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Cortesia: GET Config Agente (raw)": {
+      "main": [
+        [
+          {
+            "node": "Cortesia: Montar Envio Z-API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cortesia: Montar Envio Z-API": {
+      "main": [
+        [
+          {
+            "node": "Cortesia: Enviar Z-API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cortesia: Enviar Z-API": {
+      "main": [
+        [
+          {
+            "node": "Cortesia: Marcar Enviada (raw)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "tags": []
+}

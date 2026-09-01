@@ -1,0 +1,513 @@
+{
+  "updatedAt": "2026-08-30T23:51:47.689Z",
+  "createdAt": "2026-03-04T22:43:59.333Z",
+  "id": "hg12ud3yo5mTu3XI",
+  "name": "03 - JSGRAFICA | STATUS MSG",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "jsgraficastatusmsg",
+        "options": {}
+      },
+      "id": "f5ddcd65-e923-41e9-8f21-0d4fc65dbcb4",
+      "name": "Webhook STATUS MSG",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -496,
+        -48
+      ],
+      "webhookId": "1dcebc15-3376-49ab-ae34-444b6036e162"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.body ?? $json;\n\nconst messageId = raw.messageId ?? raw.message_id ?? raw.ids?.[0] ?? raw.zaapId ?? null;\n\nif (!messageId) {\n  return [];\n}\n\nfunction toSP(ms) {\n  if (!ms) return null;\n  return new Date(\n    new Date(ms).toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })\n  ).toISOString().replace('Z', '-03:00');\n}\n\nconst eventAt = raw.momment ? toSP(raw.momment) : toSP(Date.now());\n\nlet status = null;\nlet delivered_at = null;\nlet read_at = null;\n\nif (raw.type === 'DeliveryCallback') {\n  status = 'DELIVERED';\n  delivered_at = eventAt;\n}\n\nif (raw.type === 'ReadCallback') {\n  status = 'READ';\n  read_at = eventAt;\n}\n\nif (raw.type === 'MessageStatusCallback') {\n  if (raw.status === 'READ' || raw.status === 'READ_BY_ME') {\n    status = 'READ';\n    read_at = eventAt;\n  } else if (raw.status === 'SENT' || raw.status === 'RECEIVED') {\n    status = raw.status;\n  }\n}\n\nreturn [{\n  json: {\n    message_id: messageId,\n    status: status,\n    delivered_at: delivered_at,\n    read_at: read_at,\n    last_update_at: eventAt\n  }\n}];"
+      },
+      "id": "54ae0117-1ab8-4cd5-b81d-08efdcb8d837",
+      "name": "PROCESSAR STATUS",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -256,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{ $json.message_id }}",
+              "operator": {
+                "operation": "notEmpty"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "514c0ccb-fe3e-40c9-b289-af7ba6b7d359",
+      "name": "IF MSG EXISTE",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        624,
+        -64
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        464,
+        -64
+      ],
+      "id": "f6973214-b700-4e07-b13d-ee45e181db1c",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d9d40806-4f5e-465c-bbce-c6042b557b0d",
+              "leftValue": "={{ $json._source }}",
+              "rightValue": "privada",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        -80
+      ],
+      "id": "7a063b01-a46f-4099-a857-d695a3fa7284",
+      "name": "If É PRIVADA OU GRUPO?"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "jsgrafica_log_msgs_grupos",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "message_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.message_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.message_id }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            },
+            {
+              "fieldId": "delivered_at",
+              "fieldValue": "={{ $json.delivered_at }}"
+            },
+            {
+              "fieldId": "read_at",
+              "fieldValue": "={{ $json.read_at }}"
+            },
+            {
+              "fieldId": "last_update_at",
+              "fieldValue": "={{ $json.last_update_at }}"
+            }
+          ]
+        }
+      },
+      "id": "f82f1e39-3f60-4309-9cc9-fcb75f637127",
+      "name": "UPDATE STATUS MSG GRUPO",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        32
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "jsgrafica_log_msgs_privadas",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "message_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.message_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.message_id }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            },
+            {
+              "fieldId": "delivered_at",
+              "fieldValue": "={{ $json.delivered_at }}"
+            },
+            {
+              "fieldId": "read_at",
+              "fieldValue": "={{ $json.read_at }}"
+            },
+            {
+              "fieldId": "last_update_at",
+              "fieldValue": "={{ $json.last_update_at }}"
+            }
+          ]
+        }
+      },
+      "id": "f7e7f4c1-76b0-49ec-9a14-ed3cc8eff1ec",
+      "name": "UPDATE STATUS MSG PRIVADA",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        -208
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "jsgrafica_log_msgs_privadas",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "message_id",
+              "keyValue": "={{ $json.message_id }}"
+            }
+          ]
+        }
+      },
+      "id": "c0b253a1-ce19-4836-8911-c5996c08cee9",
+      "name": "GET MSG PRIVADA",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -176
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "jsgrafica_log_msgs_grupos",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "message_id",
+              "keyValue": "={{ $json.message_id }}"
+            }
+          ]
+        }
+      },
+      "id": "48274c44-0fd1-4e08-ba1a-c60a1e77fdf4",
+      "name": "GET MSG GRUPOS",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        80
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const status = $('PROCESSAR STATUS').first().json;\nconst msg = $input.first().json;\nreturn [{ json: {\n  ...msg,\n  ...status,\n  delivered_at: status.delivered_at || msg.delivered_at || null,\n  read_at: status.read_at || msg.read_at || null,\n  _source: 'privada'\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        176,
+        -176
+      ],
+      "id": "cfe1e670-5af5-496b-ba5c-5e5299cf1a97",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "const status = $('PROCESSAR STATUS').first().json;\nconst msg = $input.first().json;\nreturn [{ json: {\n  ...msg,\n  ...status,\n  delivered_at: status.delivered_at || msg.delivered_at || null,\n  read_at: status.read_at || msg.read_at || null,\n  _source: 'grupo'\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        176,
+        80
+      ],
+      "id": "4519603f-3df2-4024-b807-177c0946f623",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c7e2b1a4-9f3d-4a5b-8c6e-0d1e2f3a4b5c",
+              "leftValue": "={{ $json.body.phone }}",
+              "rightValue": "status@broadcast",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1e6f4b2-3c9d-4e5a-8b7f-1d2c3e4f5a6b",
+      "name": "É Visualização de Status?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -256,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "tableId": "jsgrafica_status_visualizacoes",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "participant",
+              "fieldValue": "={{ $json.body.participant || $json.body.phone }}"
+            },
+            {
+              "fieldId": "ids",
+              "fieldValue": "={{ $json.body.ids }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.body.status }}"
+            },
+            {
+              "fieldId": "momment",
+              "fieldValue": "={{ $json.body.momment }}"
+            }
+          ]
+        }
+      },
+      "id": "b2f7a5c3-4d0e-4f6b-9c8a-2e3d4f5a6b7c",
+      "name": "Gravar Visualização Status",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -280
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook STATUS MSG": {
+      "main": [
+        [
+          {
+            "node": "É Visualização de Status?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PROCESSAR STATUS": {
+      "main": [
+        [
+          {
+            "node": "GET MSG PRIVADA",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET MSG GRUPOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF MSG EXISTE": {
+      "main": [
+        [
+          {
+            "node": "If É PRIVADA OU GRUPO?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "IF MSG EXISTE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If É PRIVADA OU GRUPO?": {
+      "main": [
+        [
+          {
+            "node": "UPDATE STATUS MSG PRIVADA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "UPDATE STATUS MSG GRUPO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET MSG PRIVADA": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET MSG GRUPOS": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "É Visualização de Status?": {
+      "main": [
+        [
+          {
+            "node": "Gravar Visualização Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PROCESSAR STATUS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true
+  },
+  "staticData": null,
+  "tags": []
+}

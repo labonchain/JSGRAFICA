@@ -1,0 +1,1921 @@
+{
+  "updatedAt": "2026-07-30T00:32:54.112Z",
+  "createdAt": "2026-04-15T15:10:26.901Z",
+  "id": "KofIBAIFmZgPNCSc",
+  "name": "JSGRAFICA | REPORT SHEETS",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2624,
+        1296
+      ],
+      "id": "jsgrafica-report-a080cfa7-a642-4be1-9eac-7f7bc3de3e81",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2336,
+        960
+      ],
+      "id": "jsgrafica-report-754a0755-e44f-46f5-a3c7-e512145ee53c",
+      "name": "a cada 30m"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://arqkdnexpederquztegn.supabase.co/rest/v1/rpc/report_agent_summary",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "p_agent",
+              "value": "jsgrafica"
+            },
+            {
+              "name": "p_inicio_dia",
+              "value": "={{ $json.inicio_dia }}"
+            },
+            {
+              "name": "p_inicio_7d",
+              "value": "={{ $json.inicio_7d }}"
+            },
+            {
+              "name": "p_inicio_30d",
+              "value": "={{ $json.inicio_30d }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1872,
+        736
+      ],
+      "id": "jsgrafica-report-9fd3aa2a-d460-4e90-9823-948000beb309",
+      "name": "Query RPC Summary",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://arqkdnexpederquztegn.supabase.co/rest/v1/rpc/report_agent_contatos",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "p_agent",
+              "value": "jsgrafica"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1872,
+        960
+      ],
+      "id": "jsgrafica-report-b9d9b8f6-a4b5-45af-9b81-a241ac54c389",
+      "name": "Query RPC Contatos",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const r = $input.first().json;\nconst datas = $('Preparar Datas 30m').first().json;\n\nconst msgs_recebidas_dia = r.msgs_recebidas_dia ?? 0;\nconst msgs_enviadas_dia = r.msgs_enviadas_dia ?? 0;\n\nreturn [{\n  json: {\n    data_dia: datas.data_formatada,\n    ultima_atualizacao: datas.hoje,\n    total_leads: r.total_leads ?? 0,\n    leads_novos: r.leads_novos ?? 0,\n    leads_recorrentes: r.leads_recorrentes ?? 0,\n    total_msgs_recebidas: r.total_msgs_recebidas ?? 0,\n    total_msgs_enviadas: r.total_msgs_enviadas ?? 0,\n    volume_hoje: r.volume_hoje ?? 0,\n    volume_7_dias: r.volume_7_dias ?? 0,\n    volume_30_dias: r.volume_30_dias ?? 0,\n    instancias_ativas: r.instancias_ativas ?? 0,\n    leads_novos_dia: r.leads_novos_dia ?? 0,\n    leads_recorrentes_dia: r.leads_recorrentes_dia ?? 0,\n    msgs_recebidas_dia,\n    msgs_enviadas_dia,\n    linha_id: 01\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1616,
+        736
+      ],
+      "id": "jsgrafica-report-e839217c-83a9-4c3b-964c-ac297d3c5de5",
+      "name": "Montar Dados Summary"
+    },
+    {
+      "parameters": {
+        "jsCode": "const datas = $('Preparar Datas 30m').first().json;\nconst items = $input.all();\n\nif (!items || items.length === 0) return [];\n\n// remover grupos\nconst contatos = items.filter(c => {\n  const phone = c.json.phone ?? '';\n  return !phone.includes('-group');\n});\n\nreturn contatos.map(c => ({\n  json: {\n    posicao: c.json.posicao,\n    lead_name: c.json.lead_name,\n    phone: c.json.phone,\n    classificacao: c.json.classificacao,\n    tipo_registro: c.json.tipo_registro,\n    lead_photo: c.json.lead_photo ?? '',\n    status_atividade: c.json.status_atividade,\n    score_engajamento: c.json.score_engajamento,\n    total_interacoes: c.json.total_interacoes,\n    total_mensagens_recebidas: c.json.total_mensagens_recebidas,\n    total_mensagens_enviadas: c.json.total_mensagens_enviadas,\n    taxa_resposta: c.json.taxa_resposta,\n    dias_inativo: c.json.dias_inativo,\n    dias_relacionamento: c.json.dias_relacionamento,\n    media_msgs_por_dia: c.json.media_msgs_por_dia,\n    tem_foto: c.json.tem_foto,\n    data_primeiro_contato: c.json.data_primeiro_contato,\n    data_ultimo_contato: c.json.data_ultimo_contato,\n    idioma: c.json.idioma,\n    is_business: c.json.is_business ?? false,\n    business_name: c.json.business_name ?? '',\n    business_category: c.json.business_category ?? '',\n    business_website: c.json.business_website ?? '',\n    business_address: c.json.business_address ?? '',\n    instance_id: c.json.instance_id,\n    ultima_atualizacao: datas.hoje\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1632,
+        960
+      ],
+      "id": "jsgrafica-report-4c7b9111-b961-4bc7-a691-24f127525425",
+      "name": "Montar Dados Contatos"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1ZacdN5ih3bgUGNA40Q99_W9_C1qAsD3aNFvvOzllsko",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "report_leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "posicao": "={{ $json.posicao }}",
+            "lead_name": "={{ $json.lead_name }}",
+            "phone": "={{ $json.phone }}",
+            "classificacao": "={{ $json.classificacao }}",
+            "tipo_registro": "={{ $json.tipo_registro }}",
+            "lead_photo": "={{ $json.lead_photo }}",
+            "status_atividade": "={{ $json.status_atividade }}",
+            "score_engajamento": "={{ $json.score_engajamento }}",
+            "total_interacoes": "={{ $json.total_interacoes }}",
+            "total_mensagens_recebidas": "={{ $json.total_mensagens_recebidas }}",
+            "total_mensagens_enviadas": "={{ $json.total_mensagens_enviadas }}",
+            "taxa_resposta": "={{ $json.taxa_resposta }}",
+            "dias_inativo": "={{ $json.dias_inativo }}",
+            "dias_relacionamento": "={{ $json.dias_relacionamento }}",
+            "media_msgs_por_dia": "={{ $json.media_msgs_por_dia }}",
+            "tem_foto": "={{ $json.tem_foto }}",
+            "data_primeiro_contato": "={{ $json.data_primeiro_contato }}",
+            "data_ultimo_contato": "={{ $json.data_ultimo_contato }}",
+            "idioma": "={{ $json.idioma }}",
+            "is_business": "={{ $json.is_business }}",
+            "business_name": "={{ $json.business_name }}",
+            "business_category": "={{ $json.business_category }}",
+            "business_website": "={{ $json.business_website }}",
+            "business_address": "={{ $json.business_address }}",
+            "instance_id": "={{ $json.instance_id }}",
+            "ultima_atualizacao": "={{ $json.ultima_atualizacao }}"
+          },
+          "matchingColumns": [
+            "phone"
+          ],
+          "schema": [
+            {
+              "id": "posicao",
+              "displayName": "posicao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_name",
+              "displayName": "lead_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "classificacao",
+              "displayName": "classificacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tipo_registro",
+              "displayName": "tipo_registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_photo",
+              "displayName": "lead_photo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status_atividade",
+              "displayName": "status_atividade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score_engajamento",
+              "displayName": "score_engajamento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_interacoes",
+              "displayName": "total_interacoes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_mensagens_recebidas",
+              "displayName": "total_mensagens_recebidas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_mensagens_enviadas",
+              "displayName": "total_mensagens_enviadas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "taxa_resposta",
+              "displayName": "taxa_resposta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dias_inativo",
+              "displayName": "dias_inativo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dias_relacionamento",
+              "displayName": "dias_relacionamento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "media_msgs_por_dia",
+              "displayName": "media_msgs_por_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tem_foto",
+              "displayName": "tem_foto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_primeiro_contato",
+              "displayName": "data_primeiro_contato",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_ultimo_contato",
+              "displayName": "data_ultimo_contato",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "idioma",
+              "displayName": "idioma",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "is_business",
+              "displayName": "is_business",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_name",
+              "displayName": "business_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_category",
+              "displayName": "business_category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_website",
+              "displayName": "business_website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_address",
+              "displayName": "business_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "instance_id",
+              "displayName": "instance_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ultima_atualizacao",
+              "displayName": "ultima_atualizacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1376,
+        960
+      ],
+      "id": "jsgrafica-report-d535120d-9d45-4b73-b071-31186788417f",
+      "name": "Atualizar LEADS",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jP4U4ZbIMrnQDAzd",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ZacdN5ih3bgUGNA40Q99_W9_C1qAsD3aNFvvOzllsko",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "report_sumario",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ultima_atualizacao": "={{ $json.ultima_atualizacao }}",
+            "total_leads": "={{ $json.total_leads }}",
+            "leads_novos": "={{ $json.leads_novos }}",
+            "leads_recorrentes": "={{ $json.leads_recorrentes }}",
+            "total_msgs_recebidas": "={{ $json.total_msgs_recebidas }}",
+            "total_msgs_enviadas": "={{ $json.total_msgs_enviadas }}",
+            "volume_hoje": "={{ $json.volume_hoje }}",
+            "volume_7_dias": "={{ $json.volume_7_dias }}",
+            "volume_30_dias": "={{ $json.volume_30_dias }}",
+            "instancias_ativas": "={{ $json.instancias_ativas }}",
+            "leads_novos_dia": "={{ $json.leads_novos_dia }}",
+            "leads_recorrentes_dia": "={{ $json.leads_recorrentes_dia }}",
+            "msgs_recebidas_dia": "={{ $json.msgs_recebidas_dia }}",
+            "msgs_enviadas_dia": "={{ $json.msgs_enviadas_dia }}",
+            "data_dia": "={{ $json.data_dia }}",
+            "row_number": 2,
+            "linha_id": "={{ $json.linha_id }}"
+          },
+          "matchingColumns": [
+            "linha_id"
+          ],
+          "schema": [
+            {
+              "id": "linha_id",
+              "displayName": "linha_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "data_dia",
+              "displayName": "data_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ultima_atualizacao",
+              "displayName": "ultima_atualizacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_leads",
+              "displayName": "total_leads",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "leads_novos",
+              "displayName": "leads_novos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "leads_recorrentes",
+              "displayName": "leads_recorrentes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_msgs_recebidas",
+              "displayName": "total_msgs_recebidas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_msgs_enviadas",
+              "displayName": "total_msgs_enviadas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "volume_hoje",
+              "displayName": "volume_hoje",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "volume_7_dias",
+              "displayName": "volume_7_dias",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "volume_30_dias",
+              "displayName": "volume_30_dias",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "instancias_ativas",
+              "displayName": "instancias_ativas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "leads_novos_dia",
+              "displayName": "leads_novos_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "leads_recorrentes_dia",
+              "displayName": "leads_recorrentes_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "msgs_recebidas_dia",
+              "displayName": "msgs_recebidas_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "msgs_enviadas_dia",
+              "displayName": "msgs_enviadas_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1360,
+        736
+      ],
+      "id": "jsgrafica-report-33bc3295-410b-485e-88cc-3c6b4087c51c",
+      "name": "Atualizar REPORT_SUMMARY1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jP4U4ZbIMrnQDAzd",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const agora = new Date();\n\nconst spOffset = -3 * 60;\nconst spNow = new Date(agora.getTime() + (spOffset - (-agora.getTimezoneOffset())) * 60000);\n\nconst inicioDia = new Date(spNow);\ninicioDia.setHours(0, 0, 0, 0);\nconst inicioDiaUTC = new Date(inicioDia.getTime() - spOffset * 60000);\n\nconst inicio7d = new Date(inicioDiaUTC);\ninicio7d.setDate(inicio7d.getDate() - 7);\n\nconst inicio30d = new Date(inicioDiaUTC);\ninicio30d.setDate(inicio30d.getDate() - 30);\n\nconst pad = n => String(n).padStart(2, '0');\nconst dataFormatada = `${pad(spNow.getDate())}/${pad(spNow.getMonth() + 1)}/${spNow.getFullYear()}`;\n\nreturn [{\n  json: {\n    hoje: agora.toISOString(),\n    inicio_dia: inicioDiaUTC.toISOString(),\n    inicio_7d: inicio7d.toISOString(),\n    inicio_30d: inicio30d.toISOString(),\n    data_formatada: dataFormatada\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2128,
+        960
+      ],
+      "id": "jsgrafica-report-029dfe30-6a0d-4df4-8344-8e25c268fe0a",
+      "name": "Preparar Datas 30m"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://arqkdnexpederquztegn.supabase.co/rest/v1/rpc/report_agent_grupos_full",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "p_agent",
+              "value": "jsgrafica"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1872,
+        1248
+      ],
+      "id": "jsgrafica-report-a2ce5c98-10ed-491d-8f98-d47c7c34c3b8",
+      "name": "Query RPC Grupos",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (!items || items.length === 0) return [];\nconst leads = [];\nconst grupos = [];\nfor (const c of items) {\n  const r = c.json;\n  if (!r) continue;\n  if (r.dataset === 'report_leads_grupos') {\n    leads.push({\n      json: {\n        dataset: r.dataset,\n        posicao: r.posicao ?? null,\n        group_name: r.group_name ?? '',\n        group_id: r.group_id ?? '',\n        participant_name: r.participant_name ?? '',\n        participant_phone: r.participant_phone ?? '',\n        total_interacoes: r.total_interacoes ?? 0,\n        total_mensagens_enviadas: r.total_mensagens_enviadas ?? 0,\n        total_mensagens_recebidas: r.total_mensagens_recebidas ?? 0,\n        score_engajamento: r.score_engajamento ?? 0,\n        status_atividade: r.status_atividade ?? '',\n        dias_inativo: r.dias_inativo ?? 0,\n        data_primeiro_evento: r.data_primeiro_evento ?? null,\n        data_ultimo_evento: r.data_ultimo_evento ?? null,\n        total_midias: r.total_midias ?? 0,\n        total_links: r.total_links ?? 0,\n        evento_recente: r.evento_recente ?? '',\n        tem_foto: r.tem_foto ?? false,\n        link_foto: r.link_foto ?? '',\n        ultima_atualizacao: r.ultima_atualizacao ?? null\n      }\n    });\n  }\n  if (r.dataset === 'report_grupos') {\n    grupos.push({\n      json: {\n        dataset: r.dataset,\n        posicao: r.posicao ?? null,\n        group_name: r.group_name ?? '',\n        group_id: r.group_id ?? '',\n        total_participantes_ativos: r.total_participantes_ativos ?? 0,\n        total_interacoes: r.total_interacoes ?? 0,\n        total_mensagens_recebidas: r.total_mensagens_recebidas ?? 0,\n        total_mensagens_enviadas: r.total_mensagens_enviadas ?? 0,\n        score_engajamento: r.score_engajamento ?? 0,\n        dias_inativo: r.dias_inativo ?? 0,\n        data_primeiro_evento: r.data_primeiro_evento ?? null,\n        data_ultimo_evento: r.data_ultimo_evento ?? null,\n        total_eventos_entrada: r.total_eventos_entrada ?? 0,\n        total_eventos_saida: r.total_eventos_saida ?? 0,\n        total_midias: r.total_midias ?? 0,\n        total_links: r.total_links ?? 0,\n        ultima_atualizacao: r.ultima_atualizacao ?? null\n      }\n    });\n  }\n}\nreturn [...leads, ...grupos];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1632,
+        1248
+      ],
+      "id": "jsgrafica-report-171a5c19-4eba-4d0b-927e-4335aca04801",
+      "name": "Montar Dados Grupos"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "baf45c55-051f-4abf-91c0-3e1ec3ffb50f",
+              "leftValue": "={{ $json.dataset === 'report_grupos' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1408,
+        1376
+      ],
+      "id": "jsgrafica-report-869878ee-3568-4e5d-b3f6-e41122703d1d",
+      "name": "IF - Atualizar report_grupos"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e7f48dff-c73c-4564-939f-b11967e4db18",
+              "leftValue": "={{ $json.dataset === 'report_leads_grupos' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1360,
+        1168
+      ],
+      "id": "jsgrafica-report-56dbd58e-d91f-444b-b683-867f4c30ef69",
+      "name": "If - Atualizar report_leads_grupos"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 19
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2288,
+        1600
+      ],
+      "id": "jsgrafica-report-bb94277c-db3c-452a-ab6f-00970e8dd87e",
+      "name": "19h"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (!items || items.length === 0) return [];\n\nconst hojeISO = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' }); // YYYY-MM-DD\n\nconst hoje = items.find(r => r.json.data === hojeISO);\nif (!hoje) return [];\n\nconst r = hoje.json;\n\nreturn [{\n  json: {\n    data: new Date(r.data).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }),\n    volume_dia:                 r.volume_dia ?? 0,\n    msgs_recebidas_dia:         r.msgs_recebidas_dia ?? 0,\n    msgs_enviadas_dia:          r.msgs_enviadas_dia ?? 0,\n    taxa_resposta_dia:          r.taxa_resposta_dia ?? 0,\n    total_leads_acumulado:      r.total_leads_acumulado ?? 0,\n    leads_novos_dia:            r.leads_novos_dia ?? 0,\n    leads_recorrentes_dia:      r.leads_recorrentes_dia ?? 0,\n    leads_ativos_dia:           r.leads_ativos_dia ?? 0,\n    leads_mornos_dia:           r.leads_mornos_dia ?? 0,\n    leads_frios_dia:            r.leads_frios_dia ?? 0,\n    leads_business_dia:         r.leads_business_dia ?? 0,\n    score_medio_leads:          r.score_medio_leads ?? 0,\n    taxa_leads_novos:           r.taxa_leads_novos ?? 0,\n    taxa_engajamento_dia:       r.taxa_engajamento_dia ?? 0,\n    total_grupos_ativos:        r.total_grupos_ativos ?? 0,\n    total_participantes_grupos: r.total_participantes_grupos ?? 0,\n    msgs_grupos_recebidas_dia:  r.msgs_grupos_recebidas_dia ?? 0,\n    msgs_grupos_enviadas_dia:   r.msgs_grupos_enviadas_dia ?? 0,\n    entradas_grupos_dia:        r.entradas_grupos_dia ?? 0,\n    saidas_grupos_dia:          r.saidas_grupos_dia ?? 0,\n    taxa_grupos_ativos:         r.taxa_grupos_ativos ?? 0,\n    total_midias_dia:           r.total_midias_dia ?? 0,\n    total_links_dia:            r.total_links_dia ?? 0,\n    taxa_midia_dia:             r.taxa_midia_dia ?? 0\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1584,
+        1600
+      ],
+      "id": "jsgrafica-report-109c8d13-a0c7-4fd6-9c8f-0e6d47155960",
+      "name": "Montar Dados Diario"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://arqkdnexpederquztegn.supabase.co/rest/v1/rpc/report_agent_history",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "p_agent",
+              "value": "jsgrafica"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1840,
+        1600
+      ],
+      "id": "jsgrafica-report-568b6397-5b5a-4d76-9956-82e389f8ff22",
+      "name": "Query RPC Summary1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ZacdN5ih3bgUGNA40Q99_W9_C1qAsD3aNFvvOzllsko",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "report_historico",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "data": "={{ $json.data }}",
+            "volume_dia": "={{ $json.volume_dia }}",
+            "msgs_recebidas_dia": "={{ $json.msgs_recebidas_dia }}",
+            "taxa_resposta_dia": "={{ $json.taxa_resposta_dia }}",
+            "msgs_enviadas_dia": "={{ $json.msgs_enviadas_dia }}",
+            "total_leads_acumulado": "={{ $json.total_leads_acumulado }}",
+            "leads_novos_dia": "={{ $json.leads_novos_dia }}",
+            "leads_recorrentes_dia": "={{ $json.leads_recorrentes_dia }}",
+            "leads_ativos_dia": "={{ $json.leads_ativos_dia }}",
+            "leads_mornos_dia": "={{ $json.leads_mornos_dia }}",
+            "leads_frios_dia": "={{ $json.leads_frios_dia }}",
+            "leads_business_dia": "={{ $json.leads_business_dia }}",
+            "score_medio_leads": "={{ $json.score_medio_leads }}",
+            "taxa_leads_novos": "={{ $json.taxa_leads_novos }}",
+            "taxa_engajamento_dia": "={{ $json.taxa_engajamento_dia }}",
+            "total_grupos_ativos": "={{ $json.total_grupos_ativos }}",
+            "total_participantes_grupos": "={{ $json.total_participantes_grupos }}",
+            "msgs_grupos_recebidas_dia": "={{ $json.msgs_grupos_recebidas_dia }}",
+            "msgs_grupos_enviadas_dia": "={{ $json.msgs_grupos_enviadas_dia }}",
+            "entradas_grupos_dia": "={{ $json.entradas_grupos_dia }}",
+            "saidas_grupos_dia": "={{ $json.saidas_grupos_dia }}",
+            "taxa_grupos_ativos": "={{ $json.taxa_grupos_ativos }}",
+            "total_midias_dia": "={{ $json.total_midias_dia }}",
+            "total_links_dia": "={{ $json.total_links_dia }}",
+            "taxa_midia_dia": "={{ $json.taxa_midia_dia }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "volume_dia",
+              "displayName": "volume_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "msgs_recebidas_dia",
+              "displayName": "msgs_recebidas_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "msgs_enviadas_dia",
+              "displayName": "msgs_enviadas_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "taxa_resposta_dia",
+              "displayName": "taxa_resposta_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "total_leads_acumulado",
+              "displayName": "total_leads_acumulado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "leads_novos_dia",
+              "displayName": "leads_novos_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "leads_recorrentes_dia",
+              "displayName": "leads_recorrentes_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "leads_ativos_dia",
+              "displayName": "leads_ativos_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "leads_mornos_dia",
+              "displayName": "leads_mornos_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "leads_frios_dia",
+              "displayName": "leads_frios_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "leads_business_dia",
+              "displayName": "leads_business_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "score_medio_leads",
+              "displayName": "score_medio_leads",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "taxa_leads_novos",
+              "displayName": "taxa_leads_novos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "taxa_engajamento_dia",
+              "displayName": "taxa_engajamento_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "total_grupos_ativos",
+              "displayName": "total_grupos_ativos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "total_participantes_grupos",
+              "displayName": "total_participantes_grupos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "msgs_grupos_recebidas_dia",
+              "displayName": "msgs_grupos_recebidas_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "msgs_grupos_enviadas_dia",
+              "displayName": "msgs_grupos_enviadas_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "entradas_grupos_dia",
+              "displayName": "entradas_grupos_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "saidas_grupos_dia",
+              "displayName": "saidas_grupos_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "taxa_grupos_ativos",
+              "displayName": "taxa_grupos_ativos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "total_midias_dia",
+              "displayName": "total_midias_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "total_links_dia",
+              "displayName": "total_links_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "taxa_midia_dia",
+              "displayName": "taxa_midia_dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1360,
+        1600
+      ],
+      "id": "jsgrafica-report-06b8a493-52ff-4427-9ffb-ec497bb60c9b",
+      "name": "Append REPORT_HISTORICO1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jP4U4ZbIMrnQDAzd",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function toSP(date) {\n  return new Date(\n    date.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })\n  ).toISOString().replace('Z', '-03:00');\n}\nconst agora = new Date();\nconst inicioDia = new Date(agora);\ninicioDia.setHours(0,0,0,0);\nconst inicio7d = new Date(agora);\ninicio7d.setDate(inicio7d.getDate() - 7);\nconst inicio30d = new Date(agora);\ninicio30d.setDate(inicio30d.getDate() - 30);\nreturn [{\n  json: {\n    hoje: toSP(agora),\n    inicio_dia: toSP(inicioDia),\n    inicio_7d: toSP(inicio7d),\n    inicio_30d: toSP(inicio30d),\n    data_formatada: agora.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' })\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2080,
+        1600
+      ],
+      "id": "jsgrafica-report-edf332a8-9ff1-4833-aa93-fe91eb3c7432",
+      "name": "Preparar Datas diario"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1ZacdN5ih3bgUGNA40Q99_W9_C1qAsD3aNFvvOzllsko",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "report_grupos",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "posicao": "={{ $json.posicao }}",
+            "group_name": "={{ $json.group_name }}",
+            "group_id": "={{ $json.group_id }}",
+            "total_participantes_ativos": "={{ $json.total_participantes_ativos }}",
+            "total_interacoes": "={{ $json.total_interacoes }}",
+            "total_mensagens_recebidas": "={{ $json.total_mensagens_recebidas }}",
+            "total_mensagens_enviadas": "={{ $json.total_mensagens_enviadas }}",
+            "score_engajamento": "={{ $json.score_engajamento }}",
+            "dias_inativo": "={{ $json.dias_inativo }}",
+            "data_primeiro_evento": "={{ $json.data_primeiro_evento }}",
+            "data_ultimo_evento": "={{ $json.data_ultimo_evento }}",
+            "total_eventos_entrada": "={{ $json.total_eventos_entrada }}",
+            "total_eventos_saida": "={{ $json.total_eventos_saida }}",
+            "total_midias": "={{ $json.total_midias }}",
+            "total_links": "={{ $json.total_links }}",
+            "ultima_atualizacao": "={{ $json.ultima_atualizacao }}"
+          },
+          "matchingColumns": [
+            "group_id"
+          ],
+          "schema": [
+            {
+              "id": "posicao",
+              "displayName": "posicao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "group_name",
+              "displayName": "group_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "group_id",
+              "displayName": "group_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "total_participantes_ativos",
+              "displayName": "total_participantes_ativos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_interacoes",
+              "displayName": "total_interacoes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_mensagens_recebidas",
+              "displayName": "total_mensagens_recebidas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_mensagens_enviadas",
+              "displayName": "total_mensagens_enviadas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score_engajamento",
+              "displayName": "score_engajamento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dias_inativo",
+              "displayName": "dias_inativo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_primeiro_evento",
+              "displayName": "data_primeiro_evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_ultimo_evento",
+              "displayName": "data_ultimo_evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_eventos_entrada",
+              "displayName": "total_eventos_entrada",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_eventos_saida",
+              "displayName": "total_eventos_saida",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_midias",
+              "displayName": "total_midias",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_links",
+              "displayName": "total_links",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ultima_atualizacao",
+              "displayName": "ultima_atualizacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1040,
+        1360
+      ],
+      "id": "jsgrafica-report-b9fdc23f-9a69-4d06-915c-2ef13fd155b0",
+      "name": "Atualizar report_grupos1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jP4U4ZbIMrnQDAzd",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1ZacdN5ih3bgUGNA40Q99_W9_C1qAsD3aNFvvOzllsko",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "report_leads_grupos",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "posicao": "={{ $json.posicao }}",
+            "group_name": "={{ $json.group_name }}",
+            "group_id": "={{ $json.group_id }}",
+            "participant_name": "={{ $json.participant_name }}",
+            "total_interacoes": "={{ $json.total_interacoes }}",
+            "participant_phone": "={{ $json.participant_phone }}",
+            "total_mensagens_enviadas": "={{ $json.total_mensagens_enviadas }}",
+            "total_mensagens_recebidas": "={{ $json.total_mensagens_recebidas }}",
+            "score_engajamento": "={{ $json.score_engajamento }}",
+            "dias_inativo": "={{ $json.dias_inativo }}",
+            "data_primeiro_evento": "={{ $json.data_primeiro_evento }}",
+            "data_ultimo_evento": "={{ $json.data_ultimo_evento }}",
+            "total_midias": "={{ $json.total_midias }}",
+            "total_links": "={{ $json.total_links }}",
+            "ultima_atualizacao": "={{ $json.ultima_atualizacao }}"
+          },
+          "matchingColumns": [
+            "participant_phone"
+          ],
+          "schema": [
+            {
+              "id": "posicao",
+              "displayName": "posicao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "group_name",
+              "displayName": "group_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "group_id",
+              "displayName": "group_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "participant_name",
+              "displayName": "participant_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "participant_phone",
+              "displayName": "participant_phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "total_interacoes",
+              "displayName": "total_interacoes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_mensagens_enviadas",
+              "displayName": "total_mensagens_enviadas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_mensagens_recebidas",
+              "displayName": "total_mensagens_recebidas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score_engajamento",
+              "displayName": "score_engajamento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status_atividade",
+              "displayName": "status_atividade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "dias_inativo",
+              "displayName": "dias_inativo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_primeiro_evento",
+              "displayName": "data_primeiro_evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_ultimo_evento",
+              "displayName": "data_ultimo_evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_midias",
+              "displayName": "total_midias",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_links",
+              "displayName": "total_links",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "evento_recente",
+              "displayName": "evento_recente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "evento_detalhe",
+              "displayName": "evento_detalhe",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tem_foto",
+              "displayName": "tem_foto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "link_foto",
+              "displayName": "link_foto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ultima_atualizacao",
+              "displayName": "ultima_atualizacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1056,
+        1152
+      ],
+      "id": "jsgrafica-report-0f20ce39-e5cd-4c57-8964-3d490d3488d7",
+      "name": "Atualizar repor_leads_grupos1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jP4U4ZbIMrnQDAzd",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.zapi_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "client-token",
+              "value": "Fc6Me4daf2c5a61d0820e0f012e50f18dS"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "phone",
+              "value": "={{ $json.tutor_phone }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.message }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -400,
+        1600
+      ],
+      "id": "31cc7bbd-fee7-4b1e-b51d-728a0f6235d4",
+      "name": "HTTP Enviar Resumo Tutor"
+    },
+    {
+      "parameters": {
+        "url": "https://arqkdnexpederquztegn.supabase.co/rest/v1/jsgrafica_agent_config?select=agent_name,tutor_name,tutor_phone,instance_id,zapi_url&limit=1",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1040,
+        1600
+      ],
+      "id": "fea87347-25e0-4aba-be2a-5cdf98051687",
+      "name": "GET Config Resumo",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const r = $('Montar Dados Diario' in $nodeNames() ? 'Montar Dados Diario' : 'Montar Dados Diario1', 0).json;\nconst cfg = $input.first().json;\n\nif (!cfg || !cfg.tutor_phone) {\n  return [{ json: { skip: true, reason: 'sem tutor_phone' } }];\n}\n\nconst agentName  = cfg.agent_name  ?? 'jsgrafica';\nconst tutorPhone = cfg.tutor_phone.replace(/\\D/g, '');\nconst zapiUrl    = (cfg.zapi_url ?? '').replace(/\\/+$/, '');\nconst data = r.data ?? new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });\n\nconst msg =\n`\\u{1F4CA} *Relat\\u00F3rio do dia \\u2014 ${agentName}*\\n` +\n`\\u{1F4C5} ${data}\\n\\n` +\n`\\u{1F4AC} *Conversas*\\n` +\n`\\u251C Recebidas: ${r.msgs_recebidas_dia ?? 0}\\n` +\n`\\u251C Enviadas: ${r.msgs_enviadas_dia ?? 0}\\n` +\n`\\u2514 Taxa de resposta: ${r.taxa_resposta_dia ?? 0}%\\n\\n` +\n`\\u{1F465} *Leads*\\n` +\n`\\u251C Novos hoje: ${r.leads_novos_dia ?? 0}\\n` +\n`\\u251C Recorrentes: ${r.leads_recorrentes_dia ?? 0}\\n` +\n`\\u251C Base total: ${r.total_leads_acumulado ?? 0}\\n` +\n`\\u2514 Engajamento do dia: ${r.taxa_engajamento_dia ?? 0}%\\n\\n` +\n`\\u{1F321}\\uFE0F *Temperatura da base*\\n` +\n`\\u251C \\u{1F7E2} Ativos: ${r.leads_ativos_dia ?? 0}\\n` +\n`\\u251C \\u{1F7E1} Mornos: ${r.leads_mornos_dia ?? 0}\\n` +\n`\\u2514 \\u{1F534} Frios: ${r.leads_frios_dia ?? 0}`;\n\nreturn [{ json: {\n  tutor_phone: tutorPhone,\n  zapi_url: zapiUrl,\n  message: msg\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -720,
+        1600
+      ],
+      "id": "3ce4f6d8-fdb5-4490-a486-80558167b1bd",
+      "name": "Montar MSG Resumo Tutor"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "a cada 30m": {
+      "main": [
+        [
+          {
+            "node": "Preparar Datas 30m",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query RPC Summary": {
+      "main": [
+        [
+          {
+            "node": "Montar Dados Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query RPC Contatos": {
+      "main": [
+        [
+          {
+            "node": "Montar Dados Contatos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Dados Summary": {
+      "main": [
+        [
+          {
+            "node": "Atualizar REPORT_SUMMARY1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Dados Contatos": {
+      "main": [
+        [
+          {
+            "node": "Atualizar LEADS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Datas 30m": {
+      "main": [
+        [
+          {
+            "node": "Query RPC Summary",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Query RPC Contatos",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Query RPC Grupos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query RPC Grupos": {
+      "main": [
+        [
+          {
+            "node": "Montar Dados Grupos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Dados Grupos": {
+      "main": [
+        [
+          {
+            "node": "If - Atualizar report_leads_grupos",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "IF - Atualizar report_grupos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Atualizar report_grupos": {
+      "main": [
+        [
+          {
+            "node": "Atualizar report_grupos1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "If - Atualizar report_leads_grupos": {
+      "main": [
+        [
+          {
+            "node": "Atualizar repor_leads_grupos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "19h": {
+      "main": [
+        [
+          {
+            "node": "Preparar Datas diario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Dados Diario": {
+      "main": [
+        [
+          {
+            "node": "Append REPORT_HISTORICO1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query RPC Summary1": {
+      "main": [
+        [
+          {
+            "node": "Montar Dados Diario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Datas diario": {
+      "main": [
+        [
+          {
+            "node": "Query RPC Summary1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append REPORT_HISTORICO1": {
+      "main": [
+        [
+          {
+            "node": "GET Config Resumo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar MSG Resumo Tutor": {
+      "main": [
+        [
+          {
+            "node": "HTTP Enviar Resumo Tutor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Config Resumo": {
+      "main": [
+        [
+          {
+            "node": "Montar MSG Resumo Tutor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": {
+    "node:a cada 30m": {
+      "recurrenceRules": []
+    },
+    "node:19h": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": []
+}

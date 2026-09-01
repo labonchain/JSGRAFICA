@@ -1,0 +1,250 @@
+{
+  "updatedAt": "2026-07-29T17:01:12.650Z",
+  "createdAt": "2026-07-03T02:38:19.478Z",
+  "id": "zfxfDZPQyHnOa4a1",
+  "name": "12 - JSGRAFICA | SYNC CONNECTED_PHONE",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 20
+            }
+          ]
+        }
+      },
+      "id": "sched-013",
+      "name": "A cada 20min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_agent_config",
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ativo",
+              "condition": "eq",
+              "keyValue": true
+            }
+          ]
+        }
+      },
+      "id": "get-config-013",
+      "name": "GET Config",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://api.z-api.io/instances/' + $json.instance_id + '/token/' + $json.token + '/device' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "client-token",
+              "value": "={{ $json.client_token }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "get-device-013",
+      "name": "GET Device Z-API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -352,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $('GET Config').first().json;\nconst device = $json || {};\n\n// normaliza telefone (so digitos)\nfunction normaliza(v) { return String(v || '').replace(/\\D/g, ''); }\n\nconst phoneAtualBanco = normaliza(config.connected_phone);\nconst phoneAgoraZapi = normaliza(device.phone);\n\n// se a chamada ao Z-API falhou ou nao trouxe phone, nao faz nada\nif (!phoneAgoraZapi) {\n  return [{ json: { _deve_atualizar: false, _motivo: 'sem_resposta_valida_zapi' } }];\n}\n\nconst mudou = phoneAgoraZapi !== phoneAtualBanco;\n\nreturn [{\n  json: {\n    _deve_atualizar: mudou,\n    _config_id: config.id,\n    _phone_anterior: config.connected_phone || null,\n    _phone_novo: device.phone,\n    _motivo: mudou ? 'telefone_mudou' : 'sem_mudanca'\n  }\n}];"
+      },
+      "id": "comparar-013",
+      "name": "Comparar e Decidir",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._deve_atualizar }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "if-mudou-013",
+      "name": "If Mudou",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        96,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "jsgrafica_agent_config",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json._config_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "connected_phone",
+              "fieldValue": "={{ $json._phone_novo }}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "update-013",
+      "name": "UPDATE connected_phone",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        320,
+        -96
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "A cada 20min": {
+      "main": [
+        [
+          {
+            "node": "GET Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Config": {
+      "main": [
+        [
+          {
+            "node": "GET Device Z-API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Device Z-API": {
+      "main": [
+        [
+          {
+            "node": "Comparar e Decidir",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Comparar e Decidir": {
+      "main": [
+        [
+          {
+            "node": "If Mudou",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Mudou": {
+      "main": [
+        [
+          {
+            "node": "UPDATE connected_phone",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:A cada 20min": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,155 @@
+{
+  "updatedAt": "2026-08-31T18:15:49.823Z",
+  "createdAt": "2026-08-31T14:54:55.659Z",
+  "id": "Zrjw2XrJEahpwJzd",
+  "name": "364 - JSGRAFICA | GERACAO IMAGEM IA (briefing -> Gemini)",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "n364-webhook",
+      "name": "Webhook Briefing Imagem",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -640,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "jsgraficageracaoimagem",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "webhookId": "e096d59b-7e1e-4e84-9040-3a58e3df288b"
+    },
+    {
+      "id": "n364-preparar",
+      "name": "Preparar Tamanhos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const body = $json.body ?? $json;\nconst sizesPedidos = (body.sizes && body.sizes.length) ? body.sizes : ['1:1'];\n// Nano Banana (gemini-2.5-flash-image) nao tem campo dedicado de aspect ratio documentado de\n// forma confiavel - orientacao de proporcao entra como texto no proprio prompt (abordagem\n// pratica conhecida pra esse modelo).\nconst mapaProporcao = {\n  '1:1': 'formato quadrado 1:1',\n  '9:16': 'formato vertical 9:16, bem mais alto que largo'\n};\n\nreturn sizesPedidos.map((prop) => {\n  const instrucaoProporcao = mapaProporcao[prop] || mapaProporcao['1:1'];\n  return {\n    json: {\n      prompt: body.prompt + ' A imagem deve estar em ' + instrucaoProporcao + '. Sem nenhum texto, letra, palavra ou marca d\\'agua na imagem.',\n      proporcao: prop,\n      file_prefix: body.file_prefix || 'imagem-gerada',\n      bloco: body.bloco || null,\n      peca: body.peca || null\n    }\n  };\n});"
+      }
+    },
+    {
+      "id": "n364-gemini",
+      "name": "Gerar Imagem Gemini",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -180,
+        0
+      ],
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googlePalmApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contents: [{ parts: [{ text: $json.prompt }] }] }) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HuMb1WcX1o0FTeLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "id": "n364-montar",
+      "name": "Montar Resposta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        60,
+        -100
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const items = $input.all();\nconst pedidos = $('Preparar Tamanhos').all();\n\nconst imagens = items.map((item, idx) => {\n  const meta = pedidos[idx].json;\n  const candidates = item.json.candidates || [];\n  let b64 = null;\n  let mimeType = null;\n  for (const c of candidates) {\n    const parts = (c.content && c.content.parts) || [];\n    for (const p of parts) {\n      if (p.inlineData && p.inlineData.data) {\n        b64 = p.inlineData.data;\n        mimeType = p.inlineData.mimeType || 'image/png';\n        break;\n      }\n    }\n    if (b64) break;\n  }\n  return {\n    filename: meta.file_prefix + '_' + meta.proporcao.replace(':', 'x') + '.png',\n    proporcao: meta.proporcao,\n    mimeType: mimeType,\n    base64: b64,\n    sucesso: !!b64\n  };\n});\n\nreturn [{\n  json: {\n    bloco: pedidos[0] ? pedidos[0].json.bloco : null,\n    peca: pedidos[0] ? pedidos[0].json.peca : null,\n    provedor: 'gemini-2.5-flash-image',\n    gerado_em: new Date().toISOString(),\n    imagens: imagens\n  }\n}];"
+      }
+    },
+    {
+      "id": "n364-erro",
+      "name": "Montar Erro",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        60,
+        120
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const items = $input.all();\nreturn [{ json: { sucesso: false, erro: items.map(i => (i.json.error && (i.json.error.message || JSON.stringify(i.json.error))) || 'Erro desconhecido na geracao de imagem') } }];"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Briefing Imagem": {
+      "main": [
+        [
+          {
+            "node": "Preparar Tamanhos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Tamanhos": {
+      "main": [
+        [
+          {
+            "node": "Gerar Imagem Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Imagem Gemini": {
+      "main": [
+        [
+          {
+            "node": "Montar Resposta",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Montar Erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "availableInMCP": false,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "tags": []
+}

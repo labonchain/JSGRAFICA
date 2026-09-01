@@ -1,0 +1,3282 @@
+{
+  "updatedAt": "2026-08-28T03:20:43.661Z",
+  "createdAt": "2026-08-17T14:13:53.345Z",
+  "id": "aO6iktSzcYtVZ6B5",
+  "name": "296 - JSGRAFICA | CAMINHO C FERRAMENTAS (TESTE ISOLADO)",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "caminho-c-consultar-preco-produto",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6bf9a9eb-59a0-4f20-8e07-98c0cd2d6263",
+      "name": "WH Consultar Preco Produto",
+      "webhookId": "65efe3a2-8cda-4c71-9881-88c4cd4a81fc"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst b = ($json.body !== undefined) ? $json.body : $json;\nconst produtoNomeOuId = (b.produto_nome_ou_id || '').toString().trim();\nconst quantidade = parseInt(b.quantidade, 10);\nif (!produtoNomeOuId || !Number.isInteger(quantidade) || quantidade < 1) {\n  return [{ json: { _erro: 'parametros_invalidos', encontrado: false } }];\n}\nreturn [{ json: { produto_nome_ou_id: produtoNomeOuId, quantidade } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        0
+      ],
+      "id": "c693ab95-eb2e-4a69-8c2b-d28a453eee4a",
+      "name": "Validar Entrada Preco"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._erro }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        0
+      ],
+      "id": "793d28be-37b0-4ce7-a15a-b180c4ab1dc1",
+      "name": "Preco: Entrada Invalida?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { encontrado: false, erro: 'parametros_invalidos' } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        0
+      ],
+      "id": "5afbb2c9-a49c-4427-b33a-c72c78a0e2bc",
+      "name": "Resp Preco Erro Entrada"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_produtos",
+        "returnAll": false,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.produto_nome_ou_id }}"
+            },
+            {
+              "keyName": "ativo",
+              "condition": "eq",
+              "keyValue": true
+            }
+          ]
+        },
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "daf63ccb-c8da-4275-a928-a18953c87ef2",
+      "name": "Preco: Buscar Por Id",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst entrada = $('Validar Entrada Preco').first().json;\nconst items = $input.all().map(i => i.json).filter(p => p && p.id);\nreturn [{ json: { ...entrada, achou_por_id: items.length > 0, produto: items[0] || null } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        0
+      ],
+      "id": "e2f21b34-8ff4-4060-a9dc-6acaab1295bd",
+      "name": "Preco: Avaliar Busca Por Id"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.achou_por_id }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1560,
+        0
+      ],
+      "id": "28bb964d-8009-4ccf-95cf-1c55fec801ec",
+      "name": "Preco: Achou Por Id?"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_produtos",
+        "returnAll": false,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "nome",
+              "condition": "ilike",
+              "keyValue": "=%{{ $json.produto_nome_ou_id }}%"
+            },
+            {
+              "keyName": "ativo",
+              "condition": "eq",
+              "keyValue": true
+            }
+          ]
+        },
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        0
+      ],
+      "id": "e0e68e08-e444-4407-a941-64cfe508664f",
+      "name": "Preco: Buscar Por Nome",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst quantidade = $('Validar Entrada Preco').first().json.quantidade;\nconst entrada = $json;\nlet produto = entrada.produto || null;\nif (!produto) {\n  const items = $input.all().map(i => i.json).filter(p => p && p.id);\n  produto = items[0] || null;\n}\nif (!produto) return [{ json: { encontrado: false } }];\nreturn [{ json: { encontrado: true, produto_id: produto.id, produto_nome: produto.nome, categoria: produto.categoria, quantidade } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2080,
+        0
+      ],
+      "id": "581320d1-c029-4816-a5e5-df3b50d8053c",
+      "name": "Preco: Normalizar Produto"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.encontrado === false }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2340,
+        0
+      ],
+      "id": "3345e056-14d3-48e7-bb26-577ac341e60c",
+      "name": "Preco: Nao Encontrado?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { encontrado: false } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2600,
+        0
+      ],
+      "id": "538bfb22-f55c-45f7-a980-97d06d331446",
+      "name": "Resp Preco Nao Encontrado"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://admin.jsgrafica.site/api/pedidos/calcular-valor",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { produtoId: $json.produto_id, quantidade: $json.quantidade } }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "fullResponse": true
+            }
+          },
+          "timeout": 15000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2860,
+        0
+      ],
+      "id": "618e55e4-9b38-4169-8577-a8f581c61dc0",
+      "name": "Preco: Calcular Valor Real",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "219uMmTJqpPg1PzW",
+          "name": "JS Gr�fica - X-Internal-Secret"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst resp = $json;\nconst body = resp.body || {};\nif (resp.statusCode >= 400 || !body.calculo) {\n  return [{ json: { encontrado: false, erro: body.error || 'erro_ao_calcular' } }];\n}\nconst produto = body.produto;\nconst c = body.calculo;\nconst nomeFmt = (produto.nome || '').toUpperCase();\nlet fraseValor = `R$ ${c.valorFinal.toFixed(2).replace('.', ',')}`;\nif (c.descontoPct > 0) fraseValor += ` (${c.descontoPct}% de desconto aplicado)`;\nconst qtdTxt = c.quantidade > 1 ? ` (qtd: ${c.quantidade})` : '';\nconst frase_pronta = `${nomeFmt}${qtdTxt}, ${fraseValor}`;\nreturn [{ json: {\n  encontrado: true,\n  produto_id: produto.id,\n  produto_nome: produto.nome,\n  valor_unitario: c.valorUnitario,\n  quantidade: c.quantidade,\n  desconto_pct: c.descontoPct,\n  valor_final: c.valorFinal,\n  frase_pronta,\n} }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        0
+      ],
+      "id": "73278323-864a-44c5-a4a5-4139a6b11123",
+      "name": "Preco: Montar Retorno"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        3380,
+        0
+      ],
+      "id": "0d822732-c97e-4203-99e3-34300962c738",
+      "name": "Resp Preco Sucesso"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "caminho-c-escalar-para-humano",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        320
+      ],
+      "id": "dd9ffcc5-a959-4d13-a059-e4a37ea0a7d1",
+      "name": "WH Escalar Para Humano",
+      "webhookId": "6581dc45-a69a-4e8c-855d-1feb6cd29cdc"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst MOTIVOS = [\"dizu\", \"alto_toque\", \"negociacao_pagamento\", \"ambiguo_nao_resolvido\", \"proposta_negada\", \"timeout\", \"nao_entendido\", \"cancelamento_pago\", \"cancelamento_entregue\", \"outro\"];\nconst b = ($json.body !== undefined) ? $json.body : $json;\nconst telefone = (b.telefone || '').toString().trim();\nconst motivo = (b.motivo || '').toString().trim();\nif (!telefone || !MOTIVOS.includes(motivo)) {\n  return [{ json: { _erro: 'parametros_invalidos', telefone, motivo } }];\n}\nreturn [{ json: { telefone, motivo } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        320
+      ],
+      "id": "c0c82fc3-b735-4c79-9177-7b9f3acbf81b",
+      "name": "Validar Entrada Escalar"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._erro }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        320
+      ],
+      "id": "476ea036-2ed6-4311-b271-0701c41eb72c",
+      "name": "Escalar: Entrada Invalida?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: false, erro: 'parametros_invalidos' } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        320
+      ],
+      "id": "45faee20-bee0-461e-a10c-ec8fda81b7cb",
+      "name": "Resp Escalar Erro Entrada"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_agente_teste_sessoes",
+        "returnAll": false,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.telefone }}"
+            }
+          ]
+        },
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        320
+      ],
+      "id": "5be19607-cf66-43f1-b6e8-fe971054e558",
+      "name": "Escalar: Buscar Sessao",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst entrada = $('Validar Entrada Escalar').first().json;\nconst sessoes = $input.all().map(i => i.json).filter(s => s && s.id);\nconst sessao = sessoes[0] || null;\nreturn [{ json: {\n  telefone: entrada.telefone,\n  motivo: entrada.motivo,\n  has_session: !!sessao,\n  sessao_id: sessao ? sessao.id : null,\n  dados_extra_atual: sessao ? (sessao.dados_extra || {}) : {},\n} }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        320
+      ],
+      "id": "34c1b11f-0dce-495c-abc4-7d0267f5baa8",
+      "name": "Escalar: Preparar Gravacao"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.has_session }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1560,
+        320
+      ],
+      "id": "c0622bf9-12a2-4ff3-aaee-5af1b7fb49a6",
+      "name": "Escalar: Tem Sessao?"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "update",
+        "tableId": "jsgrafica_agente_teste_sessoes",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.sessao_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "escalada"
+            },
+            {
+              "fieldId": "dados_extra",
+              "fieldValue": "={{ Object.assign({}, $json.dados_extra_atual, { motivo_escalonamento: $json.motivo }) }}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        320
+      ],
+      "id": "0824592e-02e2-485d-86e5-e77700625388",
+      "name": "Escalar: Atualizar Sessao",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "tableId": "jsgrafica_agente_teste_sessoes",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $json.telefone }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "escalada"
+            },
+            {
+              "fieldId": "dados_extra",
+              "fieldValue": "={{ ({ motivo_escalonamento: $json.motivo }) }}"
+            },
+            {
+              "fieldId": "mensagens",
+              "fieldValue": "={{ [{ tipo: 'escalonamento_caminho_c', motivo: $json.motivo, em: $now.toISO() }] }}"
+            },
+            {
+              "fieldId": "ultima_mensagem_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2080,
+        320
+      ],
+      "id": "7cfca5db-080a-45dd-9725-1329373601e5",
+      "name": "Escalar: Criar Sessao",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst motivo = $('Escalar: Preparar Gravacao').first().json.motivo;\nconst frase_pronta = motivo === 'dizu'\n  ? 'Esse numero aqui e so da JS Grafica agora. Pra pedido de comida da Dizu Refeicoes, chama direto no WhatsApp delas: (81) 9107-0806 \\ud83d\\ude0a'\n  : 'Chamando a equipe';\nreturn [{ json: { ok: true, frase_pronta } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2340,
+        320
+      ],
+      "id": "a1e9bcc1-460f-4cbd-aa01-c0d7349d221b",
+      "name": "Escalar: Montar Retorno"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2600,
+        320
+      ],
+      "id": "6cba595e-a2e1-44ba-881a-4a1e58e38f6c",
+      "name": "Resp Escalar Sucesso"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "caminho-c-carregar-contexto-atendimento",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        640
+      ],
+      "id": "76344892-0f1f-4263-b3e2-29340cde8f69",
+      "name": "WH Carregar Contexto Atendimento",
+      "webhookId": "a628be1c-e649-4ddd-9863-2a66f51210bb"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst b = ($json.body !== undefined) ? $json.body : $json;\nconst telefone = (b.telefone || '').toString().trim();\nif (!telefone) {\n  return [{ json: { _erro: 'parametros_invalidos' } }];\n}\nconst janelaMs = 7 * 24 * 60 * 60 * 1000;\nreturn [{ json: { telefone, desde_ms: $now.toMillis() - janelaMs } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        640
+      ],
+      "id": "7c4bdc49-b626-4110-8fbf-d73602eeaf89",
+      "name": "Validar Entrada Contexto"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._erro }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        640
+      ],
+      "id": "99f87c50-e710-48f4-b565-7d2f3a85a3c3",
+      "name": "Contexto: Entrada Invalida?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro_ao_carregar: true, sessao_ativa: null, contexto_recente: [] } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        640
+      ],
+      "id": "b64de216-6392-4869-97e0-1ed568f683a9",
+      "name": "Resp Contexto Erro Entrada"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_agente_teste_sessoes",
+        "returnAll": false,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.telefone }}"
+            }
+          ]
+        },
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        640
+      ],
+      "id": "72e14a9c-0cdd-46d1-9c1a-693a8c81a6e0",
+      "name": "Contexto: Buscar Sessao",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json;\nconst rows = Array.isArray(body) ? body : (body ? [body] : []);\n\n// Deteccao Dizu em 2 niveis, MESMA logica de 'Dizu: Verificar Padrao' (demanda 316) - mantida\n// IDENTICA de proposito, nao criar copia que pode divergir com o tempo. Regex flat anterior\n// (demanda 315) dava falso positivo em clientes pagantes pedindo cardapio IMPRESSO; ver 316.\nfunction isDizuMessage(texto) {\n  const altaPrecisao = /quentinha|bolinho de frango|\\blombo\\b|farofa|vinagrete|panqueca de carne|frango pizzaiolo|peixe frito|bife ao molho|cupim molho|prato feito|prato do dia|pre[çc]o d[ao] marmita/;\n  if (altaPrecisao.test(texto)) return true;\n\n  const ambigua = /card[áa]pio|almo[çc]o|marmita|refei[çc][ãa]o|\\bprato\\b|\\bcomida\\b/;\n  if (!ambigua.test(texto)) return false;\n\n  const temIntencaoPedido = /quero (um|uma)|vou querer|tem\\s.{0,15}ainda|ainda tem|faz entrega|vcs? entreg|voc[êe]s? entreg|qual\\s.{0,15}card[áa]pio|card[áa]pio\\s.{0,10}hoje|hoje\\s.{0,10}tem/;\n  if (!temIntencaoPedido.test(texto)) return false;\n\n  const temVocabGrafico = /imprim|papel\\s*(cart[ãa]o|foto|of[íi]cio|couch[eê])|plastific|frente e verso|\\barte\\b|\\bdesign\\b|\\bpdf\\b|qr\\s*code|adesivo|cart[ãa]o de visita|or[çc]amento|vende[- ]se/;\n  if (temVocabGrafico.test(texto)) return false;\n\n  return true;\n}\n\nconst semDizu = rows.filter(r => {\n  const texto = (((r.message_text || '') + ' ' + (r.caption || '')).toLowerCase());\n  return !isDizuMessage(texto);\n});\n\nreturn semDizu.map(r => ({ json: r }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1460,
+        640
+      ],
+      "id": "c8e83c51-e088-4bed-b2f9-0428c2e4c700",
+      "name": "Contexto: Buscar Log Recente"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst sessoes = ($('Contexto: Buscar Sessao').all() || []).map(i => i.json).filter(s => s && s.id);\nconst ultima = sessoes[0] || null;\nconst escalada = !!(ultima && ultima.status === 'escalada');\nconst sessaoAtiva = (ultima && !escalada) ? ultima : null;\n\nconst logs = $input.all().map(i => i.json).filter(l => l && l.phone);\nlogs.sort((a, b) => (b.data_timestamp || 0) - (a.data_timestamp || 0));\nconst contexto_recente = logs.map(l => ({\n  // Demanda 318: quando a mensagem historica era resposta a outra (quoted_msg_id), prepende\n  // o texto citado (coluna quoted_msg_body, resolvida na demanda 318 no ramo de log do\n  // workflow 01 - antes ficava sempre null). Mesma convencao de fallback ja usada aqui.\n  texto: (l.quoted_msg_body ? '[respondendo a: \"' + l.quoted_msg_body + '\"] ' : '') + (l.message_text || l.caption || '[midia sem legenda]'),\n  quando: l.sent_at || (l.data_timestamp ? new Date(l.data_timestamp).toISOString() : null),\n  origem: l.from_me ? (l.enviado_por || 'sistema') : 'cliente',\n}));\n\nreturn [{ json: {\n  sessao_ativa: sessaoAtiva,\n  contexto_recente,\n  ultima_interacao_foi_escalada: escalada,\n} }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1560,
+        640
+      ],
+      "id": "151198b0-8805-4930-920f-873206489935",
+      "name": "Contexto: Montar Retorno"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1820,
+        640
+      ],
+      "id": "6e629d3a-fe80-43ac-a45e-01c7f34a9605",
+      "name": "Resp Contexto Sucesso"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "caminho-c-verificar-dizu",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        960
+      ],
+      "id": "13263ad6-b354-4f2f-8dfc-73fcf763ea20",
+      "name": "WH Verificar Padrao Dizu",
+      "webhookId": "545387e3-d69e-45f4-868f-2c723c03fe2e"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst b = ($json.body !== undefined) ? $json.body : $json;\nconst texto = (((b.message_text || '') + ' ' + (b.caption || '')).toLowerCase());\n\n// Deteccao Dizu em 2 niveis (demanda 316) - regex flat anterior dava falso positivo real\n// em clientes pagantes da grafica pedindo cardapio IMPRESSO (Thalita, 8 pedidos reais) e\n// placa com nome de comida (picole, 1 pedido real). MESMA logica replicada em 'Contexto:\n// Buscar Log Recente' (comentario la deixa isso explicito) - manter as 2 em sincronia manual.\nfunction isDizuMessage(texto) {\n  const altaPrecisao = /quentinha|bolinho de frango|\\blombo\\b|farofa|vinagrete|panqueca de carne|frango pizzaiolo|peixe frito|bife ao molho|cupim molho|prato feito|prato do dia|pre[çc]o d[ao] marmita/;\n  if (altaPrecisao.test(texto)) return true;\n\n  const ambigua = /card[áa]pio|almo[çc]o|marmita|refei[çc][ãa]o|\\bprato\\b|\\bcomida\\b/;\n  if (!ambigua.test(texto)) return false;\n\n  const temIntencaoPedido = /quero (um|uma)|vou querer|tem\\s.{0,15}ainda|ainda tem|faz entrega|vcs? entreg|voc[êe]s? entreg|qual\\s.{0,15}card[áa]pio|card[áa]pio\\s.{0,10}hoje|hoje\\s.{0,10}tem/;\n  if (!temIntencaoPedido.test(texto)) return false;\n\n  const temVocabGrafico = /imprim|papel\\s*(cart[ãa]o|foto|of[íi]cio|couch[eê])|plastific|frente e verso|\\barte\\b|\\bdesign\\b|\\bpdf\\b|qr\\s*code|adesivo|cart[ãa]o de visita|or[çc]amento|vende[- ]se/;\n  if (temVocabGrafico.test(texto)) return false;\n\n  return true;\n}\n\nreturn [{ json: { is_dizu: isDizuMessage(texto) } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        960
+      ],
+      "id": "79ad8c0e-adbc-4662-987a-128d37ee43b0",
+      "name": "Dizu: Verificar Padrao"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        960
+      ],
+      "id": "a16eb2bb-0a4b-491c-90b5-417f142a84ab",
+      "name": "Resp Verificar Dizu"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "caminho-c-criar-pedido-aguardando-aprovacao",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        1280
+      ],
+      "id": "2d65f9ae-d7a2-4b36-95a9-3dfbf1bc9b51",
+      "name": "WH Criar Pedido Aguardando Aprovacao",
+      "webhookId": "16fb5885-a91c-458e-b22b-eb7a23bab3d2"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst b = ($json.body !== undefined) ? $json.body : $json;\nconst telefone = (b.telefone || '').toString().trim();\nconst produto_id = (b.produto_id || '').toString().trim();\nconst quantidade = parseInt(b.quantidade, 10);\nif (!telefone || !produto_id || !Number.isInteger(quantidade) || quantidade < 1) {\n  return [{ json: { _erro: 'parametros_invalidos' } }];\n}\nreturn [{ json: { telefone, produto_id, quantidade } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        1280
+      ],
+      "id": "b99ba330-5f84-4c66-8cf5-be5f0b90bd36",
+      "name": "CriarPedido: Validar Entrada"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._erro }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        1280
+      ],
+      "id": "060d382c-6ce1-487c-a1d4-0a432027670a",
+      "name": "CriarPedido: Entrada Invalida?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro: 'parametros_invalidos' } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        1280
+      ],
+      "id": "06392bc4-49ae-4ded-946e-cc59cdf2e1d2",
+      "name": "Resp CriarPedido Erro Entrada"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_telefones_autorizados",
+        "returnAll": false,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.telefone }}"
+            },
+            {
+              "keyName": "ativo",
+              "condition": "eq",
+              "keyValue": true
+            }
+          ]
+        },
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        1280
+      ],
+      "id": "48bf8868-f134-482d-bf96-e3fc385b6962",
+      "name": "CriarPedido: Checar Whitelist",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst entrada = $('CriarPedido: Validar Entrada').first().json;\nconst autorizado = $input.all().some(i => i.json && i.json.telefone);\nreturn [{ json: { ...entrada, autorizado } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        1280
+      ],
+      "id": "1d813653-1253-4355-a23f-503557c1c47f",
+      "name": "CriarPedido: Avaliar Whitelist"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.autorizado === false }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1560,
+        1280
+      ],
+      "id": "86d3e1be-f095-47d2-ab90-0c2d9bae2f02",
+      "name": "CriarPedido: Nao Autorizado?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro: 'telefone_nao_autorizado' } }}",
+        "options": {
+          "responseCode": 403
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1820,
+        1280
+      ],
+      "id": "96dc9f9e-af42-467f-8ae0-393ddd1aaae1",
+      "name": "Resp CriarPedido Nao Autorizado"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_agente_teste_sessoes",
+        "returnAll": false,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.telefone }}"
+            }
+          ]
+        },
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2080,
+        1280
+      ],
+      "id": "18080532-ad0c-42fc-8b0c-1e3b7a06c71c",
+      "name": "CriarPedido: Buscar Sessao Atual",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst entrada = $('CriarPedido: Avaliar Whitelist').first().json;\nconst sessoes = $input.all().map(i => i.json).filter(s => s && s.id);\nconst sessao = sessoes[0] || null;\nlet dizuBloqueado = false;\nif (sessao && sessao.status === 'escalada') {\n  const de = sessao.dados_extra || {};\n  if (de.motivo_escalonamento === 'dizu') dizuBloqueado = true;\n}\nreturn [{ json: { ...entrada, sessao_id: sessao ? sessao.id : null, dizu_bloqueado: dizuBloqueado } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2340,
+        1280
+      ],
+      "id": "50943fd4-2c24-43ff-aac1-a0fccde3118a",
+      "name": "CriarPedido: Avaliar Trava Dizu"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.dizu_bloqueado }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2600,
+        1280
+      ],
+      "id": "f9183e83-3741-4deb-9df0-bf01153d25c8",
+      "name": "CriarPedido: Dizu Bloqueado?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro: 'dizu_bloqueado' } }}",
+        "options": {
+          "responseCode": 403
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2860,
+        1280
+      ],
+      "id": "a4898fdf-04eb-4877-ad5c-e362dc9a5a19",
+      "name": "Resp CriarPedido Dizu Bloqueado"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_pedidos",
+        "returnAll": false,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.telefone }}"
+            },
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "aguardando_aprovacao"
+            }
+          ]
+        },
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        1280
+      ],
+      "id": "82dee270-bc96-495d-a100-1cc776b2f39c",
+      "name": "CriarPedido: Checar Duplicidade",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst entrada = $('CriarPedido: Avaliar Trava Dizu').first().json;\nconst duplicado = $input.all().some(i => i.json && i.json.id);\nreturn [{ json: { ...entrada, duplicado } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3380,
+        1280
+      ],
+      "id": "6708f599-ce7b-4b42-90f7-7440099c1279",
+      "name": "CriarPedido: Avaliar Duplicidade"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.duplicado }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3640,
+        1280
+      ],
+      "id": "12a39c95-29d8-4a9a-b143-adf284a39ca2",
+      "name": "CriarPedido: Duplicado?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro: 'pedido_duplicado' } }}",
+        "options": {
+          "responseCode": 409
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        3900,
+        1280
+      ],
+      "id": "eb677e1a-8ff7-4e3f-bedc-df776fd52b3c",
+      "name": "Resp CriarPedido Duplicado"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/caminho-c-consultar-preco-produto",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { produto_nome_ou_id: $json.produto_id, quantidade: $json.quantidade } }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "fullResponse": true
+            }
+          },
+          "timeout": 15000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4160,
+        1280
+      ],
+      "id": "f4694312-8f02-4a21-8a12-ecc43df90c91",
+      "name": "CriarPedido: Recalcular Preco Real"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst entrada = $('CriarPedido: Avaliar Duplicidade').first().json;\nconst resp = $json;\nconst body = resp.body || {};\nif (resp.statusCode >= 400 || body.encontrado === false) {\n  return [{ json: { ...entrada, produto_encontrado: false } }];\n}\nreturn [{ json: {\n  ...entrada,\n  produto_encontrado: true,\n  servico_nome: body.produto_nome,\n  valor_unitario: body.valor_unitario,\n  desconto_pct: body.desconto_pct,\n  valor_final: body.valor_final,\n} }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4420,
+        1280
+      ],
+      "id": "ae8596b8-bc5e-4d4d-83a7-3711cb0ab03f",
+      "name": "CriarPedido: Avaliar Preco"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.produto_encontrado === false }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4680,
+        1280
+      ],
+      "id": "93b86d67-182f-4041-a8e7-be1850869b8a",
+      "name": "CriarPedido: Produto Nao Encontrado?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro: 'produto_nao_encontrado' } }}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        4940,
+        1280
+      ],
+      "id": "b65fe809-ca71-43fb-8f89-044c51ed2268",
+      "name": "Resp CriarPedido Produto Nao Encontrado"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst d = $json;\nconst valorTotal = Math.round(d.valor_unitario * d.quantidade * 100) / 100;\nreturn [{ json: { ...d, valor_total: valorTotal } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5200,
+        1280
+      ],
+      "id": "8530c50d-059e-4c29-9741-6bbd4bff18e2",
+      "name": "CriarPedido: Preparar Gravacao"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "tableId": "jsgrafica_pedidos",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $json.telefone }}"
+            },
+            {
+              "fieldId": "servico_id",
+              "fieldValue": "={{ $json.produto_id }}"
+            },
+            {
+              "fieldId": "servico_nome",
+              "fieldValue": "={{ $json.servico_nome }}"
+            },
+            {
+              "fieldId": "quantidade",
+              "fieldValue": "={{ $json.quantidade }}"
+            },
+            {
+              "fieldId": "valor_unitario",
+              "fieldValue": "={{ $json.valor_unitario }}"
+            },
+            {
+              "fieldId": "valor_total",
+              "fieldValue": "={{ $json.valor_total }}"
+            },
+            {
+              "fieldId": "desconto_pct",
+              "fieldValue": "={{ $json.desconto_pct }}"
+            },
+            {
+              "fieldId": "valor_final",
+              "fieldValue": "={{ $json.valor_final }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "aguardando_aprovacao"
+            },
+            {
+              "fieldId": "pedido_criado_por",
+              "fieldValue": "agente_caminho_c"
+            },
+            {
+              "fieldId": "origem_conversa",
+              "fieldValue": "whatsapp_caminho_c"
+            },
+            {
+              "fieldId": "session_id",
+              "fieldValue": "={{ $json.sessao_id }}"
+            },
+            {
+              "fieldId": "forma_pagamento_escolhida",
+              "fieldValue": "pix"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        5460,
+        1280
+      ],
+      "id": "68844e70-fce4-49b7-b322-671d8b7704fa",
+      "name": "CriarPedido: Gravar Pedido",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst p = $json;\nconst valorTexto = p.desconto_pct > 0\n  ? `R$ ${Number(p.valor_final).toFixed(2).replace('.', ',')} (${p.desconto_pct}% de desconto aplicado)`\n  : `R$ ${Number(p.valor_final).toFixed(2).replace('.', ',')}`;\nconst qtdTexto = p.quantidade > 1 ? `\\nQtd: ${p.quantidade}` : '';\nconst frase_pronta = `Pedido confirmado!\\n\\n${p.servico_nome}${qtdTexto}\\n${valorTexto}\\n\\nAssim que confirmarmos o pagamento, a gente comeca a producao.`;\nreturn [{ json: {\n  pedido_id: p.id,\n  servico_nome: p.servico_nome,\n  valor_final: p.valor_final,\n  frase_pronta,\n} }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5720,
+        1280
+      ],
+      "id": "42227009-d503-4950-920e-c001c1a1baf5",
+      "name": "CriarPedido: Montar Retorno"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        5980,
+        1280
+      ],
+      "id": "266ff1a0-f049-4fea-8e82-d2f65b4a7214",
+      "name": "Resp CriarPedido Sucesso"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "caminho-c-gerar-cobranca-pix",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        1600
+      ],
+      "id": "e33794a1-09e8-480a-9ce6-42e7500f52c5",
+      "name": "WH Gerar Cobranca Pix",
+      "webhookId": "417fea0f-f73e-41fe-b93f-30ff93ad6a11"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst b = ($json.body !== undefined) ? $json.body : $json;\nconst pedido_id = (b.pedido_id || '').toString().trim();\nif (!pedido_id) return [{ json: { _erro: 'parametros_invalidos' } }];\nreturn [{ json: { pedido_id } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        1600
+      ],
+      "id": "ca55d17a-03e5-4b83-9907-d701a90cc0a2",
+      "name": "Pix: Validar Entrada"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._erro }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        1600
+      ],
+      "id": "57bd3776-1de7-4938-b5ee-c2c03fb411e9",
+      "name": "Pix: Entrada Invalida?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro: 'parametros_invalidos' } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        1600
+      ],
+      "id": "e316ec67-d71a-4e37-a437-25f2428756b6",
+      "name": "Resp Pix Erro Entrada"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_pedidos",
+        "returnAll": false,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.pedido_id }}"
+            }
+          ]
+        },
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        1600
+      ],
+      "id": "2250da42-b2ca-4fc2-86ca-598b225c7ee7",
+      "name": "Pix: Buscar Pedido",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst entrada = $('Pix: Validar Entrada').first().json;\nconst pedidos = $input.all().map(i => i.json).filter(p => p && p.id);\nconst pedido = pedidos[0] || null;\nif (!pedido) return [{ json: { ...entrada, situacao: 'nao_encontrado' } }];\nif (pedido.forma_pagamento_escolhida !== 'pix') return [{ json: { ...entrada, situacao: 'sem_pix_escolhido' } }];\nreturn [{ json: { ...entrada, situacao: 'ok', telefone: pedido.telefone, valor_final: pedido.valor_final } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        1600
+      ],
+      "id": "7e383fd4-d9f8-4fbb-bea6-63cdbfbe8e6f",
+      "name": "Pix: Avaliar Pedido"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.situacao === 'nao_encontrado' }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1560,
+        1600
+      ],
+      "id": "41748e0c-d51b-412a-9b24-51f1cf446fd1",
+      "name": "Pix: Pedido Nao Encontrado?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro: 'pedido_nao_encontrado' } }}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1820,
+        1600
+      ],
+      "id": "5fdccb76-979f-4c40-97cf-8ff20fc6ef8c",
+      "name": "Resp Pix Pedido Nao Encontrado"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.situacao === 'sem_pix_escolhido' }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2080,
+        1600
+      ],
+      "id": "6cc5366e-674e-4a41-8a1c-1f5e00e01f3f",
+      "name": "Pix: Sem Pix Escolhido?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro: 'pedido_sem_pix_escolhido' } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2340,
+        1600
+      ],
+      "id": "1206f429-f848-45bf-a058-784f287fe505",
+      "name": "Resp Pix Sem Pix Escolhido"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://admin.jsgrafica.site/api/mercadopago/cobranca",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { pedidoId: $json.pedido_id, telefone: $json.telefone } }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "fullResponse": true
+            }
+          },
+          "timeout": 20000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2600,
+        1600
+      ],
+      "id": "3278efc9-7f43-414e-908b-dddbcd28f6d4",
+      "name": "Pix: Gerar Cobranca Real",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "219uMmTJqpPg1PzW",
+          "name": "JS Gr�fica - X-Internal-Secret"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst entrada = $('Pix: Avaliar Pedido').first().json;\nconst resp = $('Pix: Gerar Cobranca Real').first().json;\nconst body = resp.body || {};\nconst ok = resp.statusCode < 400 && !!body.qrCode;\nif (!ok) return [{ json: { ...entrada, cobranca_ok: false } }];\nreturn [{ json: {\n  ...entrada,\n  cobranca_ok: true,\n  copia_e_cola: body.qrCode,\n  expira_em: body.expiraEm,\n  valor: body.valor,\n} }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2860,
+        1600
+      ],
+      "id": "4dea776e-b6eb-43cd-bf10-913caba4d7ef",
+      "name": "Pix: Avaliar Resposta Cobranca"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.cobranca_ok === false }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3120,
+        1600
+      ],
+      "id": "bcf366cd-8b5d-45d2-9ec8-814f89c71619",
+      "name": "Pix: Cobranca Falhou?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/caminho-c-escalar-para-humano",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { telefone: $json.telefone, motivo: 'outro' } }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "fullResponse": true
+            }
+          },
+          "timeout": 15000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3380,
+        1600
+      ],
+      "id": "b1e2eb89-7b1e-4d2f-b6e7-6f3466742e00",
+      "name": "Pix: Escalar Falha Para Equipe"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: false, escalado: true, frase_pronta: 'Vou chamar a equipe pra confirmar isso, so um instante' } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        3640,
+        1600
+      ],
+      "id": "5d010467-4b2d-430f-866e-4191016194bc",
+      "name": "Resp Pix Escalado"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst d = $json;\nconst valorTxt = Number(d.valor).toFixed(2).replace('.', ',');\nconst frase_pronta = `Para iniciarmos a producao, precisamos do pagamento antecipado\\n\\nPix copia e cola (valido por 24h):\\n\\n${d.copia_e_cola}\\n\\nValor: R$ ${valorTxt}\\n\\nE so copiar o codigo acima e colar na area Pix do app do seu banco. Assim que o pagamento cair, a gente avisa por aqui.`;\nreturn [{ json: { copia_e_cola: d.copia_e_cola, expira_em: d.expira_em, frase_pronta } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3900,
+        1600
+      ],
+      "id": "b7773de8-2fb6-40e9-b249-227163eda39b",
+      "name": "Pix: Montar Retorno Sucesso"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        4160,
+        1600
+      ],
+      "id": "21c6176d-5121-4847-8011-3f9f133b422a",
+      "name": "Resp Pix Sucesso"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "caminho-c-processar-cancelamento",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        1920
+      ],
+      "id": "2293c6bb-6e11-4d7b-9d4e-01e5966188d5",
+      "name": "WH Processar Cancelamento",
+      "webhookId": "dc633b6e-ec45-42c3-9739-f5928e71f961"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst b = ($json.body !== undefined) ? $json.body : $json;\nconst pedido_id = (b.pedido_id || '').toString().trim();\nconst telefone = (b.telefone || '').toString().trim();\nif (!pedido_id || !telefone) return [{ json: { _erro: 'parametros_invalidos' } }];\nreturn [{ json: { pedido_id, telefone } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        1920
+      ],
+      "id": "7b6136a2-3eba-4a79-82fe-1d978e6b232f",
+      "name": "Cancelar: Validar Entrada"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json._erro }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        1920
+      ],
+      "id": "1bb16887-95bd-4d22-97c7-51cad0824998",
+      "name": "Cancelar: Entrada Invalida?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro: 'parametros_invalidos' } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        1920
+      ],
+      "id": "36398286-63d4-4db2-8c49-b16bd6578a3b",
+      "name": "Resp Cancelar Erro Entrada"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_pedidos",
+        "returnAll": false,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.pedido_id }}"
+            }
+          ]
+        },
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        1920
+      ],
+      "id": "b37d2ace-f0c1-4026-a581-bb45fa0f9f9c",
+      "name": "Cancelar: Buscar Pedido",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst entrada = $('Cancelar: Validar Entrada').first().json;\nconst pedidos = $input.all().map(i => i.json).filter(p => p && p.id);\nconst pedido = pedidos[0] || null;\nif (!pedido) return [{ json: { ...entrada, situacao: 'nao_encontrado' } }];\nif (pedido.telefone !== entrada.telefone) return [{ json: { ...entrada, situacao: 'nao_pertence' } }];\nconst pago = !!pedido.pagamento_confirmado;\nconst entregue = !!pedido.data_entregue_at || pedido.status === 'entregue';\nlet acao;\nif (!pago) acao = 'cancelar_direto';\nelse if (pago && !entregue) acao = 'escalar_devolucao';\nelse acao = 'escalar_admin_pos_entrega';\nreturn [{ json: { ...entrada, situacao: 'ok', acao } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        1920
+      ],
+      "id": "cd79522d-e0ac-440d-8974-96e80704a498",
+      "name": "Cancelar: Avaliar Pedido"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.situacao === 'nao_encontrado' }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1560,
+        1920
+      ],
+      "id": "35361f44-2804-4392-bfd0-ff77a0e5a35c",
+      "name": "Cancelar: Pedido Nao Encontrado?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro: 'pedido_nao_encontrado' } }}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1820,
+        1920
+      ],
+      "id": "ed93ce0e-0ec9-4588-85eb-19dd995ff25b",
+      "name": "Resp Cancelar Pedido Nao Encontrado"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.situacao === 'nao_pertence' }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2080,
+        1920
+      ],
+      "id": "f0aca60e-6395-453c-8c22-8d73366f5b15",
+      "name": "Cancelar: Nao Pertence?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { erro: 'pedido_nao_pertence_ao_telefone' } }}",
+        "options": {
+          "responseCode": 403
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2340,
+        1920
+      ],
+      "id": "5d97f945-e128-43ea-b71d-fd9520fad97a",
+      "name": "Resp Cancelar Nao Pertence"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.acao === 'cancelar_direto' }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2600,
+        1920
+      ],
+      "id": "03c543e4-1840-49e0-9e3c-b677bcc7b2ea",
+      "name": "Cancelar: Acao E Cancelar Direto?"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://admin.jsgrafica.site/api/pedidos",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { id: $json.pedido_id, status: 'cancelado', operador: 'Agente Caminho C', motivoCancelamento: 'Cancelamento solicitado pelo cliente via automacao (Caminho C)' } }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "fullResponse": true
+            }
+          },
+          "timeout": 15000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2860,
+        1920
+      ],
+      "id": "2ca44bd5-dd66-413e-b9a8-53bc62e79247",
+      "name": "Cancelar: Cancelar Via API",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "219uMmTJqpPg1PzW",
+          "name": "JS Gr�fica - X-Internal-Secret"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { resultado: 'cancelado', frase_pronta: 'Sem problemas, cancelado!' } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        3120,
+        1920
+      ],
+      "id": "0c7f03c7-5791-4f45-b17b-414795832acd",
+      "name": "Resp Cancelar Cancelado"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.acao === 'escalar_devolucao' }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3380,
+        1920
+      ],
+      "id": "ea468ee5-4847-4166-b731-74ccd4d66685",
+      "name": "Cancelar: Escalar Devolucao?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/caminho-c-escalar-para-humano",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { telefone: $json.telefone, motivo: 'cancelamento_pago' } }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "fullResponse": true
+            }
+          },
+          "timeout": 15000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3640,
+        1920
+      ],
+      "id": "207d4a2c-29b5-4f80-a056-3a45e4d41840",
+      "name": "Cancelar: Escalar Devolucao"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { resultado: 'escalado_devolucao', frase_pronta: 'Voce ja pagou esse. Vou pedir pra equipe processar a devolucao' } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        3900,
+        1920
+      ],
+      "id": "0560b27b-7468-4576-939c-d8141d87b18b",
+      "name": "Resp Cancelar Escalado Devolucao"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.labonchain.xyz/webhook/caminho-c-escalar-para-humano",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { telefone: $json.telefone, motivo: 'cancelamento_entregue' } }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "fullResponse": true
+            }
+          },
+          "timeout": 15000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4160,
+        1920
+      ],
+      "id": "a3ac7674-1262-4834-a812-253f354efd90",
+      "name": "Cancelar: Escalar Admin Pos Entrega"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { resultado: 'escalado_admin', frase_pronta: 'Esse ja foi entregue. Vou verificar e te aviso' } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        4420,
+        1920
+      ],
+      "id": "97fba2a3-5975-4f84-b891-8e593bfd41ea",
+      "name": "Resp Cancelar Escalado Admin"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "caminho-c-verificar-alto-toque",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        2400
+      ],
+      "id": "ec2cc34f-7b45-4b69-9ab0-7bbf7e10bdc8",
+      "name": "WH Verificar Alto Toque",
+      "webhookId": "4969980a-f676-4444-b4e4-c7c8c8d58cd3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Demanda 305: gate deterministico de Alto Toque (dado pessoal), mesmo\n// regex real ja corrigido no 206 (Servico Alto Toque?, pos-278: inclui\n// gov.br/conta gov/senha do gov), agora testado direto contra o texto cru\n// da mensagem (o 206 testa contra uma classificacao previa do Gemini que\n// nao existe neste pipeline mais simples).\nconst b = ($json.body !== undefined) ? $json.body : $json;\nconst texto = ((b.message_text || '') + ' ' + (b.caption || '')).toLowerCase();\nconst re = /curr[ií]culo|digita[çc][ãa]o|prova|antecedente|foto composta|composi[çc][ãa]o|gov\\.?br|conta gov|senha do gov/i;\nreturn [{ json: { is_alto_toque: re.test(texto) } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        2400
+      ],
+      "id": "ec75030d-b25b-440e-a6bb-7382796847c1",
+      "name": "Alto Toque: Verificar Padrao"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        2400
+      ],
+      "id": "647711f4-f56c-4b7c-b8c6-d995a52e567a",
+      "name": "Resp Verificar Alto Toque"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://arqkdnexpederquztegn.supabase.co/rest/v1/jsgrafica_log_msgs_privadas?phone=eq.{{ $('Validar Entrada Contexto').first().json.telefone }}&data_timestamp=gte.{{ $('Validar Entrada Contexto').first().json.desde_ms }}&order=data_timestamp.desc.nullslast&limit=8",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        640
+      ],
+      "id": "b22988dc-a487-4ec2-84fc-c3d9d225efc8",
+      "name": "Contexto: Buscar Log Recente (raw)",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://arqkdnexpederquztegn.supabase.co/rest/v1/jsgrafica_contatos?phone=eq.{{ $('Escalar: Preparar Gravacao').first().json.telefone }}&atendente=eq.{{ encodeURIComponent('Agente Atendimento') }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { atendente: null, status_atendimento: 'escalado' } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1820,
+        480
+      ],
+      "id": "http-contatos-liberar-escalado-321",
+      "name": "Contatos: Liberar Atendimento (Escalado)",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googlePalmApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { content: { parts: [ { text: $json.produto_nome_ou_id } ] }, outputDimensionality: 768 } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -3300,
+        480
+      ],
+      "id": "http-preco-embedar-busca",
+      "name": "Preco: Embedar Busca",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HuMb1WcX1o0FTeLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://arqkdnexpederquztegn.supabase.co/rest/v1/rpc/jsgrafica_buscar_produto_semantico",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { query_embedding: (`[${$json.embedding.values.join(\",\")}]`), limiar: 0.75 } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -3100,
+        480
+      ],
+      "id": "http-preco-buscar-semantica",
+      "name": "Preco: Buscar Por Semantica",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "WH Consultar Preco Produto": {
+      "main": [
+        [
+          {
+            "node": "Validar Entrada Preco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Entrada Preco": {
+      "main": [
+        [
+          {
+            "node": "Preco: Entrada Invalida?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preco: Entrada Invalida?": {
+      "main": [
+        [
+          {
+            "node": "Resp Preco Erro Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Preco: Buscar Por Id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preco: Buscar Por Id": {
+      "main": [
+        [
+          {
+            "node": "Preco: Avaliar Busca Por Id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preco: Avaliar Busca Por Id": {
+      "main": [
+        [
+          {
+            "node": "Preco: Achou Por Id?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preco: Achou Por Id?": {
+      "main": [
+        [
+          {
+            "node": "Preco: Normalizar Produto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Preco: Embedar Busca",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preco: Normalizar Produto": {
+      "main": [
+        [
+          {
+            "node": "Preco: Nao Encontrado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preco: Nao Encontrado?": {
+      "main": [
+        [
+          {
+            "node": "Resp Preco Nao Encontrado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Preco: Calcular Valor Real",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preco: Calcular Valor Real": {
+      "main": [
+        [
+          {
+            "node": "Preco: Montar Retorno",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preco: Montar Retorno": {
+      "main": [
+        [
+          {
+            "node": "Resp Preco Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WH Escalar Para Humano": {
+      "main": [
+        [
+          {
+            "node": "Validar Entrada Escalar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Entrada Escalar": {
+      "main": [
+        [
+          {
+            "node": "Escalar: Entrada Invalida?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar: Entrada Invalida?": {
+      "main": [
+        [
+          {
+            "node": "Resp Escalar Erro Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalar: Buscar Sessao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar: Buscar Sessao": {
+      "main": [
+        [
+          {
+            "node": "Escalar: Preparar Gravacao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar: Preparar Gravacao": {
+      "main": [
+        [
+          {
+            "node": "Escalar: Tem Sessao?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar: Tem Sessao?": {
+      "main": [
+        [
+          {
+            "node": "Escalar: Atualizar Sessao",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalar: Criar Sessao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar: Atualizar Sessao": {
+      "main": [
+        [
+          {
+            "node": "Escalar: Montar Retorno",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Contatos: Liberar Atendimento (Escalado)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar: Criar Sessao": {
+      "main": [
+        [
+          {
+            "node": "Escalar: Montar Retorno",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Contatos: Liberar Atendimento (Escalado)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar: Montar Retorno": {
+      "main": [
+        [
+          {
+            "node": "Resp Escalar Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WH Carregar Contexto Atendimento": {
+      "main": [
+        [
+          {
+            "node": "Validar Entrada Contexto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Entrada Contexto": {
+      "main": [
+        [
+          {
+            "node": "Contexto: Entrada Invalida?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contexto: Entrada Invalida?": {
+      "main": [
+        [
+          {
+            "node": "Resp Contexto Erro Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Contexto: Buscar Sessao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contexto: Buscar Sessao": {
+      "main": [
+        [
+          {
+            "node": "Contexto: Buscar Log Recente (raw)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contexto: Buscar Log Recente": {
+      "main": [
+        [
+          {
+            "node": "Contexto: Montar Retorno",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contexto: Montar Retorno": {
+      "main": [
+        [
+          {
+            "node": "Resp Contexto Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WH Verificar Padrao Dizu": {
+      "main": [
+        [
+          {
+            "node": "Dizu: Verificar Padrao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dizu: Verificar Padrao": {
+      "main": [
+        [
+          {
+            "node": "Resp Verificar Dizu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WH Criar Pedido Aguardando Aprovacao": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Validar Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Validar Entrada": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Entrada Invalida?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Entrada Invalida?": {
+      "main": [
+        [
+          {
+            "node": "Resp CriarPedido Erro Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CriarPedido: Checar Whitelist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Checar Whitelist": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Avaliar Whitelist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Avaliar Whitelist": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Nao Autorizado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Nao Autorizado?": {
+      "main": [
+        [
+          {
+            "node": "Resp CriarPedido Nao Autorizado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CriarPedido: Buscar Sessao Atual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Buscar Sessao Atual": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Avaliar Trava Dizu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Avaliar Trava Dizu": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Dizu Bloqueado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Dizu Bloqueado?": {
+      "main": [
+        [
+          {
+            "node": "Resp CriarPedido Dizu Bloqueado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CriarPedido: Checar Duplicidade",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Checar Duplicidade": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Avaliar Duplicidade",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Avaliar Duplicidade": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Duplicado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Duplicado?": {
+      "main": [
+        [
+          {
+            "node": "Resp CriarPedido Duplicado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CriarPedido: Recalcular Preco Real",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Recalcular Preco Real": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Avaliar Preco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Avaliar Preco": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Produto Nao Encontrado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Produto Nao Encontrado?": {
+      "main": [
+        [
+          {
+            "node": "Resp CriarPedido Produto Nao Encontrado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CriarPedido: Preparar Gravacao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Preparar Gravacao": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Gravar Pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Gravar Pedido": {
+      "main": [
+        [
+          {
+            "node": "CriarPedido: Montar Retorno",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarPedido: Montar Retorno": {
+      "main": [
+        [
+          {
+            "node": "Resp CriarPedido Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WH Gerar Cobranca Pix": {
+      "main": [
+        [
+          {
+            "node": "Pix: Validar Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pix: Validar Entrada": {
+      "main": [
+        [
+          {
+            "node": "Pix: Entrada Invalida?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pix: Entrada Invalida?": {
+      "main": [
+        [
+          {
+            "node": "Resp Pix Erro Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pix: Buscar Pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pix: Buscar Pedido": {
+      "main": [
+        [
+          {
+            "node": "Pix: Avaliar Pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pix: Avaliar Pedido": {
+      "main": [
+        [
+          {
+            "node": "Pix: Pedido Nao Encontrado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pix: Pedido Nao Encontrado?": {
+      "main": [
+        [
+          {
+            "node": "Resp Pix Pedido Nao Encontrado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pix: Sem Pix Escolhido?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pix: Sem Pix Escolhido?": {
+      "main": [
+        [
+          {
+            "node": "Resp Pix Sem Pix Escolhido",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pix: Gerar Cobranca Real",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pix: Gerar Cobranca Real": {
+      "main": [
+        [
+          {
+            "node": "Pix: Avaliar Resposta Cobranca",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pix: Avaliar Resposta Cobranca": {
+      "main": [
+        [
+          {
+            "node": "Pix: Cobranca Falhou?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pix: Cobranca Falhou?": {
+      "main": [
+        [
+          {
+            "node": "Pix: Escalar Falha Para Equipe",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pix: Montar Retorno Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pix: Escalar Falha Para Equipe": {
+      "main": [
+        [
+          {
+            "node": "Resp Pix Escalado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pix: Montar Retorno Sucesso": {
+      "main": [
+        [
+          {
+            "node": "Resp Pix Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WH Processar Cancelamento": {
+      "main": [
+        [
+          {
+            "node": "Cancelar: Validar Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar: Validar Entrada": {
+      "main": [
+        [
+          {
+            "node": "Cancelar: Entrada Invalida?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar: Entrada Invalida?": {
+      "main": [
+        [
+          {
+            "node": "Resp Cancelar Erro Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cancelar: Buscar Pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar: Buscar Pedido": {
+      "main": [
+        [
+          {
+            "node": "Cancelar: Avaliar Pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar: Avaliar Pedido": {
+      "main": [
+        [
+          {
+            "node": "Cancelar: Pedido Nao Encontrado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar: Pedido Nao Encontrado?": {
+      "main": [
+        [
+          {
+            "node": "Resp Cancelar Pedido Nao Encontrado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cancelar: Nao Pertence?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar: Nao Pertence?": {
+      "main": [
+        [
+          {
+            "node": "Resp Cancelar Nao Pertence",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cancelar: Acao E Cancelar Direto?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar: Acao E Cancelar Direto?": {
+      "main": [
+        [
+          {
+            "node": "Cancelar: Cancelar Via API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cancelar: Escalar Devolucao?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar: Cancelar Via API": {
+      "main": [
+        [
+          {
+            "node": "Resp Cancelar Cancelado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar: Escalar Devolucao?": {
+      "main": [
+        [
+          {
+            "node": "Cancelar: Escalar Devolucao",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cancelar: Escalar Admin Pos Entrega",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar: Escalar Devolucao": {
+      "main": [
+        [
+          {
+            "node": "Resp Cancelar Escalado Devolucao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar: Escalar Admin Pos Entrega": {
+      "main": [
+        [
+          {
+            "node": "Resp Cancelar Escalado Admin",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WH Verificar Alto Toque": {
+      "main": [
+        [
+          {
+            "node": "Alto Toque: Verificar Padrao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alto Toque: Verificar Padrao": {
+      "main": [
+        [
+          {
+            "node": "Resp Verificar Alto Toque",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contexto: Buscar Log Recente (raw)": {
+      "main": [
+        [
+          {
+            "node": "Contexto: Buscar Log Recente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preco: Embedar Busca": {
+      "main": [
+        [
+          {
+            "node": "Preco: Buscar Por Semantica",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preco: Buscar Por Semantica": {
+      "main": [
+        [
+          {
+            "node": "Preco: Normalizar Produto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "tags": []
+}

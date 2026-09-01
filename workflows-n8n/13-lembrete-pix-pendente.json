@@ -1,0 +1,330 @@
+{
+  "updatedAt": "2026-08-17T01:03:21.203Z",
+  "createdAt": "2026-07-04T03:18:12.116Z",
+  "id": "17o7HPeASEqoqqnZ",
+  "name": "13 - JSGRAFICA | LEMBRETE PIX PENDENTE",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "sched-047",
+      "name": "A cada 1h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1024,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_agent_config",
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ativo",
+              "condition": "eq",
+              "keyValue": true
+            }
+          ]
+        }
+      },
+      "id": "get-config-047",
+      "name": "GET Config",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -800,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "jsgrafica_pedidos",
+        "returnAll": true,
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "aguardando_pix"
+            },
+            {
+              "keyName": "pagamento_confirmado",
+              "condition": "eq",
+              "keyValue": false
+            },
+            {
+              "keyName": "confirmado_cliente_at",
+              "condition": "lt",
+              "keyValue": "={{ $now.minus({ hours: 3 }).toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "get-pedidos-elegiveis-047",
+      "name": "GET Pedidos Aguardando Pix",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filtra quem ja recebeu lembrete e monta a mensagem\n// Define pairedItem explicitamente (indice original) pra nao quebrar\n// referencias de nos mais a frente (Marcar Lembrete Enviado usa $('Montar Lembrete').item)\nconst config = $('GET Config').first().json;\nconst pedidosItems = $input.all();\n\nconst resultado = [];\npedidosItems.forEach((item, idx) => {\n  const pedido = item.json;\n  if (pedido.lembrete_pix_enviado_at) return;\n\n  const chavePix = pedido.chave_pix || config.chave_pix;\n  const titularPix = config.titular_pix;\n  const valor = Number(pedido.valor_final || 0).toFixed(2);\n  const message = `Oi! Passando pra lembrar que seu pedido (${pedido.servico_nome || 'seu pedido'}) `\n    + `continua aguardando o pagamento pra gente iniciar a producao 😊\n\n`\n    + `Chave Pix:\n📱 *${chavePix}*\n`\n    + `Titular: ${titularPix}\n`\n    + `💰 Valor: *R$ ${valor}*\n\n`\n    + `Quando fizer o pix, me manda o comprovante aqui.`;\n\n  resultado.push({\n    json: {\n      pedido_id: pedido.id,\n      telefone: pedido.telefone,\n      message,\n      _zapi_url: config.zapi_url,\n      _zapi_token: config.client_token\n    },\n    pairedItem: { item: idx }\n  });\n});\n\nreturn resultado;"
+      },
+      "id": "montar-lembrete-047",
+      "name": "Montar Lembrete",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -352,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json._zapi_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "client-token",
+              "value": "={{ $json._zapi_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ phone: $json.telefone, message: $json.message }) }}",
+        "options": {}
+      },
+      "id": "enviar-lembrete-zapi-047",
+      "name": "Enviar Lembrete Z-API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "jsgrafica_pedidos",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Montar Lembrete').item.json.pedido_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "lembrete_pix_enviado_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "marcar-lembrete-enviado-047",
+      "name": "Marcar Lembrete Enviado",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        96,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "operation": "create",
+        "tableId": "jsgrafica_log_msgs_privadas",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "phone",
+              "fieldValue": "={{ $('Montar Lembrete').item.json.telefone }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.messageId }}"
+            },
+            {
+              "fieldId": "from_me",
+              "fieldValue": true
+            },
+            {
+              "fieldId": "message_text",
+              "fieldValue": "={{ $('Montar Lembrete').item.json.message }}"
+            },
+            {
+              "fieldId": "sent_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            },
+            {
+              "fieldId": "data_timestamp",
+              "fieldValue": "={{ $now.toMillis() }}"
+            },
+            {
+              "fieldId": "from_api",
+              "fieldValue": true
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "sent"
+            },
+            {
+              "fieldId": "enviado_por",
+              "fieldValue": "sistema"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        92,
+        0
+      ],
+      "id": "d294b001-log-sistema-lembrete-pix",
+      "name": "LOG Sistema - Lembrete Pix",
+      "credentials": {
+        "supabaseApi": {
+          "id": "PxQdXsvBxo3M5H8I",
+          "name": "Supabase account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "A cada 1h": {
+      "main": [
+        [
+          {
+            "node": "GET Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Config": {
+      "main": [
+        [
+          {
+            "node": "GET Pedidos Aguardando Pix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Pedidos Aguardando Pix": {
+      "main": [
+        [
+          {
+            "node": "Montar Lembrete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Lembrete": {
+      "main": [
+        [
+          {
+            "node": "Enviar Lembrete Z-API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Lembrete Z-API": {
+      "main": [
+        [
+          {
+            "node": "LOG Sistema - Lembrete Pix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LOG Sistema - Lembrete Pix": {
+      "main": [
+        [
+          {
+            "node": "Marcar Lembrete Enviado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "availableInMCP": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": {
+    "node:A cada 1h": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": []
+}
